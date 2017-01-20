@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Rhome</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="showMapSydney">Show Sydney!</string>
+    <string name="showCurrentLocation">Show my location!</string>
+    <string name="title_activity_my_location">Map</string>
 </resources>
