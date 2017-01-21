@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">Rhome</string>
     <string name="title_activity_maps">Map</string>
-    <string name="showMapSydney">Show Sydney!</string>
-    <string name="showCurrentLocation">Show my location!</string>
+    <string name="find_my_location">Find my location</string>
     <string name="title_activity_my_location">Map</string>
+    <string name="main_activity_header">Choose what to do:</string>
+
+    <!-- Maps Activity -->
+    <string name="your_location">Showing your location:</string>
+    <string name="your_location_info">Info on your location:</string>
+    <string name="custom_location">Use a custom location:</string>
+    <string name="enter_location">Enter location</string>
 </resources>

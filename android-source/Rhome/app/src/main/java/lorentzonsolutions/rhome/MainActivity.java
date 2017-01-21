@@ -18,8 +18,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void showMyLocation(View view) {
-        Intent intent = new Intent(this, MyLocation.class);
-        startActivity(intent);
-    }
 }
