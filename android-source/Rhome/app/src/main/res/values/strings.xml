@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Rhome</string>
     <string name="title_activity_maps">Map</string>
-    <string name="find_my_location">Find my location</string>
+    <string name="find_my_location">Select start location</string>
     <string name="title_activity_my_location">Map</string>
     <string name="main_activity_header">Choose what to do:</string>
 
     <!-- Maps Activity -->
-    <string name="your_location">Showing your location:</string>
-    <string name="your_location_info">Info on your location:</string>
-    <string name="custom_location">Use a custom location:</string>
-    <string name="enter_location">Enter location</string>
+    <string name="your_location">Pick start location</string>
+    <string name="your_location_info">Info on selected location:</string>
+    <string name="button_my_location">Use current location</string>
+    <string name="button_pick_selected">Use selected position</string>
 </resources>
