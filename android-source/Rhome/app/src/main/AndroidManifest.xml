@@ -43,6 +43,14 @@
         <activity
             android:name=".MyLocation"
             android:label="@string/title_activity_my_location"></activity>
+
+        <!--
+        <service
+            android:name=".utils.services.FetchAddressIntentService"
+            android:exported="false"
+            android:description="@string/address_service_description"/>
+         -->
+
     </application>
 
 </manifest>
