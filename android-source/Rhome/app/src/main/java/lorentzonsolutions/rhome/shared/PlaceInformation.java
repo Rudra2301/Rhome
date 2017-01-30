@@ -24,6 +24,16 @@ public class PlaceInformation implements Comparable, Parcelable{
     public int minutesByBicycle;
     public int minutesByWalk;
 
+    // For calculation
+    private int orderId;
+
+    public void setOrderId(int id) {
+        this.orderId = id;
+    }
+    public int getOrderId() {
+        return this.orderId;
+    }
+
 
     private PlaceInformation(BuildPlace builder) {
         this.name = builder.name;

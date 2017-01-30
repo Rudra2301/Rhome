@@ -9,7 +9,15 @@ public enum LocationTypes {
     ACCOUNTING("accounting", "Accounting"), AIRPORT("airport", "Airport"), AMUSEMENT_PARK("amusement_park", "Amusement Park"), AQUARIUM("aquarium", "Aquarium"),
     ART_GALLERY("art_gallery", "Art Gallery"), ATM("atm", "ATM"), BAKERY("bakery", "Bakery"), BANK("bank", "Bank"), BAR("bar", "Bar"), BEAUTY_SALON("beauty_salon", "Beauty Salon"),
     BICYCLE_STORE("bicycle_store", "Bicycle Store"), BOOK_STORE("book_store", "Book Store"), BOWLING_ALLEY("bowling_alley", "Bowling Alley"), BUS_STATION("bus_station", "Bus Station"),
-    CAFE("cafe", "Cafe");
+    CAFE("cafe", "Cafe"), CAMPGROUND("campground", "Campground"), CAR_DEALER("car_dealer", "Car Dealer"), CAR_RENTAL("car_rental", "Car Rental"), CAR_REPAIR("car_repair", "Car Repair"),
+    CAR_WASH("car_wash", "Car Wash"), CASINO("casion", "Casino"), CEMETERY("cemetery", "Cemetery"), CHURCH("church", "Church"), CITY_HALL("city_hall", "City Hall"),
+    CLOTHING_STORE("clothing_store", "Clothing Strore"), CONVENIENCE_STORE("convenience_store", "Convenience Store"), COURTHOUSE("courthouse", "Courthouse"), DENTIST("dentist", "Dentist"),
+    DEPARTMENT_STORE("department_store", "Department Store"), DOCTOR("doctor", "Doctor"), ELECTRICIAN("electrician", "Electrician"), ELECTRONICS_STORE("electronics_store", "Electronics Store"),
+    EMBASSY("embassy", "Embassy"), FIRE_STATION("fire_station", "Fire Station"), FLORIST("florist", "Florist"), FURNITURE_STORE("furniture_store", "Furniture Store"),
+    GAS_STATION("gas_station", "Gas Station"), GYM("gym", "Gym"), HAIR_CARE("hair_care", "Hair Care"), HARDWARE_STORE("hardware_store", "Hardware Store"), HOME_GOODS_STORE("home_goods_store", "Home Goods Store"),
+    HOSPITAL("hospital", "Hospital"), INSURANCE_AGENCY("insurance_agency", "Insurance Agency"), JEWELRY_STORE("jewelry_store", "Jewelry Store"), LAUNDRY("laundry", "Laundry"),
+    LAWYER("lawyer", "Lawyer"), LIBRARY("library", "Library"), LIQUOR_STORE("liquor_store", "Liquor Store"), LOCAL_GOVERNMENT_OFFICE("local_government_office", "Local Goverment Office"),
+    LOCKSMITH("locksmith", "Locksmith");
 
 
     private String googleType;
@@ -35,65 +43,9 @@ public enum LocationTypes {
 }
 
 /*
-accounting
-airport
-amusement_park
-aquarium
-art_gallery
-atm
-bakery
-bank
-bar
-beauty_salon
-bicycle_store
-book_store
-bowling_alley
-bus_station
-cafe
---------------------
-campground
-car_dealer
-car_rental
-car_repair
-car_wash
-casino
-cemetery
-church
-city_hall
-clothing_store
-convenience_store
-courthouse
-dentist
-department_store
-doctor
-electrician
-electronics_store
-embassy
-establishment (deprecated)
-finance (deprecated)
-fire_station
-florist
-food (deprecated)
 funeral_home
-furniture_store
-gas_station
-general_contractor (deprecated)
-grocery_or_supermarket (deprecated)
-gym
-hair_care
-hardware_store
-health (deprecated)
 hindu_temple
-home_goods_store
-hospital
-insurance_agency
-jewelry_store
-laundry
-lawyer
-library
-liquor_store
-local_government_office
-locksmith
+---------------------------
 lodging
 meal_delivery
 meal_takeaway
