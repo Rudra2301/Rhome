@@ -1,24 +1,47 @@
 <resources>
     <string name="app_name">Rhome</string>
 
-    <!-- Maps Activity -->
+    <!-- Main Activity -->
 
     <string name="title_activity_maps">Map</string>
     <string name="start_location_not_set">Select start location</string>
     <string name="start_location_is_set">Select new start location</string>
     <string name="title_activity_my_location">Map</string>
-    <string name="main_activity_header">Choose what to do:</string>
-    <string name="start_location_info_header">Your current selected start location is:</string>
+    <string name="main_activity_header">Welcome!</string>
+    <string name="start_location_info_header">Your selected start location is:</string>
+    <string name="select_places_to_visit">Pick places to Rhome through!</string>
+
+    <string name="list_places_header">Places to visit</string>
+
+
 
     <!-- Maps Activity -->
     <string name="your_location">Pick start location</string>
     <string name="your_location_info">Info on selected location:</string>
-    <string name="button_my_location">Use current location</string>
-    <string name="button_pick_selected">Use selected position</string>
     <string name="service_not_available">No service available</string>
     <string name="invalid_lat_long_used">Invalid LatLng used</string>
     <string name="no_address_found">No address found</string>
     <string name="address_found">Address found</string>
+    <string name="select_places_button">Select places</string>
 
+    <!-- ListLocationTypeSelection Activity -->
+    <string name="list_location_type_header">Choose a type of location in the below</string>
+    <string name="button_my_location">Use current location</string>
+    <string name="button_pick_selected">Use selected position</string>
+
+    <!-- ListNearbyPlacesOfType Activity -->
+    <string name="list_nearby_locations_header">Showing nearby places</string>
+
+    <string-array name="places_context_menu">
+        <item>Show on map</item>
+        <item>Do not show again</item>
+    </string-array>
+
+    <!-- Place list item -->
+    <string name="place_selected">Place is selected!</string>
+    <string name="place_selected_button">Remove place</string>
+
+    <!-- System strings -->
     <string name="address_service_description">Fetches addresses for Rhome Application</string>
+
 </resources>

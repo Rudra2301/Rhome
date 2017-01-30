@@ -1,29 +1,79 @@
 package lorentzonsolutions.rhome;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
-import android.location.Location;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import lorentzonsolutions.rhome.shared.PlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 import lorentzonsolutions.rhome.utils.Resources;
+import lorentzonsolutions.rhome.utils.URLIconDownloader;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Context thisContext = this;
 
     // Helper objects
     private StorageUtil storageUtil = StorageUtil.INSTANCE;
 
+    private ArrayAdapter<PlaceInformation> selectedListAdapter;
+    ListView selectedPlacesList;
+    private HashMap<PlaceInformation, WeakReference<ImageView>> placeIconMap = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // TODO. Initialize the Google API connection!
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Resources.getInstance().setContext(this);
+
+        Button testButton = (Button) findViewById(R.id.test);
+
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(storageUtil.getSelectedStartLocation() != null) {
+                    Intent intent = new Intent(Resources.getInstance().getContext(), ListLocationTypeSelectionActivity.class);
+                    startActivity(intent);
+                }
+                else Toast.makeText(Resources.getInstance().getContext(), "You must select a start location.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Selected places
+        selectedPlacesList = (ListView) findViewById(R.id.selected_places_list);
+        selectedListAdapter = new SelectedPlaceListAdapter(this, storageUtil.getSelectedPlacesList());
+        selectedPlacesList.setAdapter(selectedListAdapter);
+
+        Button selectStartButton = (Button) findViewById(R.id.start_location_button);
+        selectStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(thisContext, StartLocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
     @Override
     protected void onResume() {
@@ -43,15 +93,63 @@ public class MainActivity extends AppCompatActivity {
 
             infoText.setText(startAddress.getAddressLine(0));
 
+            selectedListAdapter.notifyDataSetChanged();
         }
         super.onResume();
     }
 
-    // BUTTON FUNCTIONS ----------------------------------------------------------------------------
-    public void startMap(View view) {
-        Intent intent = new Intent(this, StartLocationActivity.class);
-        startActivity(intent);
+
+
+    // Adapter for list
+    class SelectedPlaceListAdapter extends ArrayAdapter<PlaceInformation> {
+
+        public SelectedPlaceListAdapter(Context context, List<PlaceInformation> placesList) {
+            super(context, 0, placesList);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if(convertView == null) convertView = LayoutInflater.from(getContext()).inflate(R.layout.place_selected_list_item, parent, false);
+
+            PlaceInformation place = getItem(position);
+
+            TextView selectedPlaceName = (TextView) convertView.findViewById(R.id.selected_place_name);
+            TextView selectedPlaceAddress = (TextView) convertView.findViewById(R.id.selected_place_address);
+            ImageView iconView = (ImageView) convertView.findViewById(R.id.place_icon);
+
+            selectedPlaceName.setText(place.name);
+            selectedPlaceAddress.setText(place.address);
+
+            // Running thread to collect icon
+            new SetPlaceIcon(place, iconView).execute();
+
+            return convertView;
+        }
     }
+
+    class SetPlaceIcon extends AsyncTask<Void, Void, Void> {
+
+        private final WeakReference<ImageView> iconView;
+        private PlaceInformation place;
+        private Drawable icon;
+
+
+        public SetPlaceIcon(PlaceInformation place, ImageView iconView) {
+            this.iconView = new WeakReference<ImageView>(iconView);
+            this.place = place;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            icon = URLIconDownloader.loadImageFromUrl(place.iconAddress);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) {
+            if(iconView != null && icon != null) iconView.get().setImageDrawable(icon);
+        }
+    }
+
 
 
 }

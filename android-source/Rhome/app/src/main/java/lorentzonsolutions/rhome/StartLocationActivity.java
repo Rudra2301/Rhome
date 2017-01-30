@@ -95,19 +95,6 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
         mapFragmentMyLocation.getMapAsync(this);
     }
 
-    @Override
-    protected void onStart() {
-        // TODO. Remove and use the AutoManage when building client
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        // TODO. Remove and use the AutoManage when building client
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -131,7 +118,6 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
     @Override
     public void onConnectionSuspended(int i) {
         Log.i(TAG, "Connection to the Google API suspended.");
-
     }
 
     @Override
@@ -172,6 +158,7 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
+                    .enableAutoManage(this,this)
                     .build();
         }
     }
@@ -180,6 +167,7 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
     private void initEvents() {
 
         // On map marker clicks
+        // TODO. Marker info window doesn't hide when clicked again
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -193,8 +181,8 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
             @Override
             public void onClick(View v) {
                 getCurrentLocation();
-
                 LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                selectedLocation = currentLocation;
                 moveCamera(currentLatLng);
             }
         });
@@ -211,9 +199,7 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
-
                 moveCamera(place.getLatLng());
-
             }
 
             @Override
@@ -320,7 +306,7 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
                 // Placing marker on map
                 googleMapWeakReference.get().clear();
                 MarkerOptions marker = new MarkerOptions();
-                marker.position(locationConverter.locationToLatLng(currentLocation)).title(selectedAddress.getAddressLine(0));
+                marker.position(locationConverter.locationToLatLng(selectedLocation)).title(selectedAddress.getAddressLine(0));
                 googleMapWeakReference.get().addMarker(marker);
             }
         }
