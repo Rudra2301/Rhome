@@ -94,6 +94,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <Button
+        android:id="@+id/fastest_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#4f6991"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:visibility="invisible"
+        android:text="@string/calculate_fastest_route"/>
+
+    <Button
+        android:id="@+id/shortest_route"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#4f6991"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:visibility="invisible"
+        android:text="@string/calculate_shortest_route"/>
+
 
 
 

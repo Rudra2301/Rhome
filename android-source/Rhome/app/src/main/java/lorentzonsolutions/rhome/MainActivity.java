@@ -2,7 +2,6 @@ package lorentzonsolutions.rhome;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.AsyncTask;
@@ -20,11 +19,10 @@ import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import lorentzonsolutions.rhome.shared.PlaceInformation;
+import lorentzonsolutions.rhome.utils.RouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.URLIconDownloader;
@@ -95,10 +93,24 @@ public class MainActivity extends AppCompatActivity {
 
             selectedListAdapter.notifyDataSetChanged();
         }
+        if(storageUtil.getSelectedPlacesList() != null || storageUtil.getSelectedPlacesList().size() == 0) {
+            Button calculateFastestTime = (Button) findViewById(R.id.fastest_time);
+            calculateFastestTime.setVisibility(View.VISIBLE);
+
+            Button calculateShortestDistance = (Button) findViewById(R.id.shortest_route);
+            calculateShortestDistance.setVisibility(View.VISIBLE);
+
+            calculateFastestTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RouteCalculator calculator = new RouteCalculator(storageUtil.getSelectedPlacesList());
+                    calculator.CalculateFastestTime();
+                }
+            });
+
+        }
         super.onResume();
     }
-
-
 
     // Adapter for list
     class SelectedPlaceListAdapter extends ArrayAdapter<PlaceInformation> {
@@ -127,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Async task for fetching the icon image
     class SetPlaceIcon extends AsyncTask<Void, Void, Void> {
 
         private final WeakReference<ImageView> iconView;
@@ -149,7 +162,5 @@ public class MainActivity extends AppCompatActivity {
             if(iconView != null && icon != null) iconView.get().setImageDrawable(icon);
         }
     }
-
-
 
 }

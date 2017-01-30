@@ -3,6 +3,7 @@ package lorentzonsolutions.rhome;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,12 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +32,7 @@ import lorentzonsolutions.rhome.googleWebApi.JSONDataParser;
 import lorentzonsolutions.rhome.googleWebApi.NearbyLocationSearcher;
 import lorentzonsolutions.rhome.shared.PlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
+import lorentzonsolutions.rhome.utils.URLIconDownloader;
 
 public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
 
@@ -215,33 +219,28 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             // TextView placeDuration = (TextView) convertView.findViewById(R.id.place_duration);
             TextView placeIsOpen = (TextView) convertView.findViewById(R.id.place_isopen);
 
+            ImageView iconView = (ImageView) convertView.findViewById(R.id.place_icon_nearby);
+
+            //TODO. Fetch and show the icon
+
+
             // Populate the data into the template view using the data object
             placeName.setText(place.name);
             placeAddress.setText(place.address);
 
             if(place.isOpen) {
                 placeIsOpen.setText("Open");
-                placeIsOpen.setBackgroundColor(Color.GREEN);
+                placeIsOpen.setTextColor(Color.GREEN);
             }
             else {
                 placeIsOpen.setText("Closed");
-                placeIsOpen.setBackgroundColor(Color.RED);
+                placeIsOpen.setTextColor(Color.RED);
             }
 
             // TODO. Fix so that this doesn't return 0 if there is over 100m near.
             int distanceInKm = place.distanceToStartLocation/1000;
             placeDistance.setText(distanceInKm + " km");
 
-            // Calculating the duration
-            /*
-            int duration = place.minutesByCar;
-            int totalMinutes = duration / 60;
-
-            int hours = totalMinutes / 60;
-            int minutes = duration % 60;
-
-            placeDuration.setText("Duration by car: " + hours + "h, " + minutes + "m.");
-            */
 
             // TODO. Check the best method to check this.
             if(storageUtil.getSelectedPlacesList().contains(place)) {
@@ -257,5 +256,6 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
         }
 
     }
+
 
 }

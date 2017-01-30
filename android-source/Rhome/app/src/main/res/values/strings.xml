@@ -12,7 +12,8 @@
     <string name="select_places_to_visit">Pick places to Rhome through!</string>
 
     <string name="list_places_header">Places to visit</string>
-
+    <string name="calculate_fastest_route">Rhome fastest!</string>
+    <string name="calculate_shortest_route">Rhome shortest!</string>
 
 
     <!-- Maps Activity -->
