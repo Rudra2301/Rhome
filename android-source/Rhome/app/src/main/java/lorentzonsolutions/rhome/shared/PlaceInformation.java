@@ -202,13 +202,33 @@ public class PlaceInformation implements Comparable, Parcelable{
         return sb.toString();
     }
 
+    // Always override hashCode() when Overriding equals()
+    @Override
+    public int hashCode() {
+        int result = 17;
+        
+        if(name != null) result = 31 * result + name.length();
+        if(latitude != 0) result = 31 * result + (int) latitude;
+        if(longitude != 0) result = 31 * result + (int) longitude;
+        if(googlePlaceID != null) result = 31 * result + googlePlaceID.length();
+
+        return result;
+    }
+
+
+    // Overriding because of object creation when fetching nearby places.
+    // Only value
     @Override
     public boolean equals(Object o) {
+        if(o == null) return false;
+        if(o == this) return true;
         if(!(o instanceof PlaceInformation)) return false;
-        else {
-            PlaceInformation test = (PlaceInformation) o;
-            if(test.googlePlaceID == null || this.googlePlaceID == null) return false;
-            return test.googlePlaceID.equals(this.googlePlaceID);
-        }
+
+        PlaceInformation test = (PlaceInformation) o;
+
+        if(test.googlePlaceID == null || this.googlePlaceID == null) return false;
+        return test.googlePlaceID.equals(this.googlePlaceID);
+
     }
+
 }
