@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Resources.getInstance().setContext(this);
 
-        Button testButton = (Button) findViewById(R.id.test);
+        Button selectPlacesButton = (Button) findViewById(R.id.select_places);
 
-        testButton.setOnClickListener(new View.OnClickListener() {
+        selectPlacesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(storageUtil.getSelectedStartLocation() != null) {
@@ -93,12 +93,9 @@ public class MainActivity extends AppCompatActivity {
 
             selectedListAdapter.notifyDataSetChanged();
         }
-        if(storageUtil.getSelectedPlacesList() != null || storageUtil.getSelectedPlacesList().size() == 0) {
+        if(storageUtil.getSelectedPlacesList() != null && storageUtil.getSelectedPlacesList().size() == 0) {
             Button calculateFastestTime = (Button) findViewById(R.id.fastest_time);
             calculateFastestTime.setVisibility(View.VISIBLE);
-
-            Button calculateShortestDistance = (Button) findViewById(R.id.shortest_route);
-            calculateShortestDistance.setVisibility(View.VISIBLE);
 
             calculateFastestTime.setOnClickListener(new View.OnClickListener() {
                 @Override

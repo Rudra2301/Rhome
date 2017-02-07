@@ -1,10 +1,12 @@
 package lorentzonsolutions.rhome.utils;
 
 import android.location.Location;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import lorentzonsolutions.rhome.shared.PlaceInformation;
@@ -25,28 +27,26 @@ public class RouteCalculator {
         this.route = route;
     }
 
-    private List<PlaceInformation> fastestTimeRoute = new ArrayList<>();
-    private int fastestTime;
-    private int fastestTimeDistance;
-
-    private List<PlaceInformation> shortestDistanceRoute = new ArrayList<>();
-    private int shortestDistance;
-    private int shortestDistanceTime;
 
     private List<List<PlaceInformation>> triedRoutes = new ArrayList<>();
 
     public void CalculateFastestTime() {
 
-        // TODO. Check out generic algorithms to make the best calculation.
-
+        // TODO. Check - Ant Colony Optimization
         setOrderIDs();
         List<PlaceInformation> newRoute;
-        
-        while((newRoute = findNewRoute()) != null) {
 
-            triedRoutes.add(newRoute);
-
+        class PlaceDistanceComparator implements Comparator<PlaceInformation> {
+            public int compare(PlaceInformation p1, PlaceInformation p2) {
+                return p1.distanceToStartLocation - p2.distanceToStartLocation;
+            }
         }
+        Collections.sort(route, new PlaceDistanceComparator());
+
+        for(PlaceInformation place: route) {
+            System.out.println(place.name + " - Distance to start; " + place.distanceToStartLocation);
+        }
+
 
     }
 
@@ -57,41 +57,23 @@ public class RouteCalculator {
         }
     }
 
-    private List<PlaceInformation> findNewRoute() {
-        // If it's the first run. Return the list unmodified.
-        if(triedRoutes.size() == 0) return route;
+    private static double distance(double fromLat, double fromLng, double toLat, double toLng) {
 
-        else {
-            List<PlaceInformation> newRoute = new ArrayList<>();
-            // TODO. Copy list?
-            int nrOfTries = 0;
-            while(nrOfTries < 100) {
-                Collections.copy(newRoute, route);
-                Collections.shuffle(newRoute);
-                if(!routeIsTried(newRoute)) return newRoute;
-                nrOfTries++;
-            }
-            return null;
-        }
+        double theta = fromLng - toLng;
+        double dist = Math.sin(deg2rad(fromLat)) * Math.sin(deg2rad(toLat)) + Math.cos(deg2rad(fromLat)) * Math.cos(deg2rad(toLat)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        dist = dist * 1.609344;
 
+        return (dist);
     }
 
-    private boolean routeIsTried(List<PlaceInformation> route) {
-        int[] routeOne = new int[route.size()];
-        for(int i = 0; i < routeOne.length; i++) routeOne[i] = route.get(i).getOrderId();
-
-        for(List<PlaceInformation> triedRoute : triedRoutes) {
-            int[] routeTwo = new int[triedRoute.size()];
-            for(int i = 0; i < routeTwo.length; i++) routeTwo[i] = triedRoute.get(i).getOrderId();
-            if(routesIsEqual(routeOne,routeTwo)) return true;
-        }
-        return false;
+    private static double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+    private static double rad2deg(double rad) {
+        return (rad * 180 / Math.PI);
     }
 
-    private boolean routesIsEqual(int[] routeOne, int[] routeTwo) {
-        for(int i = 0; i < routeOne.length; i++) {
-            if(routeOne[i] == routeTwo[i]) return true;
-        }
-        return false;
-    }
 }

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="fadingtextview-1.2">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.tomer/fadingtextview/1.2/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.tomer/fadingtextview/1.2/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tomer/fadingtextview/1.2/578bbfe30b3dc99f691ec3c221c5745a3ce06d4a/fadingtextview-1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
