@@ -7,6 +7,7 @@ import android.location.Address;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<PlaceInformation> selectedListAdapter;
     ListView selectedPlacesList;
     private HashMap<PlaceInformation, WeakReference<ImageView>> placeIconMap = new HashMap<>();
+    private final String TAG = "MAIN_ACTIVITY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +102,15 @@ public class MainActivity extends AppCompatActivity {
             calculateFastestTime.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RouteCalculator calculator = new RouteCalculator(storageUtil.getSelectedPlacesList());
-                    calculator.CalculateFastestTime();
+                    RouteCalculator calculator = new RouteCalculator();
+                    List<PlaceInformation> fastestRoute = calculator.CalculateFastestTime(storageUtil.getSelectedPlacesList());
+                    Log.d(TAG, "Calculated fastest route: ");
+                    for(PlaceInformation place : fastestRoute) {
+                        Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
+                    }
+
+                    double totalDistance = calculator.calculateTotalRouteDistance(fastestRoute);
+                    Log.d(TAG, "Total distance: " + totalDistance + " km.");
                 }
             });
 

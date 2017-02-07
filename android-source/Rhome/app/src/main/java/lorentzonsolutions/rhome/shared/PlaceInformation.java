@@ -206,7 +206,7 @@ public class PlaceInformation implements Comparable, Parcelable{
     @Override
     public int hashCode() {
         int result = 17;
-        
+
         if(name != null) result = 31 * result + name.length();
         if(latitude != 0) result = 31 * result + (int) latitude;
         if(longitude != 0) result = 31 * result + (int) longitude;
@@ -217,7 +217,6 @@ public class PlaceInformation implements Comparable, Parcelable{
 
 
     // Overriding because of object creation when fetching nearby places.
-    // Only value
     @Override
     public boolean equals(Object o) {
         if(o == null) return false;
