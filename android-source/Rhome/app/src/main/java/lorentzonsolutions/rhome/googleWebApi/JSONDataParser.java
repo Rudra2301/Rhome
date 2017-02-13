@@ -98,7 +98,6 @@ public class JSONDataParser {
                 DistanceDuration distanceDuration = parseDistanceCalculationData(distanceData);
                 distanceToStartLocation = distanceDuration.distance;
                 durationByCarToStartLocation = distanceDuration.duration;
-                System.out.println("Duration calculated: " + durationByCarToStartLocation);
             }
 
             // These can be null

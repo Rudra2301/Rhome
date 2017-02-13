@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#8092af"
+    android:background="#e2802b"
     android:orientation="vertical">
 
     <!-- ################################ Your location map container ################################ -->
@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/button_my_location"
-                android:background="#4f6991"
+                android:background="#302c28"
                 android:padding="15dp"
                 style="@style/Widget.AppCompat.Button.Colored"/>
 
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/button_use_location"
             android:text="@string/button_pick_selected"
-            android:background="#4f6991"
+            android:background="#302c28"
             android:padding="15dp"
             style="@style/Widget.AppCompat.Button.Colored"/>
 

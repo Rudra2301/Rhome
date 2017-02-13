@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
             selectedListAdapter.notifyDataSetChanged();
         }
-        if(storageUtil.getSelectedPlacesList() != null && storageUtil.getSelectedPlacesList().size() == 0) {
+        if(storageUtil.getSelectedPlacesList() != null && storageUtil.getSelectedPlacesList().size() != 0) {
             Button calculateFastestTime = (Button) findViewById(R.id.fastest_time);
             calculateFastestTime.setVisibility(View.VISIBLE);
 

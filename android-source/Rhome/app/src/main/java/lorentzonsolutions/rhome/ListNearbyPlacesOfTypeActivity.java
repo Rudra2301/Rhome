@@ -216,7 +216,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             TextView placeName = (TextView) convertView.findViewById(R.id.place_name);
             TextView placeAddress = (TextView) convertView.findViewById(R.id.place_address);
             TextView placeDistance = (TextView) convertView.findViewById(R.id.place_distance);
-            // TextView placeDuration = (TextView) convertView.findViewById(R.id.place_duration);
+            TextView placeDuration = (TextView) convertView.findViewById(R.id.place_duration);
             TextView placeIsOpen = (TextView) convertView.findViewById(R.id.place_isopen);
 
             ImageView iconView = (ImageView) convertView.findViewById(R.id.place_icon_nearby);
@@ -240,6 +240,9 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             // TODO. Fix so that this doesn't return 0 if there is over 100m near.
             int distanceInKm = place.distanceToStartLocation/1000;
             placeDistance.setText(distanceInKm + " km");
+
+            int timeInMinutes = place.minutesByCar/60;
+            placeDuration.setText(timeInMinutes + " min");
 
 
             // TODO. Check the best method to check this.

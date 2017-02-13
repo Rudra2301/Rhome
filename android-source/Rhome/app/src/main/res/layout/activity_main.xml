@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    android:background="#8092af"
+    android:background="#e2802b"
     tools:context="lorentzonsolutions.rhome.MainActivity">
 
 
@@ -42,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/start_location_not_set"
-        android:background="#4f6991"
+        android:background="#302c28"
         style="@style/Widget.AppCompat.Button.Colored"/>
 
     <TextView
@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/select_places_button"
-        android:background="#4f6991"
+        android:background="#302c28"
         style="@style/Widget.AppCompat.Button.Colored"/>
 
     <TextView
@@ -93,7 +93,7 @@
         android:id="@+id/fastest_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#4f6991"
+        android:background="#302c28"
         style="@style/Widget.AppCompat.Button.Colored"
         android:visibility="invisible"
         android:text="@string/calculate_fastest_route"/>
