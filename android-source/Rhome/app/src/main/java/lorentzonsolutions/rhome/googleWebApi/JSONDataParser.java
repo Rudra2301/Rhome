@@ -212,22 +212,36 @@ public class JSONDataParser {
             JSONArray jsonArray = object.getJSONArray("rows");
 
             // Element object
-            object = (JSONObject) jsonArray.get(0);
+            object = jsonArray.getJSONObject(0);
             jsonArray = object.getJSONArray("elements");
-            object = (JSONObject) jsonArray.get(0);
+            object = jsonArray.getJSONObject(0);
 
-            // Object contains status (String), duration (object), distance (object)
-            JSONObject distanceObject = (JSONObject) object.get("distance");
-            distance = distanceObject.getInt("value");
+            // Check the object array to find the closest.
+            // TODO. Determine if duration or distance should be used. Now using duration (fastest way)
+            int fastestTime = jsonArray.getJSONObject(0).getJSONObject("duration").getInt("value");
+            JSONObject fastest = jsonArray.getJSONObject(0);
+            for(int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject element = jsonArray.getJSONObject(i);
+                    int tryTime = element.getJSONObject("duration").getInt("value");
+                    if(tryTime < fastestTime) {
+                        fastest = element;
+                    }
+                }
+                catch (JSONException e) {
+                    Log.d(TAG, "Error parsing duration data.");
+                }
+            } //End of loop. Checking for fastest route.
+
+            duration = fastest.getJSONObject("duration").getInt("value");
+            distance = fastest.getJSONObject("distance").getInt("value");
+
             Log.i(TAG, "Distance calculated: " + distance);
-
-            JSONObject durationObject = (JSONObject) object.get("duration");
-            duration = durationObject.getInt("value");
             Log.i(TAG, "Duration calculated: " + duration);
 
 
         } catch (JSONException e) {
-            Log.e(TAG, "Error parsing distance data.");
+            Log.e(TAG, "Error parsing distance/duration data.");
             e.printStackTrace();
         }
         return new DistanceDuration(distance, duration);
