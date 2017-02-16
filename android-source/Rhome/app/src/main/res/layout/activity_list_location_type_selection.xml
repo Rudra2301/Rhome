@@ -12,10 +12,13 @@
     android:background="#e2802b"
     tools:context="lorentzonsolutions.rhome.ListLocationTypeSelectionActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <lorentzonsolutions.rhome.customViews.HeaderTextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/list_location_type_header"/>
+        android:text="@string/list_location_type_header"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:textSize="35sp"/>
 
     <ListView
         android:id="@+id/list_of_location_types"

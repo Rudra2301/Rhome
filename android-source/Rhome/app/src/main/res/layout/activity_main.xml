@@ -13,39 +13,25 @@
     android:background="#e2802b"
     tools:context="lorentzonsolutions.rhome.MainActivity">
 
-
-    <!--
-    Not working. Can't inflate view.
-
-    <com.tomer.fadingtextview.FadingTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#333c4c"
-        android:textColor="#ffffff"
-        android:height="64dp"
-        app:timeout="500"
-        app:texts="@string/main_activity_header"/>
-        -->
-
-    <TextView
+    <lorentzonsolutions.rhome.customViews.HeaderTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/main_activity_header"
         android:gravity="center"
         android:layout_margin="10dp"
-        android:typeface="monospace"
-        android:textStyle="bold"
-        android:textSize="20sp"/>
+        android:textSize="60sp"/>
 
-    <Button
+    <lorentzonsolutions.rhome.customViews.HombreButton
         android:id="@+id/start_location_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/start_location_not_set"
-        android:background="#302c28"
+        android:background="@drawable/round_button"
+        android:textSize="20sp"
+        android:layout_marginTop="20sp"
         style="@style/Widget.AppCompat.Button.Colored"/>
 
-    <TextView
+    <lorentzonsolutions.rhome.customViews.EdoszTextView
         android:id="@+id/start_location_info_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,7 +45,7 @@
         android:textStyle="bold"
         android:textSize="15sp"
         android:visibility="invisible"/>
-    <TextView
+    <lorentzonsolutions.rhome.customViews.EdoszTextView
         android:id="@+id/start_location_info_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -70,32 +56,35 @@
         android:gravity="center"
         android:visibility="invisible"/>
 
-    <Button
+    <lorentzonsolutions.rhome.customViews.HombreButton
         android:id="@+id/select_places"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/select_places_button"
-        android:background="#302c28"
+        android:textSize="20sp"
+        android:background="@drawable/round_button"
         style="@style/Widget.AppCompat.Button.Colored"/>
 
-    <TextView
+    <lorentzonsolutions.rhome.customViews.HeaderTextView
         android:id="@+id/selected_places_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:typeface="monospace"
-        android:textStyle="bold"
-        android:textSize="18sp"
+        android:paddingTop="10dp"
+        android:textSize="35sp"
         android:gravity="center"
+        android:visibility="invisible"
         android:text="@string/list_places_header"/>
 
-    <Button
+    <lorentzonsolutions.rhome.customViews.HombreButton
         android:id="@+id/fastest_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#302c28"
+        android:background="@drawable/round_button"
         style="@style/Widget.AppCompat.Button.Colored"
         android:visibility="invisible"
+        android:textSize="20sp"
+        android:layout_marginBottom="20sp"
         android:text="@string/calculate_fastest_route"/>
 
 
@@ -103,10 +92,6 @@
         android:id="@+id/selected_places_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
-
-
-
 
 
 </LinearLayout>

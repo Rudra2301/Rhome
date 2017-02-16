@@ -22,6 +22,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
+import lorentzonsolutions.rhome.customViews.HeaderTextView;
 import lorentzonsolutions.rhome.shared.PlaceInformation;
 import lorentzonsolutions.rhome.utils.RouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        // Hiding action bar on top
+        getSupportActionBar().hide();
+
         setContentView(R.layout.activity_main);
         Resources.getInstance().setContext(this);
 
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         if(storageUtil.getSelectedPlacesList() != null && storageUtil.getSelectedPlacesList().size() != 0) {
             Button calculateFastestTime = (Button) findViewById(R.id.fastest_time);
             calculateFastestTime.setVisibility(View.VISIBLE);
+            findViewById(R.id.selected_places_header).setVisibility(View.VISIBLE);
 
             calculateFastestTime.setOnClickListener(new View.OnClickListener() {
                 @Override

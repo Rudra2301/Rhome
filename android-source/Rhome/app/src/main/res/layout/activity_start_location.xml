@@ -24,46 +24,68 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <lorentzonsolutions.rhome.customViews.HeaderTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/your_location"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:gravity="center"
                 android:layout_margin="10dp"
-                android:typeface="monospace"
-                android:textStyle="bold"
-                android:textSize="20sp"/>
-            <Button
+                android:textSize="50sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_button"
+                android:layout_margin="10sp">
+                <fragment
+                    android:id="@+id/place_autocomplete_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+                    android:layout_margin="10dp"
+                    />
+            </LinearLayout>
+
+            <lorentzonsolutions.rhome.customViews.HombreButton
                 android:id="@+id/my_location_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/button_my_location"
-                android:background="#302c28"
-                android:padding="15dp"
+                android:background="@drawable/round_button"
+                android:textSize="20sp"
+                android:layout_margin="7sp"
                 style="@style/Widget.AppCompat.Button.Colored"/>
 
         </LinearLayout>
 
-
-        <fragment
-            android:id="@+id/place_autocomplete_fragment"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
-            android:layout_margin="10dp"
-            />
+            android:background="@drawable/round_button">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_button"
+                android:layout_margin="25sp">
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    tools:context="lorentzonsolutions.rhome.StartLocationActivity" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
 
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            tools:context="lorentzonsolutions.rhome.StartLocationActivity" />
 
-        <TextView
+
+        <lorentzonsolutions.rhome.customViews.EdoszTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/your_location_info"
@@ -78,26 +100,25 @@
             android:textStyle="bold"
             android:textSize="15sp"/>
 
-        <TextView
+        <lorentzonsolutions.rhome.customViews.EdoszTextView
             android:id="@+id/location_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:typeface="monospace"
             android:textStyle="bold"
             android:textSize="14sp"
             android:gravity="center"/>
 
-        <Button
+        <lorentzonsolutions.rhome.customViews.HombreButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/button_use_location"
             android:text="@string/button_pick_selected"
-            android:background="#302c28"
-            android:padding="15dp"
+            android:background="@drawable/round_button"
+            android:textSize="20sp"
+            android:layout_margin="5sp"
             style="@style/Widget.AppCompat.Button.Colored"/>
-
-
 
 
     </LinearLayout>
