@@ -22,23 +22,41 @@ public class RouteCalculator {
     private final String TAG = "ROUTE_CALCULATOR";
     Location startLocation = StorageUtil.INSTANCE.getSelectedStartLocation();
     PlaceInformation startPlace = new PlaceInformation.BuildPlace("Start location", startLocation.getLatitude(), startLocation.getLongitude()).build();
-    // TODO. Set end place.
+
+    Location endLocation = StorageUtil.INSTANCE.getSelectedEndLocation();
+    PlaceInformation endPlace = new PlaceInformation.BuildPlace("End location", endLocation.getLatitude(), endLocation.getLongitude()).build();
+
+
+    // TODO. Check - Ant Colony Optimization
+    // Now using the nearest neighbour algorithm
 
     public List<PlaceInformation> calculateFastestTime(List<PlaceInformation> places, boolean startFromEnd) {
+        List<PlaceInformation> route = new ArrayList<>(places);
 
-       List<PlaceInformation> route = new ArrayList<>(places);
+        // Going backwards from end location
+        if(startFromEnd) {
+            Log.d(TAG, "Finding fastest route for leaving nearest end location");
+            // Using anonymous inner comparator to sort list and the get the place nearest to our end location
+            Collections.sort(route, new Comparator<PlaceInformation>() {
+                @Override
+                public int compare(PlaceInformation o1, PlaceInformation o2) {
+                    return o1.distanceToEndLocation - o2.distanceToEndLocation;
+                }
+            });
+        }
+        // Going forward from start location
+        else {
+            Log.d(TAG, "Finding fastest route for leaving nearest start location");
+            // Using anonymous inner comparator to sort list and the get the place nearest to our start location
+            Collections.sort(route, new Comparator<PlaceInformation>() {
+                @Override
+                public int compare(PlaceInformation o1, PlaceInformation o2) {
+                    return o1.distanceToStartLocation - o2.distanceToStartLocation;
+                }
+            });
+        }
 
-        // TODO. Check - Ant Colony Optimization
-        // Now using the nearest neighbour algorithm
         List<PlaceInformation> fastestRoute = new ArrayList<>();
-
-        // Using anonymous inner comparator to sort list and the get the place nearest to our start location
-        Collections.sort(route, new Comparator<PlaceInformation>() {
-            @Override
-            public int compare(PlaceInformation o1, PlaceInformation o2) {
-                return o1.distanceToStartLocation - o2.distanceToStartLocation;
-            }
-        });
 
         //Adding first nearest neighbour
         fastestRoute.add(route.get(0));
@@ -69,8 +87,11 @@ public class RouteCalculator {
 
         // fastestRoute now contains all the places to visit in the order of nearest neighbour with the beginning at start position.
         List<PlaceInformation> returnList = new ArrayList<>();
+
         returnList.add(startPlace);
         returnList.addAll(fastestRoute);
+        returnList.add(endPlace);
+
         return returnList;
 
 

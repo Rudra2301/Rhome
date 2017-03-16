@@ -8,6 +8,7 @@ import com.google.android.gms.location.places.Place;
 import java.util.ArrayList;
 import java.util.List;
 
+import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.shared.PlaceInformation;
 
 /**
@@ -26,6 +27,17 @@ public enum StorageUtil {
 
     private List<PlaceInformation> selectedPlaces = new ArrayList<>();
     private List<PlaceInformation> placesNotToShow = new ArrayList<>();
+
+    private List<PlaceInformation> fastestRoute = new ArrayList<>();
+
+    public List<PlaceInformation> getFastestRoute() throws RouteException{
+        if(fastestRoute.size() == 0)throw new RouteException("No route calculated!");
+        return fastestRoute;
+    }
+
+    public void setFastestRoute(List<PlaceInformation> fastestRoute) {
+        this.fastestRoute = fastestRoute;
+    }
 
     public Location getSelectedStartLocation() {return selectedStartLocation;}
     public Address getSelectedStartAddress() {return selectedStartAddress;}

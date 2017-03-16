@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     RouteCalculator calculator = new RouteCalculator();
                     List<PlaceInformation> fastestRoute = calculator.calculateFastestTime(storageUtil.getSelectedPlacesList(), true);
+                    storageUtil.setFastestRoute(fastestRoute);
                     Log.d(TAG, "Calculated fastest route: ");
                     for(PlaceInformation place : fastestRoute) {
                         Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
