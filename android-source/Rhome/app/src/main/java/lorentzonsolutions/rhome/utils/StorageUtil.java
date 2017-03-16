@@ -21,6 +21,9 @@ public enum StorageUtil {
     private Location selectedStartLocation;
     private Address selectedStartAddress;
 
+    private Location selectedEndLocation;
+    private Address selectedEndAddress;
+
     private List<PlaceInformation> selectedPlaces = new ArrayList<>();
     private List<PlaceInformation> placesNotToShow = new ArrayList<>();
 
@@ -33,6 +36,17 @@ public enum StorageUtil {
 
     public void setSelectedStartAddress(Address address) {
         this.selectedStartAddress = address;
+    }
+
+    public Location getSelectedEndLocation() {return this.selectedEndLocation;}
+    public Address getSelectedEndAddress() {return this.selectedEndAddress;}
+
+    public void setSelectedEndLocation(Location endAddress) {
+        this.selectedEndLocation = endAddress;
+    }
+
+    public void setSelectedEndAddress(Address endAddress) {
+        this.selectedEndAddress = endAddress;
     }
 
     public void addSelectedPlace(PlaceInformation place) {

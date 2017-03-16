@@ -17,7 +17,7 @@ public enum LocationTypes {
     GAS_STATION("gas_station", "Gas Station"), GYM("gym", "Gym"), HAIR_CARE("hair_care", "Hair Care"), HARDWARE_STORE("hardware_store", "Hardware Store"), HOME_GOODS_STORE("home_goods_store", "Home Goods Store"),
     HOSPITAL("hospital", "Hospital"), INSURANCE_AGENCY("insurance_agency", "Insurance Agency"), JEWELRY_STORE("jewelry_store", "Jewelry Store"), LAUNDRY("laundry", "Laundry"),
     LAWYER("lawyer", "Lawyer"), LIBRARY("library", "Library"), LIQUOR_STORE("liquor_store", "Liquor Store"), LOCAL_GOVERNMENT_OFFICE("local_government_office", "Local Goverment Office"),
-    LOCKSMITH("locksmith", "Locksmith");
+    LOCKSMITH("locksmith", "Locksmith"), RESTAURANT("restaurant", "Restaurant");
 
 
     private String googleType;
@@ -66,7 +66,6 @@ plumber
 police
 post_office
 real_estate_agency
-restaurant
 roofing_contractor
 rv_park
 school

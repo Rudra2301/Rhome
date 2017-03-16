@@ -41,12 +41,12 @@ import lorentzonsolutions.rhome.utils.LocationConverter;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
-public class StartLocationActivity extends FragmentActivity implements OnMapReadyCallback,
+public class EndLocationActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     // Tag for logging.
-    private static final String TAG = "START_LOCATION_ACTIVITY";
+    private static final String TAG = "END_LOCATION_ACTIVITY";
 
     // Google API
     private GoogleMap mMap;
@@ -62,7 +62,7 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
 
     // View Objects
     Button myLocationButton;
-    Button setStartLocationButton;
+    Button setEndLocationButton;
     TextView info;
 
 
@@ -79,10 +79,10 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
 
         isMapReady = false;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_location);
+        setContentView(R.layout.activity_end_location);
 
         myLocationButton = (Button) findViewById(R.id.my_location_button);
-        setStartLocationButton = (Button) findViewById(R.id.button_use_location);
+        setEndLocationButton = (Button) findViewById(R.id.button_use_location);
         info = (TextView) findViewById(R.id.location_info);
 
         // Setting up the Google Api Client
@@ -209,7 +209,7 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
             }
         });
 
-        setStartLocationButton.setOnClickListener(new View.OnClickListener() {
+        setEndLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setEndLocation();
@@ -218,14 +218,14 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
         });
     }
 
-    // Stores the selected location as startlocation
+    // Stores the selected location as endlocation
     private void setEndLocation() {
         if(isUpdatingSelectedAddress) {
             Toast.makeText(this, "Address is being fetched. Try again.", Toast.LENGTH_SHORT).show();
         }
         else {
-            storageUtil.setSelectedStartLocation(selectedLocation);
-            Toast.makeText(this, "Start location set!", Toast.LENGTH_SHORT).show();
+            storageUtil.setSelectedEndLocation(selectedLocation);
+            Toast.makeText(this, "End location set!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -276,7 +276,7 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
                 }
                 else {
                     selectedAddress = addresses.get(0);
-                    storageUtil.setSelectedStartAddress(selectedAddress);
+                    storageUtil.setSelectedEndAddress(selectedAddress);
                     //updateSelectedLocationInfo();
                 }
             }
@@ -297,6 +297,7 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
         @Override
         protected void onPostExecute(Void result) {
             isUpdatingSelectedAddress = false;
+
             if(infoTextViewWeakReference.get() != null) {
                 Log.i(TAG, "Updating location information text.");
                 infoTextViewWeakReference.get().setText(selectedAddress.getAddressLine(0));

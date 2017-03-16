@@ -53,7 +53,8 @@
 
         <activity android:name=".ListLocationTypeSelectionActivity" />
         <activity android:name=".ListNearbyPlacesOfTypeActivity" />
-        <activity android:name=".ShowOnMap"></activity>
+        <activity android:name=".ShowOnMap" />
+        <activity android:name=".EndLocationActivity"></activity>
     </application>
 
 </manifest>

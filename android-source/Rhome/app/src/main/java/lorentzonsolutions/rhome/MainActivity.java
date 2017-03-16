@@ -56,11 +56,16 @@ public class MainActivity extends AppCompatActivity {
         selectPlacesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(storageUtil.getSelectedStartLocation() != null) {
+                if(storageUtil.getSelectedStartLocation() != null && storageUtil.getSelectedEndLocation() != null) {
                     Intent intent = new Intent(Resources.getInstance().getContext(), ListLocationTypeSelectionActivity.class);
                     startActivity(intent);
                 }
-                else Toast.makeText(Resources.getInstance().getContext(), "You must select a start location.", Toast.LENGTH_SHORT).show();
+                else if(storageUtil.getSelectedStartLocation() == null) {
+                    Toast.makeText(Resources.getInstance().getContext(), "You must select a start location.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(Resources.getInstance().getContext(), "You must select an end location.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -74,6 +79,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(thisContext, StartLocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button selectEndButton = (Button) findViewById(R.id.end_location_button);
+        selectEndButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(thisContext, EndLocationActivity.class);
                 startActivity(intent);
             }
         });
@@ -99,6 +113,26 @@ public class MainActivity extends AppCompatActivity {
 
             selectedListAdapter.notifyDataSetChanged();
         }
+        Address endAddress = storageUtil.getSelectedEndAddress();
+
+        if(endAddress != null) {
+
+            //Change the text on the select start location button.
+            Button selectStart = (Button) findViewById(R.id.end_location_button);
+            selectStart.setText(R.string.end_location_is_set);
+
+            // Showing the info for selected start location
+            TextView infoHeader = (TextView) findViewById(R.id.end_location_info_header);
+            infoHeader.setVisibility(View.VISIBLE);
+
+            TextView infoText = (TextView) findViewById(R.id.end_location_info_text);
+            infoText.setVisibility(View.VISIBLE);
+
+            infoText.setText(endAddress.getAddressLine(0));
+
+            selectedListAdapter.notifyDataSetChanged();
+        }
+
         if(storageUtil.getSelectedPlacesList() != null && storageUtil.getSelectedPlacesList().size() != 0) {
             Button calculateFastestTime = (Button) findViewById(R.id.fastest_time);
             calculateFastestTime.setVisibility(View.VISIBLE);

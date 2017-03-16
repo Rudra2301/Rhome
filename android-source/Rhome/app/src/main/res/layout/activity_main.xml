@@ -13,6 +13,7 @@
     android:background="#e2802b"
     tools:context="lorentzonsolutions.rhome.MainActivity">
 
+
     <lorentzonsolutions.rhome.customViews.HeaderTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,40 +22,103 @@
         android:layout_margin="10dp"
         android:textSize="60sp"/>
 
-    <lorentzonsolutions.rhome.customViews.HombreButton
-        android:id="@+id/start_location_button"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/start_location_not_set"
-        android:background="@drawable/round_button"
-        android:textSize="20sp"
-        android:layout_marginTop="20sp"
-        style="@style/Widget.AppCompat.Button.Colored"/>
+        android:gravity="center"
+        android:layout_marginTop="5sp"
+        android:orientation="horizontal">
+        <lorentzonsolutions.rhome.customViews.HombreButton
+            android:id="@+id/start_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_location_not_set"
+            android:background="@drawable/rounded_item"
+            android:textSize="20sp"
+            android:layout_marginRight="10sp"
+            style="@style/Widget.AppCompat.Button.Colored"/>
 
-    <lorentzonsolutions.rhome.customViews.EdoszTextView
-        android:id="@+id/start_location_info_header"
+        <lorentzonsolutions.rhome.customViews.HombreButton
+            android:id="@+id/end_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/end_location_not_set"
+            android:background="@drawable/rounded_item"
+            android:textSize="20sp"
+            android:layout_marginLeft="10sp"
+            style="@style/Widget.AppCompat.Button.Colored"/>
+
+
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/start_location_info_header"
         android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="3dp"
-        android:typeface="monospace"
-        android:textStyle="bold"
-        android:textSize="15sp"
-        android:visibility="invisible"/>
-    <lorentzonsolutions.rhome.customViews.EdoszTextView
-        android:id="@+id/start_location_info_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:typeface="monospace"
-        android:textStyle="bold"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:visibility="invisible"/>
+        android:layout_marginTop="5sp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <lorentzonsolutions.rhome.customViews.EdoszTextView
+            android:id="@+id/start_location_info_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_location_info_header"
+            android:gravity="center"
+            android:layout_margin="5sp"
+            android:typeface="monospace"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:visibility="invisible"/>
+
+        <lorentzonsolutions.rhome.customViews.EdoszTextView
+            android:id="@+id/start_location_info_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:typeface="monospace"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:visibility="invisible"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <lorentzonsolutions.rhome.customViews.EdoszTextView
+                android:id="@+id/end_location_info_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/end_location_info_header"
+                android:gravity="center"
+                android:layout_margin="5sp"
+                android:typeface="monospace"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:visibility="invisible"/>
+
+            <lorentzonsolutions.rhome.customViews.EdoszTextView
+                android:id="@+id/end_location_info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:typeface="monospace"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:visibility="invisible"/>
+        </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+
 
     <lorentzonsolutions.rhome.customViews.HombreButton
         android:id="@+id/select_places"
@@ -62,7 +126,7 @@
         android:layout_height="wrap_content"
         android:text="@string/select_places_button"
         android:textSize="20sp"
-        android:background="@drawable/round_button"
+        android:background="@drawable/rounded_item"
         style="@style/Widget.AppCompat.Button.Colored"/>
 
     <lorentzonsolutions.rhome.customViews.HeaderTextView
@@ -80,7 +144,7 @@
         android:id="@+id/fastest_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/round_button"
+        android:background="@drawable/rounded_item"
         style="@style/Widget.AppCompat.Button.Colored"
         android:visibility="invisible"
         android:textSize="20sp"
@@ -92,6 +156,5 @@
         android:id="@+id/selected_places_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
 
 </LinearLayout>

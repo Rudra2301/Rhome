@@ -4,11 +4,14 @@
     <!-- Main Activity -->
 
     <string name="title_activity_maps">Map</string>
-    <string name="start_location_not_set">Select start location</string>
-    <string name="start_location_is_set">Select new start location</string>
+    <string name="start_location_not_set">Start!</string>
+    <string name="start_location_is_set">New start!</string>
+    <string name="end_location_not_set">End!</string>
+    <string name="end_location_is_set">New end!</string>
     <string name="title_activity_my_location">Map</string>
     <string name="main_activity_header">W e l c o m e !</string>
-    <string name="start_location_info_header">Your selected start location is:</string>
+    <string name="start_location_info_header">Start location:</string>
+    <string name="end_location_info_header">End location:</string>
     <string name="select_places_to_visit">Pick places to Rhome through!</string>
 
     <string name="list_places_header">Places to visit</string>
@@ -17,7 +20,8 @@
 
 
     <!-- Maps Activity -->
-    <string name="your_location">Pick start location</string>
+    <string name="your_start_location">Pick start location</string>
+    <string name="your_end_location">Pick end location</string>
     <string name="your_location_info">Info on selected location:</string>
     <string name="service_not_available">No service available</string>
     <string name="invalid_lat_long_used">Invalid LatLng used</string>
