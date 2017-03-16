@@ -3,8 +3,6 @@ package lorentzonsolutions.rhome.shared;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Objects;
-
 /**
  * Class representing a place parsed from JSON data collected from the Google Web API.
  */
@@ -19,10 +17,16 @@ public class PlaceInformation implements Comparable, Parcelable{
     public String address;
     public String googlePlaceID;
     public double placeRating;
+    //Start location
     public int distanceToStartLocation;
-    public int minutesByCar;
-    public int minutesByBicycle;
-    public int minutesByWalk;
+    public int minutesByCarToStartLocation;
+    public int minutesByBicycleToStartLocation;
+    public int minutesByWalkToStartLocation;
+    // End location
+    public int distanceToEndLocation;
+    public int minutesByCarToEndLocation;
+    public int minutesByBicycleToEndLocation;
+    public int minutesByWalkToEndLocation;
 
     // For calculation
     private int orderId;
@@ -46,9 +50,14 @@ public class PlaceInformation implements Comparable, Parcelable{
         this.googlePlaceID = builder.googlePlaceID;
         this.placeRating = builder.placeRating;
         this.distanceToStartLocation = builder.distanceToStartLocation;
-        this.minutesByCar = builder.minutesByCar;
-        this.minutesByBicycle = builder.minutesByBicycle;
-        this.minutesByWalk = builder.minutesByWalk;
+        this.minutesByCarToStartLocation = builder.minutesByCarToStartLocation;
+        this.minutesByBicycleToStartLocation = builder.minutesByBicycleToStartLocation;
+        this.minutesByWalkToStartLocation = builder.minutesByWalkToStartLocation;
+
+        this.distanceToEndLocation = builder.distanceToEndLocation;
+        this.minutesByCarToEndLocation = builder.minutesByCarToEndLocation;
+        this.minutesByBicycleToEndLocation = builder.minutesByBicycleToEndLocation;
+        this.minutesByWalkToEndLocation = builder.minutesByWalkToEndLocation;
     }
 
     // Used by the parcelable interface to recreate the object.
@@ -64,9 +73,13 @@ public class PlaceInformation implements Comparable, Parcelable{
         this.googlePlaceID = in.readString();
         this.placeRating = in.readDouble();
         this.distanceToStartLocation = in.readInt();
-        this.minutesByCar = in.readInt();
-        this.minutesByBicycle = in.readInt();
-        this.minutesByWalk = in.readInt();
+        this.minutesByCarToStartLocation = in.readInt();
+        this.minutesByBicycleToStartLocation = in.readInt();
+        this.minutesByWalkToStartLocation = in.readInt();
+        this.distanceToEndLocation = in.readInt();
+        this.minutesByCarToEndLocation = in.readInt();
+        this.minutesByBicycleToEndLocation = in.readInt();
+        this.minutesByWalkToEndLocation = in.readInt();
     }
     public static final Parcelable.Creator<PlaceInformation> CREATOR = new Parcelable.Creator<PlaceInformation>() {
 
@@ -103,9 +116,13 @@ public class PlaceInformation implements Comparable, Parcelable{
         dest.writeString(googlePlaceID);
         dest.writeDouble(placeRating);
         dest.writeInt(distanceToStartLocation);
-        dest.writeInt(minutesByCar);
-        dest.writeInt(minutesByBicycle);
-        dest.writeInt(minutesByWalk);
+        dest.writeInt(minutesByCarToStartLocation);
+        dest.writeInt(minutesByBicycleToStartLocation);
+        dest.writeInt(minutesByWalkToStartLocation);
+        dest.writeInt(distanceToEndLocation);
+        dest.writeInt(minutesByCarToEndLocation);
+        dest.writeInt(minutesByBicycleToEndLocation);
+        dest.writeInt(minutesByWalkToEndLocation);
     }
 
 
@@ -121,9 +138,13 @@ public class PlaceInformation implements Comparable, Parcelable{
         private String googlePlaceID;
         private double placeRating;
         private int distanceToStartLocation;
-        private int minutesByCar;
-        private int minutesByBicycle;
-        private int minutesByWalk;
+        private int minutesByCarToStartLocation;
+        private int minutesByBicycleToStartLocation;
+        private int minutesByWalkToStartLocation;
+        private int distanceToEndLocation;
+        private int minutesByCarToEndLocation;
+        private int minutesByBicycleToEndLocation;
+        private int minutesByWalkToEndLocation;
 
         public BuildPlace(String name, double builderLatitude, double builderLongitude) {
             this.name = name;
@@ -163,16 +184,33 @@ public class PlaceInformation implements Comparable, Parcelable{
             this.distanceToStartLocation = distanceToStartLocation;
             return this;
         }
-        public BuildPlace minutesByCar(int minutes) {
-            this.minutesByCar = minutes;
+        public BuildPlace minutesByCarToStartLocation(int minutes) {
+            this.minutesByCarToStartLocation = minutes;
             return this;
         }
-        public BuildPlace minutesByBicycle(int minutes) {
-            this.minutesByBicycle = minutes;
+        public BuildPlace minutesByBicycleToStartLocation(int minutes) {
+            this.minutesByBicycleToStartLocation = minutes;
             return this;
         }
-        public BuildPlace minutesByWalk(int minutes) {
-            this.minutesByWalk = minutes;
+        public BuildPlace minutesByWalkToStartLocation(int minutes) {
+            this.minutesByWalkToStartLocation = minutes;
+            return this;
+        }
+
+        public BuildPlace distanceToEndLocation(int distanceToEndLocation) {
+            this.distanceToEndLocation = distanceToEndLocation;
+            return this;
+        }
+        public BuildPlace minutesByCarToEndLocation(int minutes) {
+            this.minutesByCarToEndLocation = minutes;
+            return this;
+        }
+        public BuildPlace minutesByBicycleToEndLocation(int minutes) {
+            this.minutesByBicycleToEndLocation = minutes;
+            return this;
+        }
+        public BuildPlace minutesByWalkToEndLocation(int minutes) {
+            this.minutesByWalkToEndLocation = minutes;
             return this;
         }
         public PlaceInformation build() {

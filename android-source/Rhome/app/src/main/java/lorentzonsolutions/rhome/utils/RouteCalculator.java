@@ -24,7 +24,7 @@ public class RouteCalculator {
     PlaceInformation startPlace = new PlaceInformation.BuildPlace("Start location", startLocation.getLatitude(), startLocation.getLongitude()).build();
     // TODO. Set end place.
 
-    public List<PlaceInformation> calculateFastestTime(List<PlaceInformation> places) {
+    public List<PlaceInformation> calculateFastestTime(List<PlaceInformation> places, boolean startFromEnd) {
 
        List<PlaceInformation> route = new ArrayList<>(places);
 

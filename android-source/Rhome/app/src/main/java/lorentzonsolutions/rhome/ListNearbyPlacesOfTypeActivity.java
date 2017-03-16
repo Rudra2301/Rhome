@@ -3,7 +3,6 @@ package lorentzonsolutions.rhome;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,9 +20,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +28,6 @@ import lorentzonsolutions.rhome.googleWebApi.JSONDataParser;
 import lorentzonsolutions.rhome.googleWebApi.NearbyLocationSearcher;
 import lorentzonsolutions.rhome.shared.PlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
-import lorentzonsolutions.rhome.utils.URLIconDownloader;
 
 public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
 
@@ -241,7 +236,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             int distanceInKm = place.distanceToStartLocation/1000;
             placeDistance.setText(distanceInKm + " km");
 
-            int timeInMinutes = place.minutesByCar/60;
+            int timeInMinutes = place.minutesByCarToStartLocation /60;
             placeDuration.setText(timeInMinutes + " min");
 
 

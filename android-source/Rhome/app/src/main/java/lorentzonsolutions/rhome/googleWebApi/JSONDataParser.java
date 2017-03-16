@@ -78,12 +78,18 @@ public class JSONDataParser {
         String address = "N/A";
         String googlePlaceID = "";
         double placeRating = 0.0;
+
         int distanceToStartLocation = -1;
         int durationByCarToStartLocation = -1;
+
+        int distanceToEndLocation = -1;
+        int durationByCarToEndLocation = -1;
 
         // TODO. Not parsing this now.
         int durationByBicycleToStartLocation = -1;
         int durationByWalkToStartLocation = -1;
+        int durationByBicycleToEndLocation = -1;
+        int durationByWalkToEndLocation = -1;
 
         try {
             // These cannot be null
@@ -93,11 +99,19 @@ public class JSONDataParser {
 
             // Calculates the distance to start location
             Location start = StorageUtil.INSTANCE.getSelectedStartLocation();
+            Location end = StorageUtil.INSTANCE.getSelectedEndLocation();
             if(start != null) {
                 String distanceData = distanceDurationCalculator.calculateDistance(start.getLatitude(), start.getLongitude(), latitude, longitude);
                 DistanceDuration distanceDuration = parseDistanceCalculationData(distanceData);
                 distanceToStartLocation = distanceDuration.distance;
                 durationByCarToStartLocation = distanceDuration.duration;
+            }
+            // TODO. Calculate distance to end.
+            if(end != null) {
+                String distanceData = distanceDurationCalculator.calculateDistance(end.getLatitude(), end.getLongitude(), latitude, longitude);
+                DistanceDuration distanceDuration = parseDistanceCalculationData(distanceData);
+                distanceToEndLocation = distanceDuration.distance;
+                durationByCarToEndLocation = distanceDuration.duration;
             }
 
             // These can be null
@@ -130,9 +144,12 @@ public class JSONDataParser {
                 .placeRating(placeRating)
                 .googlePlaceID(googlePlaceID)
                 .distanceToStartLocation(distanceToStartLocation)
-                .minutesByCar(durationByCarToStartLocation)
-                .minutesByBicycle(durationByBicycleToStartLocation)
-                .minutesByWalk(durationByWalkToStartLocation)
+                .minutesByCarToStartLocation(durationByCarToStartLocation)
+                .minutesByBicycleToStartLocation(durationByBicycleToStartLocation)
+                .minutesByWalkToStartLocation(durationByWalkToStartLocation)
+                .distanceToEndLocation(distanceToEndLocation)
+                .minutesByBicycleToEndLocation(durationByBicycleToEndLocation)
+                .minutesByWalkToEndLocation(durationByWalkToEndLocation)
                 .build();
 
         return result;
