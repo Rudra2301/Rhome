@@ -42,6 +42,9 @@
         <item>Do not show again</item>
     </string-array>
 
+    <!-- Route activity-->
+    <string name="route_activity_header">Fastest route</string>
+
     <!-- Place list item -->
     <string name="place_selected">Place is selected!</string>
     <string name="place_selected_button">Remove place</string>

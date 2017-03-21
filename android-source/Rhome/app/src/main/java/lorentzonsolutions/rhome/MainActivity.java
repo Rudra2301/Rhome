@@ -151,6 +151,10 @@ public class MainActivity extends AppCompatActivity {
 
                     double totalDistance = calculator.calculateTotalRouteDistance(fastestRoute);
                     Log.d(TAG, "Total distance: " + totalDistance + " km.");
+
+                    // Starting route activity
+                    Intent intent = new Intent(thisContext, RouteActivity.class);
+                    startActivity(intent);
                 }
             });
 

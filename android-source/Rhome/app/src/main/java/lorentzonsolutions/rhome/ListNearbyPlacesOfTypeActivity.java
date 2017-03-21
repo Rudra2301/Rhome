@@ -203,7 +203,6 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             // Get the data item for this position
             PlaceInformation place = getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
-
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.place_list_item, parent, false);
 
             // TODO. Fix duration info.

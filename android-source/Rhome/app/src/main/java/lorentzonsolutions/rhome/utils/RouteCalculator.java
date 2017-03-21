@@ -15,16 +15,16 @@ import lorentzonsolutions.rhome.shared.PlaceInformation;
 import lorentzonsolutions.rhome.shared.RouteObject;
 
 /**
- * Created by johanlorentzon on 2017-01-30.
+ * Calculates the route for a list of places.
  */
 
 public class RouteCalculator {
     private final String TAG = "ROUTE_CALCULATOR";
-    Location startLocation = StorageUtil.INSTANCE.getSelectedStartLocation();
-    PlaceInformation startPlace = new PlaceInformation.BuildPlace("Start location", startLocation.getLatitude(), startLocation.getLongitude()).build();
+    private Location startLocation = StorageUtil.INSTANCE.getSelectedStartLocation();
+    private PlaceInformation startPlace = new PlaceInformation.BuildPlace("Start location", startLocation.getLatitude(), startLocation.getLongitude()).build();
 
-    Location endLocation = StorageUtil.INSTANCE.getSelectedEndLocation();
-    PlaceInformation endPlace = new PlaceInformation.BuildPlace("End location", endLocation.getLatitude(), endLocation.getLongitude()).build();
+    private Location endLocation = StorageUtil.INSTANCE.getSelectedEndLocation();
+    private PlaceInformation endPlace = new PlaceInformation.BuildPlace("End location", endLocation.getLatitude(), endLocation.getLongitude()).build();
 
 
     // TODO. Check - Ant Colony Optimization
@@ -35,7 +35,7 @@ public class RouteCalculator {
 
         // Going backwards from end location
         if(startFromEnd) {
-            Log.d(TAG, "Finding fastest route for leaving nearest end location");
+            Log.d(TAG, "Finding fastest route going from end position.");
             // Using anonymous inner comparator to sort list and the get the place nearest to our end location
             Collections.sort(route, new Comparator<PlaceInformation>() {
                 @Override
@@ -46,7 +46,7 @@ public class RouteCalculator {
         }
         // Going forward from start location
         else {
-            Log.d(TAG, "Finding fastest route for leaving nearest start location");
+            Log.d(TAG, "Finding fastest route going from start position.");
             // Using anonymous inner comparator to sort list and the get the place nearest to our start location
             Collections.sort(route, new Comparator<PlaceInformation>() {
                 @Override
