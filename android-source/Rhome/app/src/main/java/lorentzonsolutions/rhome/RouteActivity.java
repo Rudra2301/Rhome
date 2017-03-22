@@ -12,7 +12,7 @@ import lorentzonsolutions.rhome.shared.PlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
 public class RouteActivity extends AppCompatActivity {
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

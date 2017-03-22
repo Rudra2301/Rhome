@@ -44,6 +44,7 @@
 
     <!-- Route activity-->
     <string name="route_activity_header">Fastest route</string>
+    <string name="button_show_route">Show route on map</string>
 
     <!-- Place list item -->
     <string name="place_selected">Place is selected!</string>

@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    android:background="#e2802b"
+    android:background="#d1d1d1"
     tools:context="lorentzonsolutions.rhome.MainActivity">
 
 
@@ -112,13 +112,7 @@
                 android:gravity="center"
                 android:visibility="invisible"/>
         </LinearLayout>
-
-
-
-        </LinearLayout>
-
-
-
+    </LinearLayout>
 
     <lorentzonsolutions.rhome.customViews.HombreButton
         android:id="@+id/select_places"
