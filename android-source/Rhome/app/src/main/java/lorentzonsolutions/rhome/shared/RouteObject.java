@@ -1,12 +1,10 @@
 package lorentzonsolutions.rhome.shared;
 
+import java.util.List;
+
 import lorentzonsolutions.rhome.googleWebApi.DistanceDuration;
 import lorentzonsolutions.rhome.googleWebApi.DistanceDurationCalculator;
 import lorentzonsolutions.rhome.googleWebApi.JSONDataParser;
-
-/**
- * Created by johanlorentzon on 2017-01-30.
- */
 
 public class RouteObject {
 
@@ -35,5 +33,19 @@ public class RouteObject {
 
     public int getDistance() {
         return distance;
+    }
+
+    public static String printRoute(List<PlaceInformation> route) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < route.size(); i++) {
+            PlaceInformation place = route.get(i);
+            sb.append((i+1) + ". Name: " + place.name
+                    + "\nDistance to end: " + place.distanceToEndLocation
+                    + "\nDistance to start:" + place.distanceToStartLocation
+                    + "\nAddress: " + place.address
+                    + "\n----------------------------------------------------\n");
+        }
+
+        return sb.toString();
     }
 }

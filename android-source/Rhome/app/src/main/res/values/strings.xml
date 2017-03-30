@@ -43,7 +43,7 @@
     </string-array>
 
     <!-- Route activity-->
-    <string name="route_activity_header">Fastest route</string>
+    <string name="route_activity_header">Your route home!</string>
     <string name="button_show_route">Show route on map</string>
 
     <!-- Place list item -->

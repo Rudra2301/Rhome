@@ -16,7 +16,7 @@
         android:id="@+id/map_route"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="400px"
+        android:layout_height="400dp"
         tools:context="lorentzonsolutions.rhome.StartLocationActivity" />
 
 

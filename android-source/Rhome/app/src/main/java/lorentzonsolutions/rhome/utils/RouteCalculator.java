@@ -60,6 +60,7 @@ public class RouteCalculator {
 
         //Adding first nearest neighbour
         fastestRoute.add(route.get(0));
+        Log.d(TAG, "Nearest neighbour from end position is " + route.get(0).name + "at " + route.get(0).distanceToEndLocation + " from end.");
         route.remove(0);
 
         // We have a next place to visit as long as the route list contains places.
@@ -88,10 +89,17 @@ public class RouteCalculator {
         // fastestRoute now contains all the places to visit in the order of nearest neighbour with the beginning at start position.
         List<PlaceInformation> returnList = new ArrayList<>();
 
+        // Check if the calculation is done with beginning from end or not
+        if(startFromEnd) {
+            Collections.reverse(fastestRoute);
+        }
+
         returnList.add(startPlace);
         returnList.addAll(fastestRoute);
         returnList.add(endPlace);
 
+        Log.d(TAG, "Route calculated: ");
+        Log.d(TAG, RouteObject.printRoute(returnList));
         return returnList;
 
 

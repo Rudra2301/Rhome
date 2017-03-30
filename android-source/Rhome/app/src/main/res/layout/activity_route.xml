@@ -12,7 +12,7 @@
     android:orientation="vertical"
     tools:context="lorentzonsolutions.rhome.RouteActivity">
 
-    <TextView
+    <lorentzonsolutions.rhome.customViews.HeaderTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/route_activity_header"
@@ -23,7 +23,7 @@
         android:layout_marginBottom="3dp"
         android:typeface="monospace"
         android:textStyle="bold"
-        android:textSize="15sp"/>
+        android:textSize="25sp"/>
 
     <ListView
         android:id="@+id/fastest_route"
