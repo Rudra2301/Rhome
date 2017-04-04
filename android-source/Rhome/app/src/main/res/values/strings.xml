@@ -36,6 +36,8 @@
 
     <!-- ListNearbyPlacesOfType Activity -->
     <string name="list_nearby_locations_header">Showing nearby places</string>
+    <string name="open">Open</string>
+    <string name="closed">Closed</string>
 
     <string-array name="places_context_menu">
         <item>Show on map</item>
@@ -45,6 +47,7 @@
     <!-- Route activity-->
     <string name="route_activity_header">Your route home!</string>
     <string name="button_show_route">Show route on map</string>
+
 
     <!-- Place list item -->
     <string name="place_selected">Place is selected!</string>

@@ -9,11 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Created by johanlorentzon on 2017-01-25.
- */
 
-public class URLDataReceiver {
+class URLDataReceiver {
 
     // Log tag
     private String TAG = "URL_DATA_RECEIVER";
@@ -22,7 +19,7 @@ public class URLDataReceiver {
     private String responseData;
 
 
-    public String readURL(String urlString) {
+    String readURL(String urlString) {
         // TODO. USE THE NEXT PAGE TOKEN TO GET MORE THAN 20 RESULTS.
 
         try{

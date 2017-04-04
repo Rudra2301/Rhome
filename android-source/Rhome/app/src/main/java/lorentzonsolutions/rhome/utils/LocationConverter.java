@@ -6,7 +6,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * Class to convert between location types. NOTE: us the FetchAddressIntentService to convert to an address.
+ * Class to convert between location types. NOTE: use the FetchAddressIntentService to convert to an address.
  */
 public enum LocationConverter {
     INSTANCE;

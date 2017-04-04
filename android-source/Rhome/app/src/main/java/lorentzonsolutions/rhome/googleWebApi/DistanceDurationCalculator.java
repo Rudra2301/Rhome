@@ -12,7 +12,7 @@ public class DistanceDurationCalculator {
     // TODO. Possibility to change modes.
     private final String TAG = "DISTANCE_CALCULATOR";
     private final String API_KEY = Resources.getInstance().getAPI_KEY_WEB_API();
-    private DistanceModes mode = DistanceModes.DRIVING;
+    private GoogleDistanceModes mode = GoogleDistanceModes.DRIVING;
 
     private URLDataReceiver urlDataReceiver = new URLDataReceiver();
 
@@ -33,7 +33,7 @@ public class DistanceDurationCalculator {
 
     }
 
-    public void setDistanceMode(DistanceModes mode) {
+    public void setDistanceMode(GoogleDistanceModes mode) {
         this.mode = mode;
     }
 

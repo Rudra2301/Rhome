@@ -1,5 +1,8 @@
 package lorentzonsolutions.rhome.googleWebApi;
 
+import java.util.List;
+
+import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.Resources;
 
 /**
@@ -35,6 +38,12 @@ public class NearbyLocationSearcher {
 
     public String retrieveNearbyLocations() {
         return urlDataReceiver.readURL(buildURL());
+    }
+
+    public List<GooglePlaceInformation> getNearbyLocationsList() {
+        String data = retrieveNearbyLocations();
+        JSONDataParser jsonDataParser = new JSONDataParser();
+        return jsonDataParser.parseNearbyDataToPlaceInformation(data);
     }
 
     private String buildURL() {

@@ -1,8 +1,5 @@
 package lorentzonsolutions.rhome.utils.services;
 
-/**
- * Created by johanlorentzon on 2017-01-24.
- */
 
 public final class Constants {
 

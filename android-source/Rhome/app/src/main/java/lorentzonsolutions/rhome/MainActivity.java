@@ -1,6 +1,5 @@
 package lorentzonsolutions.rhome;
 
-import android.*;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -28,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
-import lorentzonsolutions.rhome.utils.PermissionUtils;
 import lorentzonsolutions.rhome.utils.RouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 import lorentzonsolutions.rhome.utils.Resources;
@@ -235,8 +233,7 @@ public class MainActivity extends AppCompatActivity implements OnRequestPermissi
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-
-        // TODO.
+        // Nothing needs to be done.
     }
 
 }

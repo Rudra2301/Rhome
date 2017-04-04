@@ -1,7 +1,6 @@
 package lorentzonsolutions.rhome;
 
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -11,8 +10,6 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-
-import lorentzonsolutions.rhome.utils.PermissionUtils;
 
 public class MyLocation extends AppCompatActivity implements OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback,
@@ -43,36 +40,16 @@ public class MyLocation extends AppCompatActivity implements OnMapReadyCallback,
         enableMyLocation();
     }
 
-    // The interface method for OnRequestPermissionCallback
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode != PermissionUtils.FINE_LOCATION_PERMISSION_REQUEST_CODE) {
-            return;
-        }
-
-        if (PermissionUtils.isPermissionGranted(permissions, grantResults
-                , android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // Enable the my location layer if the permission has been granted.
-            enableMyLocation();
-        } else {
-            // Display the missing permission error dialog when the fragments resume.
-            mPermissionDenied = true;
-        }
-    }
-
     /**
      * Enables the My Location layer if the fine location permission has been granted.
      */
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission to access the location is missing.
-            PermissionUtils.requestPermission(this, PermissionUtils.FINE_LOCATION_PERMISSION_REQUEST_CODE,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION, true);
-        } else if (mMap != null) {
-            // Access to the location has been granted to the app.
-            mMap.setMyLocationEnabled(true);
+                == PackageManager.PERMISSION_GRANTED) {
+            if(mMap != null) {
+                mMap.setMyLocationEnabled(true);
+
+            }
         }
     }
 

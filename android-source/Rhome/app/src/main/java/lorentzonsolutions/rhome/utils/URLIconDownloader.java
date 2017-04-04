@@ -18,8 +18,8 @@ public class URLIconDownloader {
     public static Drawable loadImageFromUrl(String url) {
         try {
             InputStream is = (InputStream) new URL(url).getContent();
-            Drawable icon = Drawable.createFromStream(is, null);
-            return icon;
+            return Drawable.createFromStream(is, null);
+
         }
         // TODO. Return error and catch in code.
         catch (MalformedURLException e) {

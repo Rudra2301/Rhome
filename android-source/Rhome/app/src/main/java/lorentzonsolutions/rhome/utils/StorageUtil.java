@@ -1,7 +1,10 @@
 package lorentzonsolutions.rhome.utils;
 
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Location;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,5 +84,10 @@ public enum StorageUtil {
     // TODO. Return copy.
     public List<GooglePlaceInformation> getPlacesNotToShow() {
         return this.placesNotToShow;
+    }
+
+    public boolean permissionsGiven(AppCompatActivity activity) {
+        return ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -168,8 +169,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(NearbyLocationSearcher... searchers) {
             // Fetching data.
-            String data = searchers[0].retrieveNearbyLocations();
-            List<GooglePlaceInformation> googlePlaceInformationList = new JSONDataParser().parseNearbyDataToPlaceInformation(data);
+            List<GooglePlaceInformation> googlePlaceInformationList = searchers[0].getNearbyLocationsList();
             Collections.sort(googlePlaceInformationList);
 
             for(GooglePlaceInformation place : googlePlaceInformationList) publishProgress(place);
@@ -198,8 +198,9 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             super(context, 0, placesList);
         }
 
+        @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             // Get the data item for this position
             GooglePlaceInformation place = getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
@@ -219,6 +220,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
 
 
             // Populate the data into the template view using the data object
+            assert place != null;
             placeName.setText(place.name);
             placeAddress.setText(place.address);
 

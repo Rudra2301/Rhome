@@ -38,7 +38,6 @@ import java.util.List;
 import java.util.Locale;
 
 import lorentzonsolutions.rhome.utils.LocationConverter;
-import lorentzonsolutions.rhome.utils.PermissionUtils;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
@@ -143,8 +142,6 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             Log.i(TAG, "Moving camera to selected place");
             CameraPosition position = CameraPosition.builder().bearing(0).tilt(0).zoom(12).target(location).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
-
-
         } else {
             Log.i(TAG, "Map not ready!");
             Toast.makeText(this, "Map not ready!", Toast.LENGTH_SHORT).show();
@@ -227,18 +224,19 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         if (isUpdatingSelectedAddress) {
             Toast.makeText(this, "Address is being fetched. Try again.", Toast.LENGTH_SHORT).show();
         } else {
-            storageUtil.setSelectedStartLocation(selectedLocation);
-            Toast.makeText(this, "Start location set!", Toast.LENGTH_SHORT).show();
+            if(selectedLocation != null) {
+                storageUtil.setSelectedStartLocation(selectedLocation);
+                Toast.makeText(this, "Start location set!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "No place selected.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     // Function for collecting the last known location, aka current location.
     private void getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO. Request permissions.
-            return;
-        } else {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         }
     }

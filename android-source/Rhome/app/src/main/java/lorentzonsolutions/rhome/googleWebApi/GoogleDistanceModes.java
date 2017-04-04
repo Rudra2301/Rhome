@@ -1,16 +1,12 @@
 package lorentzonsolutions.rhome.googleWebApi;
 
-/**
- * Created by johanlorentzon on 2017-01-27.
- */
-
-public enum DistanceModes {
+enum GoogleDistanceModes {
 
     DRIVING("driving"), WALKING("walking"), BICYCLING("walking");
 
     String googleName;
 
-    DistanceModes(String name) {
+    GoogleDistanceModes(String name) {
         this.googleName = name;
     }
 
