@@ -5,6 +5,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
 public class PermissionUtils {
+
+    //Request code for location permission request.
+    public static final int FINE_LOCATION_PERMISSION_REQUEST_CODE = 101;
+    public static final int COARSE_LOCATION_PERMISSION_REQUEST_CODE = 202;
+
+
     /**
      * Checks if the result contains a {@link PackageManager#PERMISSION_GRANTED} result for a
      * permission from a runtime permissions request.

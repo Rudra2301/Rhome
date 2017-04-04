@@ -10,15 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import lorentzonsolutions.rhome.shared.LocationTypes;
-import lorentzonsolutions.rhome.shared.PlaceInformation;
+import lorentzonsolutions.rhome.shared.GoogleLocationTypes;
 import lorentzonsolutions.rhome.utils.Resources;
 
 public class ListLocationTypeSelectionActivity extends AppCompatActivity {
@@ -27,7 +25,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
     private final Context thisContext = this;
 
     private ListView locationTypeList;
-    private ArrayAdapter<LocationTypes> listAdapter;
+    private ArrayAdapter<GoogleLocationTypes> listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +35,11 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
         // Setting the header
         getSupportActionBar().setTitle("Choose location type");
 
-        List<LocationTypes> locationTypes = new ArrayList<>();
-        for(LocationTypes type: LocationTypes.values()) locationTypes.add(type);
+        List<GoogleLocationTypes> googleLocationTypes = new ArrayList<>();
+        for(GoogleLocationTypes type: GoogleLocationTypes.values()) googleLocationTypes.add(type);
 
         // Creating adapter
-        listAdapter = new LocationTypeListAdapter(this,locationTypes);
+        listAdapter = new LocationTypeListAdapter(this, googleLocationTypes);
 
 
         // Setting adapter to list view
@@ -53,7 +51,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Get the location type selected
-                LocationTypes type = (LocationTypes) parent.getItemAtPosition(position);
+                GoogleLocationTypes type = (GoogleLocationTypes) parent.getItemAtPosition(position);
                 Log.d(TAG, "Type selected: " + type.getAsReadable());
 
                 Intent intent = new Intent(Resources.getInstance().getContext(), ListNearbyPlacesOfTypeActivity.class);
@@ -66,9 +64,9 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
     }
 
     // Adapter for list
-    class LocationTypeListAdapter extends ArrayAdapter<LocationTypes> {
+    class LocationTypeListAdapter extends ArrayAdapter<GoogleLocationTypes> {
 
-        public LocationTypeListAdapter(Context context, List<LocationTypes> placesList) {
+        public LocationTypeListAdapter(Context context, List<GoogleLocationTypes> placesList) {
             super(context, 0, placesList);
         }
 
@@ -78,7 +76,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
                     .from(getContext())
                     .inflate(R.layout.location_type_list_item, parent, false);
 
-            LocationTypes type = getItem(position);
+            GoogleLocationTypes type = getItem(position);
             TextView typeName = (TextView) convertView.findViewById(R.id.place_type);
             typeName.setText(type.getAsReadable());
             return convertView;

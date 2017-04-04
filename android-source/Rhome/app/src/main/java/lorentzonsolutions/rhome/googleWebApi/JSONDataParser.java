@@ -13,11 +13,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import lorentzonsolutions.rhome.shared.PlaceInformation;
+import lorentzonsolutions.rhome.shared.DistanceDurationInfoObject;
+import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
 /**
- * This class parses JSON data in string to a list of PlaceInformation object.
+ * This class parses JSON data in string to a list of GooglePlaceInformation object.
  */
 
 public class JSONDataParser {
@@ -32,7 +33,7 @@ public class JSONDataParser {
      * @param nearbyRequestResponseData
      * @return
      */
-    public List<PlaceInformation> parseNearbyDataToPlaceInformation(String nearbyRequestResponseData) {
+    public List<GooglePlaceInformation> parseNearbyDataToPlaceInformation(String nearbyRequestResponseData) {
 
         Log.i(TAG, "Attempting to parse nearby locations data.");
         JSONObject jsonObject;
@@ -50,13 +51,13 @@ public class JSONDataParser {
         return parseNearbySearchResultJSONArray(jsonArray);
     }
 
-    private List<PlaceInformation> parseNearbySearchResultJSONArray(JSONArray jsonArray) {
-        List<PlaceInformation> listOfPlaces = new ArrayList<>();
+    private List<GooglePlaceInformation> parseNearbySearchResultJSONArray(JSONArray jsonArray) {
+        List<GooglePlaceInformation> listOfPlaces = new ArrayList<>();
 
         int length = jsonArray.length();
         for(int i = 0; i < length; i++) {
             try {
-                PlaceInformation place = buildNearbyPlaceInformation((JSONObject) jsonArray.get(i));
+                GooglePlaceInformation place = buildNearbyPlaceInformation((JSONObject) jsonArray.get(i));
                 listOfPlaces.add(place);
                 Log.i(TAG, "Place added");
             } catch (JSONException e) {
@@ -69,7 +70,7 @@ public class JSONDataParser {
 
     }
 
-    private PlaceInformation buildNearbyPlaceInformation(JSONObject placeObject) {
+    private GooglePlaceInformation buildNearbyPlaceInformation(JSONObject placeObject) {
         Log.i(TAG, "Building nearby place information.");
 
         String name = "N/A";
@@ -105,16 +106,16 @@ public class JSONDataParser {
             Location end = StorageUtil.INSTANCE.getSelectedEndLocation();
             if(start != null) {
                 String distanceData = distanceDurationCalculator.calculateDistance(start.getLatitude(), start.getLongitude(), latitude, longitude);
-                DistanceDuration distanceDuration = parseDistanceCalculationData(distanceData);
-                distanceToStartLocation = distanceDuration.distance;
-                durationByCarToStartLocation = distanceDuration.duration;
+                DistanceDurationInfoObject distanceDurationInfoObject = parseDistanceCalculationData(distanceData);
+                distanceToStartLocation = distanceDurationInfoObject.distance;
+                durationByCarToStartLocation = distanceDurationInfoObject.duration;
             }
             // TODO. Calculate distance to end.
             if(end != null) {
                 String distanceData = distanceDurationCalculator.calculateDistance(end.getLatitude(), end.getLongitude(), latitude, longitude);
-                DistanceDuration distanceDuration = parseDistanceCalculationData(distanceData);
-                distanceToEndLocation = distanceDuration.distance;
-                durationByCarToEndLocation = distanceDuration.duration;
+                DistanceDurationInfoObject distanceDurationInfoObject = parseDistanceCalculationData(distanceData);
+                distanceToEndLocation = distanceDurationInfoObject.distance;
+                durationByCarToEndLocation = distanceDurationInfoObject.duration;
             }
 
             // These can be null
@@ -139,7 +140,7 @@ public class JSONDataParser {
             Log.e(TAG, "Error parsing place.");
             e.printStackTrace();
         }
-        PlaceInformation result = new PlaceInformation.BuildPlace(name, latitude, longitude)
+        GooglePlaceInformation result = new GooglePlaceInformation.BuildPlace(name, latitude, longitude)
                 .address(address)
                 .iconAddress(iconAddress)
                 .isOpen(isOpen)
@@ -158,9 +159,9 @@ public class JSONDataParser {
         return result;
     }
 
-    public PlaceInformation parseReverseGeocodeDataToPlaceInformation(String reverseGeocodeData) {
+    public GooglePlaceInformation parseReverseGeocodeDataToPlaceInformation(String reverseGeocodeData) {
 
-        PlaceInformation place = null;
+        GooglePlaceInformation place = null;
 
         String name = "Location";
         double latitude = 0.0;
@@ -207,7 +208,7 @@ public class JSONDataParser {
             return null;
         }
 
-        PlaceInformation result = new PlaceInformation.BuildPlace(name, latitude, longitude)
+        GooglePlaceInformation result = new GooglePlaceInformation.BuildPlace(name, latitude, longitude)
                 .address(address)
                 .iconAddress(iconAddress)
                 .isOpen(isOpen)
@@ -221,7 +222,7 @@ public class JSONDataParser {
 
     }
 
-    public DistanceDuration parseDistanceCalculationData(String distanceData) {
+    public DistanceDurationInfoObject parseDistanceCalculationData(String distanceData) {
         int distance = -1;
         int duration = -1;
         // Info at: https://developers.google.com/maps/documentation/distance-matrix/intro#DistanceMatrixRequests
@@ -263,7 +264,7 @@ public class JSONDataParser {
             Log.e(TAG, "Error parsing distance/duration data.");
             e.printStackTrace();
         }
-        return new DistanceDuration(distance, duration);
+        return new DistanceDurationInfoObject(distance, duration);
     }
 
     // TODO. Throw wrapped exception

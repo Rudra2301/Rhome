@@ -8,8 +8,8 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -38,12 +38,13 @@ import java.util.List;
 import java.util.Locale;
 
 import lorentzonsolutions.rhome.utils.LocationConverter;
+import lorentzonsolutions.rhome.utils.PermissionUtils;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
-public class StartLocationActivity extends FragmentActivity implements OnMapReadyCallback,
+public class StartLocationActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener{
 
     // Tag for logging.
     private static final String TAG = "START_LOCATION_ACTIVITY";
@@ -95,7 +96,6 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
         mapFragmentMyLocation.getMapAsync(this);
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "Map loaded and ready.");
@@ -112,7 +112,9 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
 
         // Getting the current location
         getCurrentLocation();
-        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+        if(currentLocation != null){
+            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+        }
     }
 
     @Override
@@ -158,7 +160,7 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
-                    .enableAutoManage(this,this)
+                    .enableAutoManage(this, this)
                     .build();
         }
     }
@@ -171,7 +173,7 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if(marker.isInfoWindowShown()) marker.hideInfoWindow();
+                if (marker.isInfoWindowShown()) marker.hideInfoWindow();
                 else marker.showInfoWindow();
                 return true;
             }
@@ -181,9 +183,11 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
             @Override
             public void onClick(View v) {
                 getCurrentLocation();
-                LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                selectedLocation = currentLocation;
-                moveCamera(currentLatLng);
+                if(currentLocation != null) {
+                    LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                    selectedLocation = currentLocation;
+                    moveCamera(currentLatLng);
+                }
             }
         });
 
@@ -220,10 +224,9 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
 
     // Stores the selected location as startlocation
     private void setEndLocation() {
-        if(isUpdatingSelectedAddress) {
+        if (isUpdatingSelectedAddress) {
             Toast.makeText(this, "Address is being fetched. Try again.", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             storageUtil.setSelectedStartLocation(selectedLocation);
             Toast.makeText(this, "Start location set!", Toast.LENGTH_SHORT).show();
         }
@@ -231,19 +234,13 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
 
     // Function for collecting the last known location, aka current location.
     private void getCurrentLocation() {
-        // Get the last known location (usually the current)
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            // TODO. Request permissions.
             return;
+        } else {
+            currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         }
-        currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
     }
 
     // INNER CLASS FOR FETCHING ADDRESS ASYNC ------------------------------------------------------
@@ -311,4 +308,5 @@ public class StartLocationActivity extends FragmentActivity implements OnMapRead
             }
         }
     }
+
 }

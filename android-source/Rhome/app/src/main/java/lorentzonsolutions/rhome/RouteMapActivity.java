@@ -1,14 +1,12 @@
 package lorentzonsolutions.rhome;
 
 import android.graphics.Color;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -19,23 +17,18 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import lorentzonsolutions.rhome.exceptions.RouteException;
-import lorentzonsolutions.rhome.googleWebApi.Directions;
+import lorentzonsolutions.rhome.googleWebApi.DirectionsAPI;
 import lorentzonsolutions.rhome.googleWebApi.JSONDataParser;
-import lorentzonsolutions.rhome.shared.PlaceInformation;
-import lorentzonsolutions.rhome.utils.LocationConverter;
+import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
 public class RouteMapActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -48,8 +41,8 @@ public class RouteMapActivity extends AppCompatActivity implements OnMapReadyCal
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
 
-    // Directions
-    private Directions directions = new Directions();
+    // DirectionsAPI
+    private DirectionsAPI directionsAPI = new DirectionsAPI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +126,8 @@ public class RouteMapActivity extends AppCompatActivity implements OnMapReadyCal
                     LatLng startLatLng = new LatLng(start.latitude, start.longitude);
                     LatLng endLatLng = new LatLng(next.latitude, next.longitude);
 
-                    String directionsUrl = directions.directionsUrlForRoute(startLatLng, endLatLng);
-                    Log.d(TAG, "URL for Google Directions API created: \n" + directionsUrl);
+                    String directionsUrl = directionsAPI.directionsUrlForRoute(startLatLng, endLatLng);
+                    Log.d(TAG, "URL for Google DirectionsAPI API created: \n" + directionsUrl);
 
                     DownloadDirectionsData downloadDirectionsData = new DownloadDirectionsData();
                     downloadDirectionsData.execute(directionsUrl);
@@ -151,17 +144,17 @@ public class RouteMapActivity extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    private void placeMarkersForRoute(List<PlaceInformation> route) {
-        for(PlaceInformation place : route) {
+    private void placeMarkersForRoute(List<GooglePlaceInformation> route) {
+        for(GooglePlaceInformation place : route) {
             MarkerOptions marker = new MarkerOptions();
             marker.position(new LatLng(place.latitude, place.longitude)).title(place.name);
             mMap.addMarker(marker);
         }
     }
 
-    private List<LatLng> makeLatLngList(List<PlaceInformation> placeInformationList) {
+    private List<LatLng> makeLatLngList(List<GooglePlaceInformation> googlePlaceInformationList) {
         List<LatLng> latLngList = new ArrayList<>();
-        for(PlaceInformation place : placeInformationList) latLngList.add(new LatLng(place.latitude, place.longitude));
+        for(GooglePlaceInformation place : googlePlaceInformationList) latLngList.add(new LatLng(place.latitude, place.longitude));
         return latLngList;
     }
 
@@ -172,7 +165,7 @@ public class RouteMapActivity extends AppCompatActivity implements OnMapReadyCal
         @Override
         protected String doInBackground(String... url) {
             String directionsApiUrl = url[0];
-            String data = directions.downloadDirectionsData(directionsApiUrl);
+            String data = directionsAPI.downloadDirectionsData(directionsApiUrl);
             Log.d(TAG, "Data downloaded. \n" + data);
             return data;
         }

@@ -1,10 +1,15 @@
 package lorentzonsolutions.rhome;
 
+import android.*;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,23 +27,25 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
-import lorentzonsolutions.rhome.customViews.HeaderTextView;
-import lorentzonsolutions.rhome.shared.PlaceInformation;
+import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
+import lorentzonsolutions.rhome.utils.PermissionUtils;
 import lorentzonsolutions.rhome.utils.RouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.URLIconDownloader;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnRequestPermissionsResultCallback {
+
+    private static final int LOCATION_PERMISSIONS = 101;
 
     private Context thisContext = this;
 
     // Helper objects
     private StorageUtil storageUtil = StorageUtil.INSTANCE;
 
-    private ArrayAdapter<PlaceInformation> selectedListAdapter;
+    private ArrayAdapter<GooglePlaceInformation> selectedListAdapter;
     ListView selectedPlacesList;
-    private HashMap<PlaceInformation, WeakReference<ImageView>> placeIconMap = new HashMap<>();
+    private HashMap<GooglePlaceInformation, WeakReference<ImageView>> placeIconMap = new HashMap<>();
     private final String TAG = "MAIN_ACTIVITY";
 
     @Override
@@ -92,7 +99,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Request app permissions
+        requestPermissions();
     }
+
+    private void requestPermissions() {
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                LOCATION_PERMISSIONS);
+
+    }
+
     @Override
     protected void onResume() {
         Address startAddress = storageUtil.getSelectedStartAddress();
@@ -142,10 +160,10 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     RouteCalculator calculator = new RouteCalculator();
-                    List<PlaceInformation> fastestRoute = calculator.calculateFastestTime(storageUtil.getSelectedPlacesList(), true);
+                    List<GooglePlaceInformation> fastestRoute = calculator.calculateFastestTime(storageUtil.getSelectedPlacesList(), true);
                     storageUtil.setFastestRoute(fastestRoute);
                     Log.d(TAG, "Calculated fastest route: ");
-                    for(PlaceInformation place : fastestRoute) {
+                    for(GooglePlaceInformation place : fastestRoute) {
                         Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
                     }
 
@@ -163,9 +181,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Adapter for list
-    class SelectedPlaceListAdapter extends ArrayAdapter<PlaceInformation> {
+    class SelectedPlaceListAdapter extends ArrayAdapter<GooglePlaceInformation> {
 
-        public SelectedPlaceListAdapter(Context context, List<PlaceInformation> placesList) {
+        public SelectedPlaceListAdapter(Context context, List<GooglePlaceInformation> placesList) {
             super(context, 0, placesList);
         }
 
@@ -173,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView == null) convertView = LayoutInflater.from(getContext()).inflate(R.layout.place_selected_list_item, parent, false);
 
-            PlaceInformation place = getItem(position);
+            GooglePlaceInformation place = getItem(position);
 
             TextView selectedPlaceName = (TextView) convertView.findViewById(R.id.selected_place_name);
             TextView selectedPlaceAddress = (TextView) convertView.findViewById(R.id.selected_place_address);
@@ -193,11 +211,11 @@ public class MainActivity extends AppCompatActivity {
     class SetPlaceIcon extends AsyncTask<Void, Void, Void> {
 
         private final WeakReference<ImageView> iconView;
-        private PlaceInformation place;
+        private GooglePlaceInformation place;
         private Drawable icon;
 
 
-        public SetPlaceIcon(PlaceInformation place, ImageView iconView) {
+        public SetPlaceIcon(GooglePlaceInformation place, ImageView iconView) {
             this.iconView = new WeakReference<ImageView>(iconView);
             this.place = place;
         }
@@ -211,6 +229,14 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             if(iconView != null && icon != null) iconView.get().setImageDrawable(icon);
         }
+    }
+
+    // The interface method for OnRequestPermissionCallback
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        // TODO.
     }
 
 }

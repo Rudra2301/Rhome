@@ -23,9 +23,6 @@ public class MyLocation extends AppCompatActivity implements OnMapReadyCallback,
     // Boolean for application permission to use map
     private boolean mPermissionDenied = false;
 
-    //Request code for location permission request.
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +41,13 @@ public class MyLocation extends AppCompatActivity implements OnMapReadyCallback,
 
         mMap.setOnMyLocationButtonClickListener(this);
         enableMyLocation();
-
-
     }
 
     // The interface method for OnRequestPermissionCallback
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
+        if (requestCode != PermissionUtils.FINE_LOCATION_PERMISSION_REQUEST_CODE) {
             return;
         }
 
@@ -73,7 +68,7 @@ public class MyLocation extends AppCompatActivity implements OnMapReadyCallback,
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             // Permission to access the location is missing.
-            PermissionUtils.requestPermission(this, LOCATION_PERMISSION_REQUEST_CODE,
+            PermissionUtils.requestPermission(this, PermissionUtils.FINE_LOCATION_PERMISSION_REQUEST_CODE,
                     android.Manifest.permission.ACCESS_FINE_LOCATION, true);
         } else if (mMap != null) {
             // Access to the location has been granted to the app.

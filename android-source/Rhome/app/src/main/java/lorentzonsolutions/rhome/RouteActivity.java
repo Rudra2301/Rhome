@@ -12,7 +12,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import lorentzonsolutions.rhome.exceptions.RouteException;
-import lorentzonsolutions.rhome.shared.PlaceInformation;
+import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
 public class RouteActivity extends AppCompatActivity {
@@ -26,8 +26,8 @@ public class RouteActivity extends AppCompatActivity {
 
         try {
             ArrayList<String> places = new ArrayList<>();
-            for(PlaceInformation placeInformation : StorageUtil.INSTANCE.getFastestRoute()) {
-                places.add(placeInformation.name);
+            for(GooglePlaceInformation googlePlaceInformation : StorageUtil.INSTANCE.getFastestRoute()) {
+                places.add(googlePlaceInformation.name);
             }
 
             ArrayAdapter<String> routeListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, places);

@@ -26,7 +26,7 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.googleWebApi.JSONDataParser;
 import lorentzonsolutions.rhome.googleWebApi.NearbyLocationSearcher;
-import lorentzonsolutions.rhome.shared.PlaceInformation;
+import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
 public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
@@ -41,8 +41,8 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
     private String selectedType;
 
     private ListView nearbyPlacesList;
-    private ArrayAdapter<PlaceInformation> listAdapter;
-    private List<PlaceInformation> places;
+    private ArrayAdapter<GooglePlaceInformation> listAdapter;
+    private List<GooglePlaceInformation> places;
 
     private StorageUtil storageUtil;
 
@@ -70,7 +70,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 if(!isListUpdating) {
-                    PlaceInformation place = (PlaceInformation) parent.getItemAtPosition(position);
+                    GooglePlaceInformation place = (GooglePlaceInformation) parent.getItemAtPosition(position);
                     // Check if the place already exists in the selected place list. If so, remove it.
                     if(storageUtil.getSelectedPlacesList().contains(place)) {
                         storageUtil.removeSelectedPlace(place);
@@ -115,7 +115,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
             // Get the selected place
             // TODO. Check if the nearByPlacesList can be used
-            PlaceInformation clickedPlace = (PlaceInformation) theList.getAdapter().getItem(info.position);
+            GooglePlaceInformation clickedPlace = (GooglePlaceInformation) theList.getAdapter().getItem(info.position);
             menu.setHeaderTitle(clickedPlace.name);
             String[] menuItems = getResources().getStringArray(R.array.places_context_menu);
             // Add the menu items
@@ -131,7 +131,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         int select = item.getItemId();
         // 0 -> Show on map. 1 -> Add to never show list
-        PlaceInformation placeClicked = (PlaceInformation) nearbyPlacesList.getAdapter().getItem(info.position);
+        GooglePlaceInformation placeClicked = (GooglePlaceInformation) nearbyPlacesList.getAdapter().getItem(info.position);
 
         if(select == 0) {
             // Show map
@@ -157,7 +157,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
     Second  -> for use in onProgressUpdate(second... seconds)
     Third   -> for use in onPostExecute(third third). The return value from the doInBackground
      */
-    private class NearbyLocationCollector extends AsyncTask<NearbyLocationSearcher, PlaceInformation, Void> {
+    private class NearbyLocationCollector extends AsyncTask<NearbyLocationSearcher, GooglePlaceInformation, Void> {
 
         @Override
         protected void onPreExecute() {
@@ -169,15 +169,15 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
         protected Void doInBackground(NearbyLocationSearcher... searchers) {
             // Fetching data.
             String data = searchers[0].retrieveNearbyLocations();
-            List<PlaceInformation> placeInformationList = new JSONDataParser().parseNearbyDataToPlaceInformation(data);
-            Collections.sort(placeInformationList);
+            List<GooglePlaceInformation> googlePlaceInformationList = new JSONDataParser().parseNearbyDataToPlaceInformation(data);
+            Collections.sort(googlePlaceInformationList);
 
-            for(PlaceInformation place : placeInformationList) publishProgress(place);
+            for(GooglePlaceInformation place : googlePlaceInformationList) publishProgress(place);
             return null;
         }
 
         @Override
-        protected void onProgressUpdate(PlaceInformation... progress) {
+        protected void onProgressUpdate(GooglePlaceInformation... progress) {
             Log.i(TAG, "Nearby location added.");
             listAdapter.add(progress[0]);
             listAdapter.notifyDataSetChanged();
@@ -192,16 +192,16 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
     }
 
     // Adapter for list
-    class PlaceListAdapter extends ArrayAdapter<PlaceInformation> {
+    class PlaceListAdapter extends ArrayAdapter<GooglePlaceInformation> {
 
-        public PlaceListAdapter(Context context, List<PlaceInformation> placesList) {
+        public PlaceListAdapter(Context context, List<GooglePlaceInformation> placesList) {
             super(context, 0, placesList);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // Get the data item for this position
-            PlaceInformation place = getItem(position);
+            GooglePlaceInformation place = getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.place_list_item, parent, false);
 
