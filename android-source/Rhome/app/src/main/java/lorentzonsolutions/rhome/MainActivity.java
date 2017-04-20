@@ -26,11 +26,8 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
-import lorentzonsolutions.rhome.EndLocationActivity;
-import lorentzonsolutions.rhome.ListLocationTypeSelectionActivity;
-import lorentzonsolutions.rhome.R;
-import lorentzonsolutions.rhome.RouteActivity;
-import lorentzonsolutions.rhome.StartLocationActivity;
+import lorentzonsolutions.rhome.activities.EndLocationActivity;
+import lorentzonsolutions.rhome.activities.StartLocationActivity;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.RouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
@@ -61,98 +58,13 @@ public class MainActivity extends AppCompatActivity implements OnRequestPermissi
         setContentView(R.layout.activity_main);
         //Resources.getInstance().setContext(this);
 
-        Button selectPlacesButton = (Button) findViewById(R.id.select_places);
 
-        selectPlacesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(storageUtil.getSelectedStartLocation() != null && storageUtil.getSelectedEndLocation() != null) {
-                    Intent intent = new Intent(Resources.getInstance().getContext(), ListLocationTypeSelectionActivity.class);
-                    startActivity(intent);
-                }
-                else if(storageUtil.getSelectedStartLocation() == null) {
-                    Toast.makeText(Resources.getInstance().getContext(), "You must select a start location.", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(Resources.getInstance().getContext(), "You must select an end location.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        // Selected places
-        selectedPlacesList = (ListView) findViewById(R.id.selected_places_list);
-        selectedListAdapter = new SelectedPlaceListAdapter(this, storageUtil.getSelectedPlacesList());
-        selectedPlacesList.setAdapter(selectedListAdapter);
-
-        Button selectStartButton = (Button) findViewById(R.id.start_location_button);
-        selectStartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(thisContext, StartLocationActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button selectEndButton = (Button) findViewById(R.id.end_location_button);
-        selectEndButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(thisContext, EndLocationActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        // Request app permissions
-        requestPermissions();
+;
     }
 
-    private void requestPermissions() {
-
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                LOCATION_PERMISSIONS);
-
-    }
 
     @Override
     protected void onResume() {
-        Address startAddress = storageUtil.getSelectedStartAddress();
-        if(startAddress != null) {
-
-            //Change the text on the select start location button.
-            Button selectStart = (Button) findViewById(R.id.start_location_button);
-            selectStart.setText(R.string.start_location_is_set);
-
-            // Showing the info for selected start location
-            TextView infoHeader = (TextView) findViewById(R.id.start_location_info_header);
-            infoHeader.setVisibility(View.VISIBLE);
-
-            TextView infoText = (TextView) findViewById(R.id.start_location_info_text);
-            infoText.setVisibility(View.VISIBLE);
-
-            infoText.setText(startAddress.getAddressLine(0));
-
-            selectedListAdapter.notifyDataSetChanged();
-        }
-        Address endAddress = storageUtil.getSelectedEndAddress();
-
-        if(endAddress != null) {
-
-            //Change the text on the select start location button.
-            Button selectStart = (Button) findViewById(R.id.end_location_button);
-            selectStart.setText(R.string.end_location_is_set);
-
-            // Showing the info for selected start location
-            TextView infoHeader = (TextView) findViewById(R.id.end_location_info_header);
-            infoHeader.setVisibility(View.VISIBLE);
-
-            TextView infoText = (TextView) findViewById(R.id.end_location_info_text);
-            infoText.setVisibility(View.VISIBLE);
-
-            infoText.setText(endAddress.getAddressLine(0));
-
-            selectedListAdapter.notifyDataSetChanged();
-        }
 
         if(storageUtil.getSelectedPlacesList() != null && storageUtil.getSelectedPlacesList().size() != 0) {
             Button calculateFastestTime = (Button) findViewById(R.id.fastest_time);
@@ -183,56 +95,7 @@ public class MainActivity extends AppCompatActivity implements OnRequestPermissi
         super.onResume();
     }
 
-    // Adapter for list
-    class SelectedPlaceListAdapter extends ArrayAdapter<GooglePlaceInformation> {
 
-        public SelectedPlaceListAdapter(Context context, List<GooglePlaceInformation> placesList) {
-            super(context, 0, placesList);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null) convertView = LayoutInflater.from(getContext()).inflate(R.layout.place_selected_list_item, parent, false);
-
-            GooglePlaceInformation place = getItem(position);
-
-            TextView selectedPlaceName = (TextView) convertView.findViewById(R.id.selected_place_name);
-            TextView selectedPlaceAddress = (TextView) convertView.findViewById(R.id.selected_place_address);
-            ImageView iconView = (ImageView) convertView.findViewById(R.id.place_icon);
-
-            selectedPlaceName.setText(place.name);
-            selectedPlaceAddress.setText(place.address);
-
-            // Running thread to collect icon
-            new SetPlaceIcon(place, iconView).execute();
-
-            return convertView;
-        }
-    }
-
-    // Async task for fetching the icon image
-    class SetPlaceIcon extends AsyncTask<Void, Void, Void> {
-
-        private final WeakReference<ImageView> iconView;
-        private GooglePlaceInformation place;
-        private Drawable icon;
-
-
-        public SetPlaceIcon(GooglePlaceInformation place, ImageView iconView) {
-            this.iconView = new WeakReference<ImageView>(iconView);
-            this.place = place;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            icon = URLIconDownloader.loadImageFromUrl(place.iconAddress);
-            return null;
-        }
-        @Override
-        protected void onPostExecute(Void result) {
-            if(iconView != null && icon != null) iconView.get().setImageDrawable(icon);
-        }
-    }
 
     // The interface method for OnRequestPermissionCallback
     @Override

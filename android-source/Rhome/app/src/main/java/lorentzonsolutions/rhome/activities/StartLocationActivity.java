@@ -1,9 +1,5 @@
 package lorentzonsolutions.rhome.activities;
 
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,6 +8,8 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -44,12 +42,12 @@ import lorentzonsolutions.rhome.utils.LocationConverter;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
-public class SelectStartActivity extends AppCompatActivity implements OnMapReadyCallback,
+public class StartLocationActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener{
 
     // Tag for logging.
-    private static final String TAG = "ACTIVITY_SELECT_START";
+    private static final String TAG = "START_LOCATION_ACTIVITY";
 
     // Google API
     private GoogleMap mMap;
@@ -64,10 +62,10 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
     private Address selectedAddress;
 
     // View Objects
-    Button useCurrentPosition;
-    Button doneButton;
-    TextView locationInfoHeader;
-    TextView locationInfoText;
+    Button myLocationButton;
+    Button setStartLocationButton;
+    TextView info;
+    TextView infoHeader;
 
 
     // Storage object singleton
@@ -85,8 +83,10 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_location);
 
-        //setStartLocationButton = (Button) findViewById(R.id.button_use_location);
-        //info = (TextView) findViewById(R.id.location_info);
+        myLocationButton = (Button) findViewById(R.id.select_start_use_current_position_button);
+        setStartLocationButton = (Button) findViewById(R.id.select_start_done_button);
+        info = (TextView) findViewById(R.id.select_start_info_text);
+        infoHeader = (TextView) findViewById(R.id.select_start_info_header);
 
         // Setting up the Google Api Client
         buildGoogleApiClient();
@@ -114,7 +114,7 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
 
         // Getting the current location
         getCurrentLocation();
-        if (currentLocation != null) {
+        if(currentLocation != null){
             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
         }
     }
@@ -139,7 +139,7 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
         if (isMapReady) {
             // Setting the location as selected location
             selectedLocation = locationConverter.latLngToLocation(location);
-            new UpdateSelectedAddress(locationInfoText, mMap).execute();
+            new UpdateSelectedAddress(info, mMap).execute();
 
             // Moving camera
             Log.i(TAG, "Moving camera to selected place");
@@ -147,12 +147,17 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
         } else {
             Log.i(TAG, "Map not ready!");
-            Toast.makeText(this, "Map not ready!", Toast.LENGTH_SHORT).show();
+            // TODO. Snackbar
         }
+
+        infoHeader.setVisibility(View.VISIBLE);
+        info.setVisibility(View.VISIBLE);
+        setStartLocationButton.setEnabled(true);
     }
 
     // Using the GoogleApiClient builder to set the reference of mGoogleApiClient.
     private void buildGoogleApiClient() {
+
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -165,10 +170,6 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
 
     // Events for buttons etc.
     private void initEvents() {
-        useCurrentPosition = (Button) findViewById(R.id.select_start_use_current_position_button);
-        doneButton = (Button) findViewById(R.id.select_start_done_button);
-        locationInfoHeader = (TextView) findViewById(R.id.select_start_info_header);
-        locationInfoText = (TextView) findViewById(R.id.select_start_info_text);
 
         // On map marker clicks
         // TODO. Marker info window doesn't hide when clicked again
@@ -181,13 +182,22 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
             }
         });
 
-
+        myLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentLocation();
+                if(currentLocation != null) {
+                    LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                    selectedLocation = currentLocation;
+                    moveCamera(currentLatLng);
+                }
+            }
+        });
 
         // Google place select field
         // Getting the autocomplete fragment
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
 
         // Setting listener to the onPlaceFragment
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -205,27 +215,25 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
             }
         });
 
-        doneButton.setOnClickListener(new View.OnClickListener() {
+        setStartLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setStartLocation();
+                setEndLocation();
                 finish();
             }
         });
     }
 
     // Stores the selected location as startlocation
-    private void setStartLocation() {
+    private void setEndLocation() {
         if (isUpdatingSelectedAddress) {
-            Toast.makeText(this, "Address is being fetched. Try again.", Toast.LENGTH_SHORT).show();
-            Snackbar.make(locationInfoHeader,"Address is being fetched. Try again.", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+            // TODO. Snackbar
         } else {
-            if (selectedLocation != null) {
+            if(selectedLocation != null) {
                 storageUtil.setSelectedStartLocation(selectedLocation);
-                Toast.makeText(this, "Start location set!", Toast.LENGTH_SHORT).show();
+                // TODO. Snackbar
             } else {
-                Toast.makeText(this, "No place selected.", Toast.LENGTH_SHORT).show();
+                // TODO. Snackbar
             }
         }
     }
@@ -263,18 +271,21 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
                         selectedLocation.getLongitude(),
                         // Get just a single address.
                         1);
-                if (addresses == null || addresses.size() == 0) {
+                if(addresses == null || addresses.size() == 0) {
                     Log.i(TAG, "No address found!");
-                } else {
+                }
+                else {
                     selectedAddress = addresses.get(0);
                     storageUtil.setSelectedStartAddress(selectedAddress);
                     //updateSelectedLocationInfo();
                 }
-            } catch (IOException ioe) {
+            }
+            catch (IOException ioe) {
                 Log.e(TAG, "Service not available: \n" + ioe.getMessage());
                 ioe.printStackTrace();
                 return null;
-            } catch (IllegalArgumentException iae) {
+            }
+            catch (IllegalArgumentException iae) {
                 Log.e(TAG, "Invalid latitude or longitude: \n" + iae.getMessage());
                 iae.printStackTrace();
                 return null;
@@ -286,11 +297,15 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
         @Override
         protected void onPostExecute(Void result) {
             isUpdatingSelectedAddress = false;
-            if (infoTextViewWeakReference.get() != null) {
+            if(infoTextViewWeakReference.get() != null) {
                 Log.i(TAG, "Updating location information text.");
-                infoTextViewWeakReference.get().setText(selectedAddress.getAddressLine(0));
+                StringBuilder sb = new StringBuilder();
+                for(int i = 0; i < selectedAddress.getMaxAddressLineIndex(); i++) {
+                    sb.append(selectedAddress.getAddressLine(i) + "\n");
+                }
+                infoTextViewWeakReference.get().setText(sb.toString());
             }
-            if (googleMapWeakReference.get() != null) {
+            if(googleMapWeakReference.get() != null) {
                 Log.i(TAG, "Adding marker to map.");
                 // Placing marker on map
                 googleMapWeakReference.get().clear();
@@ -302,4 +317,3 @@ public class SelectStartActivity extends AppCompatActivity implements OnMapReady
     }
 
 }
-

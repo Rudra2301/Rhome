@@ -17,7 +17,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        tools:context="lorentzonsolutions.rhome.StartLocationActivity" />
+        tools:context="lorentzonsolutions.rhome.activities.StartLocationActivity" />
 
     <lorentzonsolutions.rhome.customViews.HombreButton
         android:layout_width="match_parent"

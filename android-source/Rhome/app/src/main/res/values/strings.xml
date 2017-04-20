@@ -21,6 +21,18 @@
     <string name="select_start_title">Choose your start</string>
     <string name="select_start_info_header">Location info</string>
 
+    <!-- SELECT END ACTIVITY -->
+    <string name="select_end_title">Choose your end</string>
+    <string name="select_end_info_header">Location info</string>
+
+    <!-- STEP TWO ACTIVITY -->
+    <string name="step_two_title">Places to visit</string>
+    <string name="step_two_start_location_text">Start location: </string>
+    <string name="step_two_end_location_text">End location: </string>
+    <string name="step_two_place_list_header">Selected places</string>
+    <string name="step_two_add_place_button">Add place</string>
+    <string name="step_two_done_button">Done!</string>
+
 
     <!--  OLD ONES BELOW -->
     <!-- Main Activity -->

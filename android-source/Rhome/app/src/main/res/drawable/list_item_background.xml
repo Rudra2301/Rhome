@@ -13,5 +13,6 @@
 
     <stroke
         android:width="2dp"
+        android:color="@color/accent_material_light_1"
         />
 </shape>

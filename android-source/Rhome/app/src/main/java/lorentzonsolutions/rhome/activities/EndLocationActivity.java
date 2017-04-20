@@ -1,4 +1,4 @@
-package lorentzonsolutions.rhome;
+package lorentzonsolutions.rhome.activities;
 
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -8,8 +8,8 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,16 +37,17 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Locale;
 
+import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.utils.LocationConverter;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
-public class StartLocationActivity extends AppCompatActivity implements OnMapReadyCallback,
+public class EndLocationActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener {
 
     // Tag for logging.
-    private static final String TAG = "START_LOCATION_ACTIVITY";
+    private static final String TAG = "END_LOCATION_ACTIVITY";
 
     // Google API
     private GoogleMap mMap;
@@ -62,8 +63,9 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
 
     // View Objects
     Button myLocationButton;
-    Button setStartLocationButton;
+    Button setEndLocationButton;
     TextView info;
+    TextView infoHeader;
 
 
     // Storage object singleton
@@ -79,11 +81,12 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
 
         isMapReady = false;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_location);
+        setContentView(R.layout.activity_end_location);
 
-        myLocationButton = (Button) findViewById(R.id.my_location_button);
-        setStartLocationButton = (Button) findViewById(R.id.button_use_location);
-        info = (TextView) findViewById(R.id.location_info);
+        myLocationButton = (Button) findViewById(R.id.select_end_use_current_position_button);
+        setEndLocationButton = (Button) findViewById(R.id.select_end_done_button);
+        info = (TextView) findViewById(R.id.select_end_info_text);
+        infoHeader = (TextView) findViewById(R.id.select_end_info_header);
 
         // Setting up the Google Api Client
         buildGoogleApiClient();
@@ -94,6 +97,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
 
         mapFragmentMyLocation.getMapAsync(this);
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -111,9 +115,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
 
         // Getting the current location
         getCurrentLocation();
-        if(currentLocation != null){
-            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-        }
+        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
     }
 
     @Override
@@ -142,10 +144,16 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             Log.i(TAG, "Moving camera to selected place");
             CameraPosition position = CameraPosition.builder().bearing(0).tilt(0).zoom(12).target(location).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
+
+
         } else {
             Log.i(TAG, "Map not ready!");
             Toast.makeText(this, "Map not ready!", Toast.LENGTH_SHORT).show();
         }
+
+        infoHeader.setVisibility(View.VISIBLE);
+        info.setVisibility(View.VISIBLE);
+        setEndLocationButton.setEnabled(true);
     }
 
     // Using the GoogleApiClient builder to set the reference of mGoogleApiClient.
@@ -157,7 +165,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
-                    .enableAutoManage(this, this)
+                    .enableAutoManage(this,this)
                     .build();
         }
     }
@@ -170,7 +178,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (marker.isInfoWindowShown()) marker.hideInfoWindow();
+                if(marker.isInfoWindowShown()) marker.hideInfoWindow();
                 else marker.showInfoWindow();
                 return true;
             }
@@ -180,11 +188,9 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onClick(View v) {
                 getCurrentLocation();
-                if(currentLocation != null) {
-                    LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                    selectedLocation = currentLocation;
-                    moveCamera(currentLatLng);
-                }
+                LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                selectedLocation = currentLocation;
+                moveCamera(currentLatLng);
             }
         });
 
@@ -210,7 +216,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-        setStartLocationButton.setOnClickListener(new View.OnClickListener() {
+        setEndLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setEndLocation();
@@ -219,26 +225,32 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         });
     }
 
-    // Stores the selected location as startlocation
+    // Stores the selected location as endlocation
     private void setEndLocation() {
-        if (isUpdatingSelectedAddress) {
+        if(isUpdatingSelectedAddress) {
             Toast.makeText(this, "Address is being fetched. Try again.", Toast.LENGTH_SHORT).show();
-        } else {
-            if(selectedLocation != null) {
-                storageUtil.setSelectedStartLocation(selectedLocation);
-                Toast.makeText(this, "Start location set!", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "No place selected.", Toast.LENGTH_SHORT).show();
-            }
+        }
+        else {
+            storageUtil.setSelectedEndLocation(selectedLocation);
+            Toast.makeText(this, "End location set!", Toast.LENGTH_SHORT).show();
         }
     }
 
     // Function for collecting the last known location, aka current location.
     private void getCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        // Get the last known location (usually the current)
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
         }
+        currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
     }
 
     // INNER CLASS FOR FETCHING ADDRESS ASYNC ------------------------------------------------------
@@ -271,7 +283,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
                 }
                 else {
                     selectedAddress = addresses.get(0);
-                    storageUtil.setSelectedStartAddress(selectedAddress);
+                    storageUtil.setSelectedEndAddress(selectedAddress);
                     //updateSelectedLocationInfo();
                 }
             }
@@ -292,9 +304,14 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected void onPostExecute(Void result) {
             isUpdatingSelectedAddress = false;
+
             if(infoTextViewWeakReference.get() != null) {
                 Log.i(TAG, "Updating location information text.");
-                infoTextViewWeakReference.get().setText(selectedAddress.getAddressLine(0));
+                StringBuilder sb = new StringBuilder();
+                for(int i = 0; i < selectedAddress.getMaxAddressLineIndex(); i++) {
+                    sb.append(selectedAddress.getAddressLine(i) + "\n");
+                }
+                infoTextViewWeakReference.get().setText(sb.toString());
             }
             if(googleMapWeakReference.get() != null) {
                 Log.i(TAG, "Adding marker to map.");
@@ -306,5 +323,4 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             }
         }
     }
-
 }
