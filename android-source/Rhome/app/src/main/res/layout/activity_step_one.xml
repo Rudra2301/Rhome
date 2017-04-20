@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="lorentzonsolutions.rhome.activities.StepOneActivity">
+
+    <lorentzonsolutions.rhome.customViews.EdoszTextView
+        android:id="@+id/step_one_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/step_one_title"
+        android:textAlignment="center"
+        android:layout_marginTop="15dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="35sp"/>
+
+
+    <Button
+        android:id="@+id/step_one_select_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/step_one_title"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/step_one_set_start_location"
+        style="@style/Widget.AppCompat.Button.Colored"/>
+    <lorentzonsolutions.rhome.customViews.EdoszTextView
+        android:id="@+id/step_one_start_location_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_below="@id/step_one_select_start"
+        android:layout_margin="15dp"
+        android:text="@string/step_one_start_location_header"
+        android:textAlignment="center"
+        android:textSize="20sp"/>
+    <TextView
+        android:id="@+id/step_one_start_location_information"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:layout_below="@id/step_one_start_location_header"
+        android:textAlignment="center"/>
+
+    <View
+        android:layout_width="250dp"
+        android:layout_height="1dp"
+        android:background="@color/accent_material_light_1"
+        android:layout_below="@id/step_one_start_location_information"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:id="@+id/step_one_select_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/step_one_start_location_information"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/step_one_set_end_location"
+        style="@style/Widget.AppCompat.Button.Colored"/>
+    <lorentzonsolutions.rhome.customViews.EdoszTextView
+        android:id="@+id/step_one_end_location_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_below="@id/step_one_select_end"
+        android:layout_margin="15dp"
+        android:text="@string/step_one_end_location_header"
+        android:textAlignment="center"
+        android:textSize="20sp"/>
+    <TextView
+        android:id="@+id/step_one_end_location_information"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:layout_below="@id/step_one_end_location_header"
+        android:textAlignment="center"/>
+
+    <View
+        android:layout_width="250dp"
+        android:layout_height="1dp"
+        android:background="@color/accent_material_light_1"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/step_one_end_location_information"/>
+
+    <Button
+        android:id="@+id/step_one_done_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/step_one_done_button"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:enabled="false"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        />
+
+</RelativeLayout>

@@ -1,6 +1,24 @@
 <resources>
     <string name="app_name">Rhome</string>
 
+    <!-- START ACTIVITY -->
+    <string name="start_title">The Rhome Application</string>
+    <string name="start_sub_title">Version 1.0</string>
+    <string name="start_button">Start!</string>
+
+    <!-- STEP ONE ACTIVITY (choose start and end locations-->
+    <string name="step_one_title">Your start and end</string>
+    <string name="step_one_set_start_location">Pick start location</string>
+    <string name="step_one_reset_start_location">New start location</string>
+    <string name="step_one_set_end_location">Pick end location</string>
+    <string name="step_one_reset_end_location">New end location</string>
+    <string name="step_one_done_button">Done!</string>
+    <string name="step_one_start_location_header">Your start location</string>
+    <string name="step_one_end_location_header">Your end location</string>
+    <string name="step_one_no_location_choosen">Choose a location!</string>
+
+
+    <!--  OLD ONES BELOW -->
     <!-- Main Activity -->
 
     <string name="title_activity_maps">Map</string>
@@ -73,5 +91,6 @@
     </string-array>
 
     <string name="minor_route_context_header">Navigation</string>
+    <string name="title_activity_start">StartActivity</string>
 
 </resources>

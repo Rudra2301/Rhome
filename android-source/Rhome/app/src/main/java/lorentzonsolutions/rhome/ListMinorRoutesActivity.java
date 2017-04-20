@@ -38,9 +38,6 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_minor_routes);
 
-        // Setting the titlebar
-        if(getSupportActionBar() != null) getSupportActionBar().setTitle("Your minor routes");
-
         // Creating adapter
         try {
             adapter = new MinorRoutesListAdapter(this, StorageUtil.INSTANCE.splitToMinorRoutes(StorageUtil.INSTANCE.getFastestRoute()));

@@ -32,9 +32,6 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_location_type_selection);
 
-        // Setting the header
-        getSupportActionBar().setTitle("Choose location type");
-
         List<GoogleLocationTypes> googleLocationTypes = new ArrayList<>();
         for(GoogleLocationTypes type: GoogleLocationTypes.values()) googleLocationTypes.add(type);
 

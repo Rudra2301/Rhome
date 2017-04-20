@@ -3,15 +3,10 @@ package lorentzonsolutions.rhome.customViews;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 import lorentzonsolutions.rhome.utils.FontCreator;
 
-/**
- * Created by johanlorentzon on 2017-02-16.
- */
-
-public class EdoszTextView extends TextView {
+public class EdoszTextView extends android.support.v7.widget.AppCompatTextView {
     public EdoszTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();

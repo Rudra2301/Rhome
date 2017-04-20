@@ -31,7 +31,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -70,7 +70,9 @@
         <activity android:name=".EndLocationActivity" />
         <activity android:name=".RouteActivity" />
         <activity android:name=".RouteMapActivity" />
-        <activity android:name=".ListMinorRoutesActivity"></activity>
+        <activity android:name=".ListMinorRoutesActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".activities.StepOneActivity"></activity>
     </application>
 
 </manifest>

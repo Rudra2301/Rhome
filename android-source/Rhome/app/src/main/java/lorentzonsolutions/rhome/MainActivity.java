@@ -26,6 +26,11 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
+import lorentzonsolutions.rhome.EndLocationActivity;
+import lorentzonsolutions.rhome.ListLocationTypeSelectionActivity;
+import lorentzonsolutions.rhome.R;
+import lorentzonsolutions.rhome.RouteActivity;
+import lorentzonsolutions.rhome.StartLocationActivity;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.RouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
@@ -51,10 +56,10 @@ public class MainActivity extends AppCompatActivity implements OnRequestPermissi
 
         super.onCreate(savedInstanceState);
         // Hiding action bar on top
-        getSupportActionBar().hide();
+        // getSupportActionBar().hide();
 
         setContentView(R.layout.activity_main);
-        Resources.getInstance().setContext(this);
+        //Resources.getInstance().setContext(this);
 
         Button selectPlacesButton = (Button) findViewById(R.id.select_places);
 

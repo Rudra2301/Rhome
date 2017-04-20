@@ -38,6 +38,8 @@ captures/
 # Intellij
 *.iml
 .idea/workspace.xml
+.idea/
+android-source/Rhome/.idea/
 
 # Keystore files
 *.jks
