@@ -60,6 +60,31 @@ public class StepOneActivity extends AppCompatActivity {
         setStart = (Button) findViewById(R.id.step_one_select_start);
         endLocationHeaderText = (TextView) findViewById(R.id.step_one_end_location_header);
         endLocationInfoText = (TextView) findViewById(R.id.step_one_end_location_information);
+
+        setStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Resources.getInstance().getContext(), SelectStartActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        setEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Resources.getInstance().getContext(), EndLocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Resources.getInstance().getContext(), StepTwoActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void doneButtonFunctionality() {
@@ -98,13 +123,6 @@ public class StepOneActivity extends AppCompatActivity {
 
         if(storage.getSelectedEndLocation() == null) setEnd.setText(R.string.step_one_set_end_location);
         else setEnd.setText(R.string.step_one_reset_end_location);
-        setEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Resources.getInstance().getContext(), EndLocationActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void endLocationInformationText() {
@@ -133,12 +151,5 @@ public class StepOneActivity extends AppCompatActivity {
         setStart.setEnabled(true);
         if(storage.getSelectedStartLocation() == null) setStart.setText(R.string.step_one_set_start_location);
         else setStart.setText(R.string.step_one_reset_start_location);
-        setStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Resources.getInstance().getContext(), StartLocationActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 }

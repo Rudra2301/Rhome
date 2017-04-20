@@ -72,7 +72,9 @@
         <activity android:name=".RouteMapActivity" />
         <activity android:name=".ListMinorRoutesActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".activities.StepOneActivity"></activity>
+        <activity android:name=".activities.StepOneActivity" />
+        <activity android:name=".activities.StepTwoActivity" />
+        <activity android:name=".activities.SelectStartActivity" />
     </application>
 
 </manifest>
