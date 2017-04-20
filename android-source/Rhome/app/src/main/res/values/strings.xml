@@ -60,4 +60,18 @@
     <string name="font_name_angeline">angeline</string>
     <string name="font_name_eltercerhombre">eltercerhombre</string>
 
+    <!-- Route map activity-->
+    <string name="button_starting_route">Start route</string>
+
+    <!-- Minor routes activity -->
+    <string name="list_minor_routes_header">Your minor routes</string>
+    <string name="button_navigate">Show list for navigation</string>
+
+    <string-array name="minor_route_context">
+        <item>Navigate from my current position</item>
+        <item>Show turn-by-turn navigation</item>
+    </string-array>
+
+    <string name="minor_route_context_header">Navigation</string>
+
 </resources>

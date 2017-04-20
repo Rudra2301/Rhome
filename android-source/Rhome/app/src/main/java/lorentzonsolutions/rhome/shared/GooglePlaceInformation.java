@@ -38,6 +38,8 @@ public class GooglePlaceInformation implements Comparable, Parcelable{
         return this.orderId;
     }
 
+    public boolean visited;
+
 
     private GooglePlaceInformation(BuildPlace builder) {
         this.name = builder.name;
@@ -58,6 +60,8 @@ public class GooglePlaceInformation implements Comparable, Parcelable{
         this.minutesByCarToEndLocation = builder.minutesByCarToEndLocation;
         this.minutesByBicycleToEndLocation = builder.minutesByBicycleToEndLocation;
         this.minutesByWalkToEndLocation = builder.minutesByWalkToEndLocation;
+
+        this.visited = false;
     }
 
     // Used by the parcelable interface to recreate the object.
@@ -228,9 +232,11 @@ public class GooglePlaceInformation implements Comparable, Parcelable{
         sb.append("Place is open: " + isOpen + "\n");
 
         sb.append("Place types: [ ");
-        for(int i = 0; i < types.length; i++) {
-            sb.append(types[i]);
-            if(i != types.length - 1) sb.append(", ");
+        if(types != null) {
+            for (int i = 0; i < types.length; i++) {
+                sb.append(types[i]);
+                if (i != types.length - 1) sb.append(", ");
+            }
         }
         sb.append(" ]\n");
 

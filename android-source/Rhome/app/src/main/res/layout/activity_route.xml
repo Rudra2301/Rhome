@@ -36,6 +36,16 @@
         android:layout_height="wrap_content"
         android:text="@string/button_show_route"
         android:textSize="20sp"
+        android:layout_margin="3dp"
+        android:background="@drawable/rounded_item"
+        style="@style/Widget.AppCompat.Button.Colored" />
+
+    <lorentzonsolutions.rhome.customViews.HombreButton
+        android:id="@+id/button_show_minor_route_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_navigate"
+        android:textSize="20sp"
         android:background="@drawable/rounded_item"
         style="@style/Widget.AppCompat.Button.Colored" />
 

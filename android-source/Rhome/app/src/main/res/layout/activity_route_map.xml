@@ -19,5 +19,13 @@
         android:layout_height="400dp"
         tools:context="lorentzonsolutions.rhome.StartLocationActivity" />
 
+    <lorentzonsolutions.rhome.customViews.HombreButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_starting_route"
+        android:background="@drawable/rounded_item"
+        android:textSize="20sp"
+        style="@style/Widget.AppCompat.Button.Colored"/>
+
 
 </LinearLayout>

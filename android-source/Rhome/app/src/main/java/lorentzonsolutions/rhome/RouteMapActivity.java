@@ -57,7 +57,6 @@ public class RouteMapActivity extends AppCompatActivity implements OnMapReadyCal
         mapFragment.getMapAsync(this);
     }
 
-
     // Using the GoogleApiClient builder to set the reference of mGoogleApiClient.
     private void buildGoogleApiClient() {
 

@@ -48,5 +48,15 @@ public class RouteActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Button for minor route activity
+        Button minorRouteListButton = (Button) findViewById(R.id.button_show_minor_route_list);
+        minorRouteListButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ListMinorRoutesActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
