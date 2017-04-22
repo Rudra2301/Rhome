@@ -64,14 +64,15 @@
     <string name="select_places_button">Select places</string>
 
     <!-- ListLocationTypeSelection Activity -->
-    <string name="list_location_type_header">Type of location?</string>
+    <string name="list_location_type_header">Select type of location</string>
     <string name="button_my_location">Use current location</string>
     <string name="button_pick_selected">Use selected position</string>
 
     <!-- ListNearbyPlacesOfType Activity -->
-    <string name="list_nearby_locations_header">Showing nearby places</string>
+    <string name="list_nearby_locations_header">Places found nearby</string>
     <string name="open">Open</string>
     <string name="closed">Closed</string>
+    <string name="getting_locations">Getting locations, hold tight!</string>
 
     <string-array name="places_context_menu">
         <item>Show on map</item>

@@ -9,16 +9,15 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="#d1d1d1"
     tools:context="lorentzonsolutions.rhome.ListLocationTypeSelectionActivity">
 
-    <lorentzonsolutions.rhome.customViews.HeaderTextView
+    <lorentzonsolutions.rhome.customViews.EdoszTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/list_location_type_header"
         android:gravity="center"
-        android:layout_margin="10dp"
-        android:textSize="35sp"/>
+        android:layout_marginBottom="20dp"
+        android:textSize="30sp"/>
 
     <ListView
         android:id="@+id/list_of_location_types"

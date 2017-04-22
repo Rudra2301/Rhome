@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,16 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import lorentzonsolutions.rhome.googleWebApi.JSONDataParser;
 import lorentzonsolutions.rhome.googleWebApi.NearbyLocationSearcher;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
@@ -76,19 +77,21 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
                     if(storageUtil.getSelectedPlacesList().contains(place)) {
                         storageUtil.removeSelectedPlace(place);
                         Log.d(TAG, "Place removed from selected.");
-                        Toast.makeText(thisContext, "Place removed!", Toast.LENGTH_SHORT).show();
+                        // TODO. Snackbar
                     }
                     // If not, add it.
                     else {
                         storageUtil.addSelectedPlace(place);
                         Log.d(TAG, "Place added to selected.");
-                        Toast.makeText(thisContext, "Place added!", Toast.LENGTH_SHORT).show();
+                        // TODO. Snackbar
                     }
 
                     // Notify adapter that data has changed.
                     listAdapter.notifyDataSetChanged();
                 }
-                else Toast.makeText(thisContext, "List is updating, please wait.", Toast.LENGTH_SHORT).show();
+                else {
+                    // TODO. Snackbar
+                }
             }
         });
 
@@ -101,6 +104,14 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
                 .type(selectedType)
                 .radius(searchRadius)
                 .build();
+
+        FloatingActionButton backButton = (FloatingActionButton) findViewById(R.id.list_nearby_locations_back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         // Initializing async task to populate list.
         new NearbyLocationCollector().execute(nearbyLocationSearcher);
@@ -160,10 +171,15 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
      */
     private class NearbyLocationCollector extends AsyncTask<NearbyLocationSearcher, GooglePlaceInformation, Void> {
 
+        TextView progressText = (TextView) findViewById(R.id.getting_locations_progress_text);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.getting_locations_progress);
+
         @Override
         protected void onPreExecute() {
             isListUpdating = true;
-            Toast.makeText(thisContext, "Fetching nearby places", Toast.LENGTH_SHORT).show();
+            progressText.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            // TODO. SNACKBAR
         }
 
         @Override
@@ -186,8 +202,14 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.i("AsyncTask", "Data collected.");
-            Toast.makeText(thisContext, "Showing " + listAdapter.getCount() + " places nearby.", Toast.LENGTH_SHORT).show();
+
+            Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
+                    "Showing " + listAdapter.getCount() + " places nearby.", Snackbar.LENGTH_SHORT);
+            mySnackbar.show();
+
             isListUpdating = false;
+            progressText.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -213,11 +235,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             TextView placeDistance = (TextView) convertView.findViewById(R.id.place_distance);
             TextView placeDuration = (TextView) convertView.findViewById(R.id.place_duration);
             TextView placeIsOpen = (TextView) convertView.findViewById(R.id.place_isopen);
-
-            ImageView iconView = (ImageView) convertView.findViewById(R.id.place_icon_nearby);
-
-            //TODO. Fetch and show the icon
-
+            LinearLayout placeItem = (LinearLayout) convertView.findViewById(R.id.place_item);
 
             // Populate the data into the template view using the data object
             assert place != null;
@@ -225,32 +243,31 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             placeAddress.setText(place.address);
 
             if(place.isOpen) {
-                placeIsOpen.setText("Open");
+                placeIsOpen.setText(R.string.open);
                 placeIsOpen.setTextColor(Color.GREEN);
             }
             else {
-                placeIsOpen.setText("Closed");
+                placeIsOpen.setText(R.string.closed);
                 placeIsOpen.setTextColor(Color.RED);
             }
 
             // TODO. Fix so that this doesn't return 0 if there is over 100m near.
             int distanceInKm = place.distanceToStartLocation/1000;
-            placeDistance.setText(distanceInKm + " km");
+            placeDistance.setText("Distance " + distanceInKm + " km");
 
             int timeInMinutes = place.minutesByCarToStartLocation /60;
-            placeDuration.setText(timeInMinutes + " min");
+            placeDuration.setText("Duration by car" + timeInMinutes + " min");
 
 
             // TODO. Check the best method to check this.
             if(storageUtil.getSelectedPlacesList().contains(place)) {
-                placeName.setBackgroundColor(Color.LTGRAY);
+
+                placeItem.setBackgroundColor(getResources().getColor(R.color.accent_material_light_1));
 
                 Log.i(TAG, "Found place in selected list: " + place.name);
                 TextView selected = (TextView) convertView.findViewById(R.id.place_selected_text);
                 selected.setVisibility(View.VISIBLE);
             }
-
-            // Return the completed view to render on screen
             return convertView;
         }
 

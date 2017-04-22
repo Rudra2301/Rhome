@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -148,7 +147,6 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
 
         } else {
             Log.i(TAG, "Map not ready!");
-            Toast.makeText(this, "Map not ready!", Toast.LENGTH_SHORT).show();
         }
 
         infoHeader.setVisibility(View.VISIBLE);
@@ -228,11 +226,11 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
     // Stores the selected location as endlocation
     private void setEndLocation() {
         if(isUpdatingSelectedAddress) {
-            Toast.makeText(this, "Address is being fetched. Try again.", Toast.LENGTH_SHORT).show();
+            // TODO. SNACKBAR
         }
         else {
             storageUtil.setSelectedEndLocation(selectedLocation);
-            Toast.makeText(this, "End location set!", Toast.LENGTH_SHORT).show();
+            // TODO. SNACKBAR
         }
     }
 
