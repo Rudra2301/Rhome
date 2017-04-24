@@ -1,38 +1,26 @@
 package lorentzonsolutions.rhome;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.List;
 
-import lorentzonsolutions.rhome.activities.EndLocationActivity;
-import lorentzonsolutions.rhome.activities.StartLocationActivity;
+import lorentzonsolutions.rhome.activities.RouteActivity;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.RouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
-import lorentzonsolutions.rhome.utils.Resources;
-import lorentzonsolutions.rhome.utils.URLIconDownloader;
 
 public class MainActivity extends AppCompatActivity implements OnRequestPermissionsResultCallback {
 

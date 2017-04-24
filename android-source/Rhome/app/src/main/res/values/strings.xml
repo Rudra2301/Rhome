@@ -83,6 +83,13 @@
     <string name="route_activity_header">Your route home!</string>
     <string name="button_show_route">Show route on map</string>
 
+    <!-- Route map activity -->
+    <string name="route_map_activity_title">Your route!</string>
+
+    <!-- Minor routes activity -->
+    <string name="minor_start">Start</string>
+    <string name="minor_dest">Destination</string>
+    <string name="minor_item_header">Route number</string>
 
     <!-- Place list item -->
     <string name="place_selected">Place is selected!</string>

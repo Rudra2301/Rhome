@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.os.AsyncTask;
-import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,14 +19,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-import lorentzonsolutions.rhome.ListLocationTypeSelectionActivity;
 import lorentzonsolutions.rhome.R;
-import lorentzonsolutions.rhome.RouteActivity;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.RouteCalculator;

@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -147,7 +148,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(position));
         } else {
             Log.i(TAG, "Map not ready!");
-            // TODO. Snackbar
+            makeSnackBar("Map not ready.");
         }
 
         infoHeader.setVisibility(View.VISIBLE);
@@ -166,6 +167,12 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
                     .enableAutoManage(this, this)
                     .build();
         }
+    }
+
+    private void makeSnackBar(String message) {
+        Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
+                message, Snackbar.LENGTH_LONG);
+        mySnackbar.show();
     }
 
     // Events for buttons etc.
@@ -227,13 +234,13 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     // Stores the selected location as startlocation
     private void setEndLocation() {
         if (isUpdatingSelectedAddress) {
-            // TODO. Snackbar
+            makeSnackBar("Updating address in progress. Please wait.");
         } else {
             if(selectedLocation != null) {
                 storageUtil.setSelectedStartLocation(selectedLocation);
-                // TODO. Snackbar
+                makeSnackBar("Start location has been set.");
             } else {
-                // TODO. Snackbar
+                makeSnackBar("Fetching location. Please wait.");
             }
         }
     }

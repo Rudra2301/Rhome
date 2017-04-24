@@ -64,13 +64,13 @@
             android:description="@string/address_service_description"/>
         -->
 
-        <activity android:name=".ListLocationTypeSelectionActivity" />
-        <activity android:name=".ListNearbyPlacesOfTypeActivity" />
+        <activity android:name=".activities.ListLocationTypeSelectionActivity" />
+        <activity android:name=".activities.ListNearbyPlacesOfTypeActivity" />
         <activity android:name=".ShowOnMap" />
         <activity android:name=".activities.EndLocationActivity" />
-        <activity android:name=".RouteActivity" />
-        <activity android:name=".RouteMapActivity" />
-        <activity android:name=".ListMinorRoutesActivity" />
+        <activity android:name=".activities.RouteActivity" />
+        <activity android:name=".activities.RouteMapActivity" />
+        <activity android:name=".activities.ListMinorRoutesActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".activities.StepOneActivity" />
         <activity android:name=".activities.StepTwoActivity" />
