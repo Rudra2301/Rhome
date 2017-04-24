@@ -9,6 +9,44 @@
     <lorentzonsolutions.rhome.customViews.EdoszTextView
         android:id="@+id/what_to_do_header"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="@string/what_to_do_header"
+        android:textSize="@dimen/header_text"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/header_margin"/>
+
+    <EditText
+        android:id="@+id/what_to_do_search_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:layout_below="@+id/what_to_do_header"
+        android:layout_centerHorizontal="true"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="@string/what_to_do_search_placeholder" />
+
+    <ListView
+        android:id="@+id/what_to_do_search_result_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/what_to_do_search_field"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/what_to_do_floating_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:fabSize="normal"
+        android:layout_marginBottom="35dp"
+        android:layout_marginEnd="10dp"
+        app:srcCompat="@android:drawable/ic_menu_revert"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

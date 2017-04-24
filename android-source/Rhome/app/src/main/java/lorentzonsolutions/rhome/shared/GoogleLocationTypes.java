@@ -63,9 +63,7 @@ public enum GoogleLocationTypes {
 
         mapOfWhatToDo.put(CAR_REPAIR, "Repair the car");
 
-
-
-
+        mapOfWhatToDo.put(ZOO, "Visit the zoo");
 
     }
 }
