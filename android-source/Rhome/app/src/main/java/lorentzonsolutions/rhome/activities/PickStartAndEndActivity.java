@@ -12,7 +12,7 @@ import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
-public class StepOneActivity extends AppCompatActivity {
+public class PickStartAndEndActivity extends AppCompatActivity {
 
     StorageUtil storage = StorageUtil.INSTANCE;
     Button setStart;
@@ -28,7 +28,7 @@ public class StepOneActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_step_one);
+        setContentView(R.layout.activity_pick_start_and_end);
 
         initComponents();
         startButtonFunctionality();
@@ -77,7 +77,7 @@ public class StepOneActivity extends AppCompatActivity {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Resources.getInstance().getContext(), StepTwoActivity.class);
+                Intent intent = new Intent(Resources.getInstance().getContext(), PickPlacesToVisitActivity.class);
                 startActivity(intent);
             }
         });

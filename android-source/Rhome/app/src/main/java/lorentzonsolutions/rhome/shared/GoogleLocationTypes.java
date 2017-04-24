@@ -1,5 +1,8 @@
 package lorentzonsolutions.rhome.shared;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Enum containing the Google Maps API location types.
  */
@@ -17,8 +20,14 @@ public enum GoogleLocationTypes {
     GAS_STATION("gas_station", "Gas Station"), GYM("gym", "Gym"), HAIR_CARE("hair_care", "Hair Care"), HARDWARE_STORE("hardware_store", "Hardware Store"), HOME_GOODS_STORE("home_goods_store", "Home Goods Store"),
     HOSPITAL("hospital", "Hospital"), INSURANCE_AGENCY("insurance_agency", "Insurance Agency"), JEWELRY_STORE("jewelry_store", "Jewelry Store"), LAUNDRY("laundry", "Laundry"),
     LAWYER("lawyer", "Lawyer"), LIBRARY("library", "Library"), LIQUOR_STORE("liquor_store", "Liquor Store"), LOCAL_GOVERNMENT_OFFICE("local_government_office", "Local Goverment Office"),
-    LOCKSMITH("locksmith", "Locksmith"), RESTAURANT("restaurant", "Restaurant");
-
+    LOCKSMITH("locksmith", "Locksmith"), RESTAURANT("restaurant", "Restaurant"),MEAL_TAKEAWAY("meal_takeaway", "Meal Takeaway"), MOSQUE("mosque", "Mosque"),
+    MOVIE_RENTAL("movie_rental", "Movie Rental"), MOVIE_THEATER("movie_theater", "Movie Theater"), MUSEUM("museum", "Museum"), NIGHT_CLUB("night_club", "Night Club"),
+    PAINTER("painter", "Painter"), PARKING("parking", "Parking"), PET_STORE("pet_store", "Pet Store"), PHARMACY("pharmacy", "Pharmacy"),
+    PHYSIOTHERAPIST("physiotherapist", "Physiotherapist"), PLUMBER("plumber", "Plumber"), POLICE("police", "Police"), POST_OFFICE("post_office", "Post Office"),
+    REAL_ESTATE_AGENCY("real_estate_agency", "Real Estate Agency"), RV_PARK("rv_park", "RV Park"), SCHOOL("school", "School"), SHOE_STORE("shoe_store", "Shoe Store"),
+    SHOPPING_MALL("shopping_mall", "Shopping Mall"), SPA("spa", "Spa"), STADIUM("stadium", "Stadium"), STORE("store", "Store"), SYNAGOGUE("synagogue", "Synagogue"),
+    TRAIN_STATION("train_station", "Train Station"), TRAVEL_AGENCY("travel_agency", "Travel Agency"), UNIVERSITY("university", "University"),
+    VETERINARY_CARE("veterinary_care", "Veterinary Care"), ZOO("zoo", "Zoo");
 
     private String googleType;
     private String readable;
@@ -40,48 +49,42 @@ public enum GoogleLocationTypes {
     public String toString() {
         return getAsReadable();
     }
+
+    // Building a map of the thing to do and type associated with that activity
+    public static Map<GoogleLocationTypes, String> mapOfWhatToDo;
+
+    static {
+        // TODO. Build this elsewhere and use resources (R.string...)
+        mapOfWhatToDo.put(AIRPORT, "Go to the airport");
+        mapOfWhatToDo.put(CLOTHING_STORE, "Buy clothes");
+        mapOfWhatToDo.put(ATM, "Withdraw money");
+
+        mapOfWhatToDo.put(BAKERY, "Go to the bakery");
+
+        mapOfWhatToDo.put(CAR_REPAIR, "Repair the car");
+
+
+
+
+
+    }
 }
 
 /*
+
+
+Not included
+
+transit_station
+taxi_stand
+storage
 funeral_home
 hindu_temple
----------------------------
 lodging
 meal_delivery
-meal_takeaway
-mosque
-movie_rental
-movie_theater
 moving_company
-museum
-night_club
-painter
 park
-parking
-pet_store
-pharmacy
-physiotherapist
-place_of_worship (deprecated)
-plumber
-police
-post_office
-real_estate_agency
 roofing_contractor
-rv_park
-school
-shoe_store
-shopping_mall
-spa
-stadium
-storage
-store
 subway_station
-synagogue
-taxi_stand
-train_station
-transit_station
-travel_agency
-university
-veterinary_care
-zoo
+
  */

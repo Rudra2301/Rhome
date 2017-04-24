@@ -17,14 +17,14 @@ import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
-public class RouteActivity extends AppCompatActivity {
+public class RouteOrderActivity extends AppCompatActivity {
 
     private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route);
+        setContentView(R.layout.activity_route_order);
 
         try {
             ArrayList<String> places = new ArrayList<>();
@@ -46,7 +46,7 @@ public class RouteActivity extends AppCompatActivity {
         routeMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, RouteMapActivity.class);
+                Intent intent = new Intent(context, MinorRoutesMapActivity.class);
                 startActivity(intent);
             }
         });

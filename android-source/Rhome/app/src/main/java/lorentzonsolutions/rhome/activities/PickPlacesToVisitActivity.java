@@ -29,9 +29,9 @@ import lorentzonsolutions.rhome.utils.RouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 import lorentzonsolutions.rhome.utils.URLIconDownloader;
 
-public class StepTwoActivity extends AppCompatActivity {
+public class PickPlacesToVisitActivity extends AppCompatActivity {
 
-    private static String TAG = StepTwoActivity.class.toString();
+    private static String TAG = PickPlacesToVisitActivity.class.toString();
 
     StorageUtil storage = StorageUtil.INSTANCE;
 
@@ -49,7 +49,7 @@ public class StepTwoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_step_two);
+        setContentView(R.layout.activity_pick_places_to_visit);
 
         setViews();
         initListeners();
@@ -128,7 +128,7 @@ public class StepTwoActivity extends AppCompatActivity {
                     Log.d(TAG, "Total distance: " + totalDistance + " km.");
 
                     // Starting route activity
-                    Intent intent = new Intent(Resources.getInstance().getContext(), RouteActivity.class);
+                    Intent intent = new Intent(Resources.getInstance().getContext(), RouteOrderActivity.class);
                     startActivity(intent);
                 }
             });
@@ -170,7 +170,7 @@ public class StepTwoActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if(convertView == null) convertView = LayoutInflater.from(getContext()).inflate(R.layout.place_selected_list_item, parent, false);
+            if(convertView == null) convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_place_selected, parent, false);
 
             GooglePlaceInformation place = getItem(position);
 

@@ -34,11 +34,11 @@ import lorentzonsolutions.rhome.googleWebApi.JSONDataParser;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
-public class RouteMapActivity extends AppCompatActivity implements OnMapReadyCallback,
+public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    private final String TAG = RouteMapActivity.class.toString();
+    private final String TAG = MinorRoutesMapActivity.class.toString();
 
     // Google API
     private GoogleMap mMap;
@@ -50,7 +50,7 @@ public class RouteMapActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_route_map);
+        setContentView(R.layout.activity_minor_routes_map);
 
         buildGoogleApiClient();
 

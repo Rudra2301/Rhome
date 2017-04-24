@@ -26,7 +26,7 @@ public class StartActivity extends AppCompatActivity implements ActivityCompat.O
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Resources.getInstance().getContext(), StepOneActivity.class);
+                Intent intent = new Intent(Resources.getInstance().getContext(), PickStartAndEndActivity.class);
                 startActivity(intent);
             }
         });

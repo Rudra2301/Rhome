@@ -53,9 +53,6 @@
         <activity
             android:name=".activities.StartLocationActivity"
             android:label="@string/title_activity_maps" />
-        <activity
-            android:name=".MyLocation"
-            android:label="@string/title_activity_my_location" />
 
         <!--
         <service
@@ -65,15 +62,15 @@
         -->
 
         <activity android:name=".activities.ListLocationTypeSelectionActivity" />
-        <activity android:name=".activities.ListNearbyPlacesOfTypeActivity" />
+        <activity android:name=".activities.ListNearbyPlacesActivity" />
         <activity android:name=".ShowOnMap" />
         <activity android:name=".activities.EndLocationActivity" />
-        <activity android:name=".activities.RouteActivity" />
-        <activity android:name=".activities.RouteMapActivity" />
+        <activity android:name=".activities.RouteOrderActivity" />
+        <activity android:name=".activities.MinorRoutesMapActivity" />
         <activity android:name=".activities.ListMinorRoutesActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".activities.StepOneActivity" />
-        <activity android:name=".activities.StepTwoActivity" />
+        <activity android:name=".activities.PickStartAndEndActivity" />
+        <activity android:name=".activities.PickPlacesToVisitActivity" />
+        <activity android:name=".activities.SelectWhatToDoActivity"></activity>
     </application>
 
 </manifest>

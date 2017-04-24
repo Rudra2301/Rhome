@@ -33,7 +33,7 @@ import lorentzonsolutions.rhome.googleWebApi.NearbyLocationSearcher;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
-public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
+public class ListNearbyPlacesActivity extends AppCompatActivity {
 
     private final Context thisContext = this;
 
@@ -53,7 +53,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_nearby_places_of_type);
+        setContentView(R.layout.activity_list_nearby_places);
 
         // Getting the value from the intent invoking this
         Intent intent = getIntent();
@@ -233,7 +233,7 @@ public class ListNearbyPlacesOfTypeActivity extends AppCompatActivity {
             // Get the data item for this position
             GooglePlaceInformation place = getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.place_list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_place, parent, false);
 
             // TODO. Fix duration info.
             // Lookup view for data population

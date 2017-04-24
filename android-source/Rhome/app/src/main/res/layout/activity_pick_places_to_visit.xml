@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="lorentzonsolutions.rhome.activities.StepTwoActivity">
+    tools:context="lorentzonsolutions.rhome.activities.PickPlacesToVisitActivity">
 
     <lorentzonsolutions.rhome.customViews.EdoszTextView
         android:id="@+id/step_two_title"

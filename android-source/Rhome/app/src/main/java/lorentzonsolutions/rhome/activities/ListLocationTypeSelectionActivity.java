@@ -53,7 +53,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
                 GoogleLocationTypes type = (GoogleLocationTypes) parent.getItemAtPosition(position);
                 Log.d(TAG, "Type selected: " + type.getAsReadable());
 
-                Intent intent = new Intent(Resources.getInstance().getContext(), ListNearbyPlacesOfTypeActivity.class);
+                Intent intent = new Intent(Resources.getInstance().getContext(), ListNearbyPlacesActivity.class);
                 intent.putExtra("selected_type", type.getAsGoogleType());
                 startActivity(intent);
             }
@@ -81,7 +81,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView == null) convertView = LayoutInflater
                     .from(getContext())
-                    .inflate(R.layout.location_type_list_item, parent, false);
+                    .inflate(R.layout.list_item_location_type, parent, false);
 
             GoogleLocationTypes type = getItem(position);
             TextView typeName = (TextView) convertView.findViewById(R.id.place_type);

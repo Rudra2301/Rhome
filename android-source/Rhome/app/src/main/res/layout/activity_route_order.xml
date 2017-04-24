@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="lorentzonsolutions.rhome.activities.RouteActivity">
+    tools:context="lorentzonsolutions.rhome.activities.RouteOrderActivity">
 
     <lorentzonsolutions.rhome.customViews.EdoszTextView
         android:id="@+id/route_activity_title"
