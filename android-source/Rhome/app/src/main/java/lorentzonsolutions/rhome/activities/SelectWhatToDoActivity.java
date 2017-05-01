@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +24,22 @@ import java.util.Map;
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.shared.GoogleLocationTypes;
 
+/**
+ * Activity to search for user input in list of thing to do. List items is clickable and start the activity
+ * for search nearby locations of the selected type.
+ */
 public class SelectWhatToDoActivity extends AppCompatActivity {
+
+    private static String TAG = SelectWhatToDoActivity.class.toString();
 
     // Components
     FloatingActionButton backButton;
     ListView searchResultList;
     EditText searchInput;
 
-    // Searchresultlist
+    // Search result components
     List<SearchResult> searchResults;
-    ListAdapter adapter;
+    ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,15 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
 
         populateList();
         initComponents();
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        populateList();
+        initComponents();
+        super.onResume();
     }
 
     private void populateList() {
@@ -63,8 +79,26 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
 
         adapter = new SearchResultListAdapter(this, searchResults);
         searchResultList.setAdapter(adapter);
+
+        initTextFieldInputListener();
     }
 
+    private void initTextFieldInputListener() {
+        // TODO. Check if this is software related. Not sure if software "keyboards" fire this event.
+        searchInput.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                String searchWord = searchInput.getText().toString();
+                Log.d(TAG, "Keyevent fired. Searching for text: " + searchWord);
+                search(searchWord);
+                return true;
+            }
+        });
+    }
+
+    /*
+    Method to call for one an character is entered in search field.
+     */
     private void search(String word) {
         searchResults.clear();
         if(word.equals("")) populateList();
@@ -76,9 +110,7 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
                 }
             }
         }
-        // TODO. Fix adapter
-        // adapter.notifyDataSetChanged();
-
+        adapter.notifyDataSetChanged();
     }
 
     class SearchResult {
