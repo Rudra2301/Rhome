@@ -59,6 +59,8 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         selectedType = intent.getStringExtra("selected_type");
 
+        Log.d(TAG, "Searching for location of type: " + selectedType);
+
         storageUtil = StorageUtil.INSTANCE;
 
         places = new ArrayList<>();

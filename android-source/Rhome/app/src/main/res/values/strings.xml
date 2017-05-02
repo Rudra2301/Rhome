@@ -35,7 +35,8 @@
 
     <!-- Select what to do activity -->
     <string name="what_to_do_header">What do you want to do?</string>
-    <string name="what_to_do_search_placeholder">Search</string>
+    <string name="what_to_do_search_placeholder">Enter text</string>
+    <string name="what_to_do_search_button_text">Search</string>
 
     <!--  OLD ONES BELOW -->
     <!-- Main Activity -->

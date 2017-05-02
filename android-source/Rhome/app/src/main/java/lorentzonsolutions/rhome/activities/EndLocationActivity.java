@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -226,12 +227,18 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
     // Stores the selected location as endlocation
     private void setEndLocation() {
         if(isUpdatingSelectedAddress) {
-            // TODO. SNACKBAR
+            makeSnackBar("List is updating. Please wait.");
         }
         else {
             storageUtil.setSelectedEndLocation(selectedLocation);
-            // TODO. SNACKBAR
+            makeSnackBar("End location has been set!");
         }
+    }
+
+    private void makeSnackBar(String message) {
+        Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
+                message, Snackbar.LENGTH_LONG);
+        mySnackbar.show();
     }
 
     // Function for collecting the last known location, aka current location.

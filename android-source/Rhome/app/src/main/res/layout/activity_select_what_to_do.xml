@@ -15,17 +15,31 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/header_margin"/>
 
-    <EditText
-        android:id="@+id/what_to_do_search_field"
+    <LinearLayout
+        android:id="@+id/what_to_do_search_component"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="30dp"
         android:layout_below="@+id/what_to_do_header"
-        android:layout_centerHorizontal="true"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/what_to_do_search_placeholder" />
+        android:orientation="horizontal">
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/what_to_do_search_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="@string/what_to_do_search_placeholder" />
+        <Button
+            android:id="@+id/what_to_do_search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/what_to_do_search_button_text"
+            style="@style/Widget.AppCompat.Button.Colored" />
+
+
+    </LinearLayout>
+
 
     <ListView
         android:id="@+id/what_to_do_search_result_list"
@@ -34,7 +48,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/what_to_do_search_field"
+        android:layout_below="@id/what_to_do_search_component"
         />
 
     <android.support.design.widget.FloatingActionButton

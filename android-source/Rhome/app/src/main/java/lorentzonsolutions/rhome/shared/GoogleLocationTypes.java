@@ -1,5 +1,6 @@
 package lorentzonsolutions.rhome.shared;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,6 +56,7 @@ public enum GoogleLocationTypes {
 
     static {
         // TODO. Build this elsewhere and use resources (R.string...)
+        mapOfWhatToDo = new HashMap<>();
         mapOfWhatToDo.put(AIRPORT, "Go to the airport");
         mapOfWhatToDo.put(CLOTHING_STORE, "Buy clothes");
         mapOfWhatToDo.put(ATM, "Withdraw money");

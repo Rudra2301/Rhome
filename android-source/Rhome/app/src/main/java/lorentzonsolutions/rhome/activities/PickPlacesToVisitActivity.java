@@ -141,7 +141,8 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(storage.getSelectedStartLocation() != null && storage.getSelectedEndLocation() != null) {
-                    Intent intent = new Intent(Resources.getInstance().getContext(), ListLocationTypeSelectionActivity.class);
+                    // Intent intent = new Intent(Resources.getInstance().getContext(), ListLocationTypeSelectionActivity.class);
+                    Intent intent = new Intent(Resources.getInstance().getContext(), SelectWhatToDoActivity.class);
                     startActivity(intent);
                 }
                 else if(storage.getSelectedStartLocation() == null) {
