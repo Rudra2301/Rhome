@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import java.util.List;
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.Resources;
-import lorentzonsolutions.rhome.utils.RouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 import lorentzonsolutions.rhome.utils.URLIconDownloader;
 
@@ -62,7 +60,7 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
 
     private void setViews() {
         addPlaceButton = (Button) findViewById(R.id.step_two_add_place_button);
-        doneButton = (Button) findViewById(R.id.step_two_done_button);
+        doneButton = (Button) findViewById(R.id.pick_places_to_visit_done_button);
         backButton = (FloatingActionButton) findViewById(R.id.step_two_floating_back_button);
         startLocationInfo = (TextView) findViewById(R.id.step_two_start_location_info_text);
         endLocationInfo = (TextView) findViewById(R.id.step_two_end_location_info_text);
@@ -116,18 +114,6 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
             doneButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    RouteCalculator calculator = new RouteCalculator();
-                    List<GooglePlaceInformation> fastestRoute = calculator.calculateFastestTime(storage.getSelectedPlacesList(), true);
-                    storage.setFastestRoute(fastestRoute);
-                    Log.d(TAG, "Calculated fastest route: ");
-                    for(GooglePlaceInformation place : fastestRoute) {
-                        Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
-                    }
-
-                    double totalDistance = calculator.calculateTotalRouteDistance(fastestRoute);
-                    Log.d(TAG, "Total distance: " + totalDistance + " km.");
-
-                    // Starting route activity
                     Intent intent = new Intent(Resources.getInstance().getContext(), RouteOrderActivity.class);
                     startActivity(intent);
                 }
@@ -141,7 +127,6 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(storage.getSelectedStartLocation() != null && storage.getSelectedEndLocation() != null) {
-                    // Intent intent = new Intent(Resources.getInstance().getContext(), ListLocationTypeSelectionActivity.class);
                     Intent intent = new Intent(Resources.getInstance().getContext(), SelectWhatToDoActivity.class);
                     startActivity(intent);
                 }

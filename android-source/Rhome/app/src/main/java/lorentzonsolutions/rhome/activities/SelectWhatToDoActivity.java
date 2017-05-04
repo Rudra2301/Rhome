@@ -45,6 +45,7 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
     ListView searchResultList;
     TextInputEditText searchInput;
     Button searchButton;
+    Button showListOfTypesButton;
 
     // Search result components
     List<SearchResult> searchResults = new ArrayList<>();
@@ -57,6 +58,7 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
 
         populateList();
         initComponents();
+        hideSoftKeyboard();
     }
 
 
@@ -65,6 +67,7 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
     protected void onResume() {
         populateList();
         initComponents();
+        hideSoftKeyboard();
         super.onResume();
     }
 
@@ -79,6 +82,7 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
         searchResultList = (ListView) findViewById(R.id.what_to_do_search_result_list);
         searchInput = (TextInputEditText) findViewById(R.id.what_to_do_search_field);
         searchButton = (Button) findViewById(R.id.what_to_do_search_button);
+        showListOfTypesButton = (Button) findViewById(R.id.what_to_do_list_types_button);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +98,6 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
     }
 
     private void initListeners() {
-        // TODO. Check if this is software related. Not sure if software "keyboards" fire this event.
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +118,14 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
                 intent.putExtra("selected_type", itemClicked.type.getAsGoogleType());
                 startActivity(intent);
 
+            }
+        });
+
+        showListOfTypesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Resources.getInstance().getContext(), ListLocationTypeSelectionActivity.class);
+                startActivity(intent);
             }
         });
     }

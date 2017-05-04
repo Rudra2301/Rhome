@@ -31,13 +31,6 @@ public class GooglePlaceInformation implements Comparable, Parcelable{
     // For calculation
     private int orderId;
 
-    public void setOrderId(int id) {
-        this.orderId = id;
-    }
-    public int getOrderId() {
-        return this.orderId;
-    }
-
     public boolean visited;
 
 

@@ -58,8 +58,13 @@ public enum GoogleLocationTypes {
         // TODO. Build this elsewhere and use resources (R.string...)
         mapOfWhatToDo = new HashMap<>();
         mapOfWhatToDo.put(AIRPORT, "Go to the airport");
+        mapOfWhatToDo.put(AMUSEMENT_PARK, "Go to the amusement park");
         mapOfWhatToDo.put(CLOTHING_STORE, "Buy clothes");
         mapOfWhatToDo.put(ATM, "Withdraw money");
+
+        mapOfWhatToDo.put(MOVIE_THEATER, "Go to the movies");
+
+        mapOfWhatToDo.put(LIQUOR_STORE, "Buy liquor");
 
         mapOfWhatToDo.put(BAKERY, "Go to the bakery");
 

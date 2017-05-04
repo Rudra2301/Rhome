@@ -33,7 +33,7 @@ public class JSONDataParser {
      * @param nearbyRequestResponseData
      * @return
      */
-    public List<GooglePlaceInformation> parseNearbyDataToPlaceInformation(String nearbyRequestResponseData) {
+    public List<GooglePlaceInformation> parseDataToGooglePlaceInformation(String nearbyRequestResponseData) {
 
         Log.i(TAG, "Attempting to parse nearby locations data.");
         JSONObject jsonObject;

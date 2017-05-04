@@ -5,19 +5,24 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
+import lorentzonsolutions.rhome.utils.RouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
 public class RouteOrderActivity extends AppCompatActivity {
+
+    private static String TAG = RouteOrderActivity.class.toString();
 
     private Context context = this;
 
@@ -25,6 +30,8 @@ public class RouteOrderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_order);
+
+        initRouteCalculation();
 
         try {
             ArrayList<String> places = new ArrayList<>();
@@ -70,5 +77,20 @@ public class RouteOrderActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void initRouteCalculation() {
+        RouteCalculator calculator = new RouteCalculator();
+        List<GooglePlaceInformation> fastestRoute = calculator.calculateFastestTime(StorageUtil.INSTANCE.getSelectedPlacesList(), true);
+        StorageUtil.INSTANCE.setFastestRoute(fastestRoute);
+        Log.d(TAG, "Calculated fastest route: ");
+        for(GooglePlaceInformation place : fastestRoute) {
+            Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
+        }
+
+        double totalDistance = calculator.calculateTotalRouteDistance(fastestRoute);
+        Log.d(TAG, "Total distance: " + totalDistance + " km.");
+
+        // Starting route activity
     }
 }

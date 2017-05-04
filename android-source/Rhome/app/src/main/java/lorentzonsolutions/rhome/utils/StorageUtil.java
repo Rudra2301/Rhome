@@ -38,9 +38,11 @@ public enum StorageUtil {
     private List<GooglePlaceInformation> selectedPlaces = new ArrayList<>();
     public void addSelectedPlace(GooglePlaceInformation place) {
         selectedPlaces.add(place);
+        // TODO. Increment value of place type in DB.
     }
     public void removeSelectedPlace(GooglePlaceInformation place) {
         selectedPlaces.remove(place);
+        // TODO. Decrease value of place type in DB.
     }
     // TODO. Return copy. Not reference to the actual object.
     public List<GooglePlaceInformation> getSelectedPlacesList() {

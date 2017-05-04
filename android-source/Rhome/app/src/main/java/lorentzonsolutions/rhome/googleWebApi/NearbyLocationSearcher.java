@@ -36,14 +36,14 @@ public class NearbyLocationSearcher {
 
     private String type;
 
-    public String retrieveNearbyLocations() {
+    private String retrieveNearbyLocationsData() {
         return urlDataReceiver.readURL(buildURL());
     }
 
     public List<GooglePlaceInformation> getNearbyLocationsList() {
-        String data = retrieveNearbyLocations();
+        String data = retrieveNearbyLocationsData();
         JSONDataParser jsonDataParser = new JSONDataParser();
-        return jsonDataParser.parseNearbyDataToPlaceInformation(data);
+        return jsonDataParser.parseDataToGooglePlaceInformation(data);
     }
 
     private String buildURL() {

@@ -54,16 +54,9 @@
             android:name=".activities.StartLocationActivity"
             android:label="@string/title_activity_maps" />
 
-        <!--
-        <service
-            android:name=".utils.services.FetchAddressIntentService"
-            android:exported="false"
-            android:description="@string/address_service_description"/>
-        -->
-
         <activity android:name=".activities.ListLocationTypeSelectionActivity" />
         <activity android:name=".activities.ListNearbyPlacesActivity" />
-        <activity android:name=".ShowOnMap" />
+        <activity android:name=".activities.ShowOnMap" />
         <activity android:name=".activities.EndLocationActivity" />
         <activity android:name=".activities.RouteOrderActivity" />
         <activity android:name=".activities.MinorRoutesMapActivity" />

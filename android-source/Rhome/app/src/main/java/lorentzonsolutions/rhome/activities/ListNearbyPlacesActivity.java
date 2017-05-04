@@ -28,16 +28,13 @@ import java.util.Collections;
 import java.util.List;
 
 import lorentzonsolutions.rhome.R;
-import lorentzonsolutions.rhome.ShowOnMap;
 import lorentzonsolutions.rhome.googleWebApi.NearbyLocationSearcher;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
 public class ListNearbyPlacesActivity extends AppCompatActivity {
 
-    private final Context thisContext = this;
-
-    private final String TAG = "NEARBY_PLACES";
+    private final String TAG = ListNearbyPlacesActivity.class.toString();
 
     private boolean isListUpdating = false;
     private int searchRadius = 5000;
@@ -65,7 +62,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
 
         places = new ArrayList<>();
 
-        listAdapter = new PlaceListAdapter(thisContext, places);
+        listAdapter = new PlaceListAdapter(getApplicationContext(), places);
 
         nearbyPlacesList = (ListView) findViewById(R.id.nearby_locations);
         nearbyPlacesList.setAdapter(listAdapter);
@@ -151,7 +148,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
 
         if(select == 0) {
             // Show map
-            Intent intent = new Intent(thisContext, ShowOnMap.class);
+            Intent intent = new Intent(getApplicationContext(), ShowOnMap.class);
             intent.putExtra("place_to_show", placeClicked);
             startActivity(intent);
         }

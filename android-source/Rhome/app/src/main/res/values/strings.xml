@@ -26,17 +26,19 @@
     <string name="select_end_info_header">Location info</string>
 
     <!-- Pick Places to visit activity -->
-    <string name="step_two_title">Places to visit</string>
-    <string name="step_two_start_location_text">Start location: </string>
-    <string name="step_two_end_location_text">End location: </string>
-    <string name="step_two_place_list_header">Selected places</string>
-    <string name="step_two_add_place_button">Add place</string>
-    <string name="step_two_done_button">Done!</string>
+    <string name="select_places_to_visit_title">Places to visit</string>
+    <string name="select_places_to_visit_start_location_text">Start location: </string>
+    <string name="select_places_to_visit_end_location_text">End location: </string>
+    <string name="select_places_to_visit_place_list_header">Selected places</string>
+    <string name="select_places_to_visit_add_place_button">Add new place</string>
+    <string name="select_places_to_visit_done_button">Done!</string>
 
     <!-- Select what to do activity -->
     <string name="what_to_do_header">What do you want to do?</string>
     <string name="what_to_do_search_placeholder">Enter text</string>
     <string name="what_to_do_search_button_text">Search</string>
+    <string name="what_to_do_list_types_button">Show list of location types</string>
+    <string name="what_to_do_favourite_list_button">Show favourites</string>
 
     <!--  OLD ONES BELOW -->
     <!-- Main Activity -->
