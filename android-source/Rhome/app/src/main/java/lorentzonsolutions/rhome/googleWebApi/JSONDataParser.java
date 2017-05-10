@@ -33,7 +33,7 @@ public class JSONDataParser {
      * @param nearbyRequestResponseData
      * @return
      */
-    public List<GooglePlaceInformation> parseDataToGooglePlaceInformation(String nearbyRequestResponseData) {
+    public List<GooglePlaceInformation> parseNearbySearchData(String nearbyRequestResponseData) {
 
         Log.i(TAG, "Attempting to parse nearby locations data.");
         JSONObject jsonObject;
@@ -269,7 +269,6 @@ public class JSONDataParser {
 
     // TODO. Throw wrapped exception
     public List<List<HashMap<String,String>>> parseDirectionsData(String directionsData) throws JSONException {
-
 
         JSONObject jObject = new JSONObject(directionsData);
 

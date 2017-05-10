@@ -29,8 +29,8 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.exceptions.RouteException;
-import lorentzonsolutions.rhome.googleWebApi.DirectionsAPI;
-import lorentzonsolutions.rhome.googleWebApi.JSONDataParser;
+import lorentzonsolutions.rhome.googleWebApi.GoogleWebApiUtil;
+import lorentzonsolutions.rhome.interfaces.WebApiUtil;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
@@ -43,9 +43,6 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
     // Google API
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
-
-    // DirectionsAPI
-    private DirectionsAPI directionsAPI = new DirectionsAPI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,11 +133,8 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
                     LatLng startLatLng = new LatLng(start.latitude, start.longitude);
                     LatLng endLatLng = new LatLng(next.latitude, next.longitude);
 
-                    String directionsUrl = directionsAPI.directionsUrlForRoute(startLatLng, endLatLng);
-                    Log.d(TAG, "URL for Google DirectionsAPI API created: \n" + directionsUrl);
-
-                    DownloadDirectionsData downloadDirectionsData = new DownloadDirectionsData();
-                    downloadDirectionsData.execute(directionsUrl);
+                    BuildDirectionsData buildDirectionsData = new BuildDirectionsData();
+                    buildDirectionsData.execute(startLatLng, endLatLng);
 
                     start = next;
                 }
@@ -168,87 +162,57 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
         return latLngList;
     }
 
-    // ------------------------ ASYNTASK CLASSES -------------------------------- //
+    // ------------------------ ASYNC TASK CLASSES -------------------------------- //
 
-    private class DownloadDirectionsData extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... url) {
-            String directionsApiUrl = url[0];
-            String data = directionsAPI.downloadDirectionsData(directionsApiUrl);
-            Log.d(TAG, "Data downloaded. \n" + data);
-            return data;
-        }
+    private class BuildDirectionsData extends AsyncTask<LatLng, Void, List<List<HashMap<String, String>>>> {
 
         @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            ParserTask parserTask = new ParserTask();
-            parserTask.execute(result);
-        }
-    }
-
-    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>> >{
-
-        // Parsing the data in non-ui thread
-        @Override
-        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
-
-            List<List<HashMap<String, String>>> routes = null;
-
-            try{
-                JSONDataParser jsonDataParser = new JSONDataParser();
-
-                // Starts parsing data
-                routes = jsonDataParser.parseDirectionsData(jsonData[0]);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-            return routes;
+        protected List<List<HashMap<String, String>>> doInBackground(LatLng... latLngs) {
+            WebApiUtil webApiUtil = new GoogleWebApiUtil();
+            LatLng start = latLngs[0];
+            LatLng end = latLngs[1];
+            List<List<HashMap<String, String>>> result = webApiUtil.getPolylineData(start, end);
+            return result;
         }
 
-        // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-            ArrayList<LatLng> points;
-            PolylineOptions lineOptions = null;
-
-            // Traversing through all the routes
-            for(int i=0;i<result.size();i++){
-                points = new ArrayList<>();
-                lineOptions = new PolylineOptions();
-
-                // Fetching i-th route
-                List<HashMap<String, String>> path = result.get(i);
-
-                // Fetching all the points in i-th route
-                for(int j=0;j<path.size();j++){
-                    HashMap<String,String> point = path.get(j);
-
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
-
-                    points.add(position);
-                }
-
-                // Adding all the points in the route to LineOptions
-                lineOptions.addAll(points);
-                lineOptions.width(6);
-                lineOptions.color(Color.RED);
-            }
-
-            // Drawing polyline in the Google Map for the i-th route
-            mMap.addPolyline(lineOptions);
+            super.onPostExecute(result);
+            drawPolyline(result);
         }
     }
 
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    private void drawPolyline(List<List<HashMap<String, String>>> result) {
+        ArrayList<LatLng> points;
+        PolylineOptions lineOptions = null;
+
+        // Traversing through all the routes
+        for(int i=0;i<result.size();i++){
+            points = new ArrayList<>();
+            lineOptions = new PolylineOptions();
+
+            // Fetching i-th route
+            List<HashMap<String, String>> path = result.get(i);
+
+            // Fetching all the points in i-th route
+            for(int j=0;j<path.size();j++){
+                HashMap<String,String> point = path.get(j);
+
+                double lat = Double.parseDouble(point.get("lat"));
+                double lng = Double.parseDouble(point.get("lng"));
+                LatLng position = new LatLng(lat, lng);
+
+                points.add(position);
+            }
+
+            // Adding all the points in the route to LineOptions
+            lineOptions.addAll(points);
+            lineOptions.width(6);
+            lineOptions.color(Color.RED);
+        }
+
+        // Drawing polyline in the Google Map for the i-th route
+        mMap.addPolyline(lineOptions);
     }
-    */
+
 }

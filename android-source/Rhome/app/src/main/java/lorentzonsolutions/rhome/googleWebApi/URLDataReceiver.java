@@ -12,20 +12,16 @@ import java.net.URL;
 
 class URLDataReceiver {
 
-    // Log tag
-    private String TAG = "URL_DATA_RECEIVER";
+    private String TAG = URLDataReceiver.class.toString();
 
-    private HttpURLConnection httpURLConnection;
     private String responseData;
 
 
     String readURL(String urlString) {
-        // TODO. USE THE NEXT PAGE TOKEN TO GET MORE THAN 20 RESULTS.
-
         try{
             System.out.println("Connecting using url:  \n" + urlString);
             URL url = new URL(urlString);
-            httpURLConnection = (HttpURLConnection) url.openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.connect();
 
             try(BufferedReader br = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()))) {
@@ -38,7 +34,7 @@ class URLDataReceiver {
                 }
 
                 responseData = sb.toString();
-                Log.d(TAG, "Data downloaded: \n" + responseData);
+                Log.d(TAG, "Directions data downloaded.");
                 br.close();
                 httpURLConnection.disconnect();
             }
