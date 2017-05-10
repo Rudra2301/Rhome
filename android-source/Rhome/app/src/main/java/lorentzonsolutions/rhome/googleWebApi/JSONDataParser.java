@@ -22,7 +22,7 @@ import lorentzonsolutions.rhome.utils.StorageUtil;
  */
 
 public class JSONDataParser {
-    private final String TAG = "JSON_DATA_PARSER";
+    private final String TAG = JSONDataParser.class.toString();
 
     private DistanceDurationCalculator distanceDurationCalculator = new DistanceDurationCalculator();
 

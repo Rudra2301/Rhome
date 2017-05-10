@@ -42,6 +42,7 @@ import lorentzonsolutions.rhome.utils.LocationConverter;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
+// TODO. End location should be optional.
 public class EndLocationActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {

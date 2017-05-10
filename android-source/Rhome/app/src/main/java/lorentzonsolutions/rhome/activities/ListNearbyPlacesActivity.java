@@ -28,13 +28,16 @@ import java.util.Collections;
 import java.util.List;
 
 import lorentzonsolutions.rhome.R;
-import lorentzonsolutions.rhome.googleWebApi.NearbyLocationSearcher;
+import lorentzonsolutions.rhome.googleWebApi.GoogleWebApiUtil;
+import lorentzonsolutions.rhome.interfaces.WebApiUtil;
 import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
 public class ListNearbyPlacesActivity extends AppCompatActivity {
 
     private final String TAG = ListNearbyPlacesActivity.class.toString();
+
+    private WebApiUtil webApiUtil = new GoogleWebApiUtil();
 
     private boolean isListUpdating = false;
     private int searchRadius = 5000;
@@ -99,13 +102,6 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
         // Context menu for items in list
         registerForContextMenu(nearbyPlacesList);
 
-        // Activating async task to fetch nearby locations.
-        NearbyLocationSearcher nearbyLocationSearcher = new NearbyLocationSearcher
-                .Builder(storageUtil.getSelectedStartLocation().getLatitude(), storageUtil.getSelectedStartLocation().getLongitude())
-                .type(selectedType)
-                .radius(searchRadius)
-                .build();
-
         FloatingActionButton backButton = (FloatingActionButton) findViewById(R.id.list_nearby_locations_back_button);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +111,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
         });
 
         // Initializing async task to populate list.
-        new NearbyLocationCollector().execute(nearbyLocationSearcher);
+        new NearbyLocationCollector().execute();
 
     }
 
@@ -170,7 +166,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
     Second  -> for use in onProgressUpdate(second... seconds)
     Third   -> for use in onPostExecute(third third). The return value from the doInBackground
      */
-    private class NearbyLocationCollector extends AsyncTask<NearbyLocationSearcher, GooglePlaceInformation, Void> {
+    private class NearbyLocationCollector extends AsyncTask<Void, GooglePlaceInformation, Void> {
 
         TextView progressText = (TextView) findViewById(R.id.getting_locations_progress_text);
         ProgressBar progressBar = (ProgressBar) findViewById(R.id.getting_locations_progress);
@@ -184,9 +180,15 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Void doInBackground(NearbyLocationSearcher... searchers) {
+        protected Void doInBackground(Void... params) {
+
+            double searchPointLatitude = storageUtil.getSelectedStartLocation().getLatitude();
+            double searchPointLongitude = storageUtil.getSelectedStartLocation().getLongitude();
+
             // Fetching data.
-            List<GooglePlaceInformation> googlePlaceInformationList = searchers[0].getNearbyLocationsList();
+            List<GooglePlaceInformation> googlePlaceInformationList = webApiUtil.getNearbyLocationsList(
+                    searchPointLatitude, searchPointLongitude, searchRadius, selectedType);
+
             Collections.sort(googlePlaceInformationList);
 
             for(GooglePlaceInformation place : googlePlaceInformationList) publishProgress(place);

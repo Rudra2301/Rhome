@@ -2,6 +2,8 @@ package lorentzonsolutions.rhome.googleWebApi;
 
 import android.util.Log;
 
+import com.google.android.gms.nearby.messages.Distance;
+
 import lorentzonsolutions.rhome.utils.Resources;
 
 /**
@@ -10,7 +12,8 @@ import lorentzonsolutions.rhome.utils.Resources;
 
 public class DistanceDurationCalculator {
     // TODO. Possibility to change modes.
-    private final String TAG = "DISTANCE_CALCULATOR";
+    private final String TAG = DistanceDurationCalculator.class.toString();
+
     private final String API_KEY = Resources.getInstance().getAPI_KEY_WEB_API();
     private GoogleDistanceModes mode = GoogleDistanceModes.DRIVING;
 
