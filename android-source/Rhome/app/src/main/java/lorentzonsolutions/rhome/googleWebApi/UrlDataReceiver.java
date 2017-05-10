@@ -10,9 +10,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-class URLDataReceiver {
+class UrlDataReceiver {
 
-    private String TAG = URLDataReceiver.class.toString();
+    private String TAG = UrlDataReceiver.class.toString();
 
     private String responseData;
 
@@ -34,7 +34,7 @@ class URLDataReceiver {
                 }
 
                 responseData = sb.toString();
-                Log.d(TAG, "Directions data downloaded.");
+                Log.d(TAG, "Data downloaded.");
                 br.close();
                 httpURLConnection.disconnect();
             }

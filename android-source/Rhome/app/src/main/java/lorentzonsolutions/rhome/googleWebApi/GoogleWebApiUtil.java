@@ -19,7 +19,7 @@ import lorentzonsolutions.rhome.utils.Resources;
 public class GoogleWebApiUtil implements WebApiUtil {
 
     private static final String WEB_API_KEY = Resources.getInstance().getAPI_KEY_WEB_API();
-    private URLDataReceiver urlDataReceiver = new URLDataReceiver();
+    private UrlDataReceiver urlDataReceiver = new UrlDataReceiver();
     private JSONDataParser jsonDataParser = new JSONDataParser();
 
     /**
@@ -55,6 +55,17 @@ public class GoogleWebApiUtil implements WebApiUtil {
         return new ArrayList<>();
     }
 
+    /**
+     * Uses Google Geocode API to reverse Geodata for LatLng to location data.
+     * @param location
+     * @return
+     */
+    @Override
+    public GooglePlaceInformation getLocationFromLatLng(LatLng location) {
+        String locationData = urlDataReceiver.readURL(buildLocationByLatLngUrl(location.latitude, location.longitude));
+        return jsonDataParser.parseReverseGeocodeDataToPlaceInformation(locationData);
+    }
+
 
     // ---------------------- URL BUILDERS --------------------------- //
 
@@ -82,4 +93,12 @@ public class GoogleWebApiUtil implements WebApiUtil {
         return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + params;
     }
 
+    // GOOGLE GEOCODE API
+    private String buildLocationByLatLngUrl(double latitude, double longitude) {
+
+        return "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
+                latitude + "," +
+                longitude +
+                "&key=" + WEB_API_KEY;
+    }
 }

@@ -14,4 +14,5 @@ import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
 public interface WebApiUtil {
     List<GooglePlaceInformation> getNearbyLocationsList(double locationLatitude, double locationLongitude, int radius, String type);
     List<List<HashMap<String, String>>> getPolylineData(LatLng start, LatLng end);
+    GooglePlaceInformation getLocationFromLatLng(LatLng location);
 }
