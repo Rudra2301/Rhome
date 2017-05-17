@@ -16,8 +16,9 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.exceptions.RouteException;
-import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
-import lorentzonsolutions.rhome.utils.RouteCalculator;
+import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
+import lorentzonsolutions.rhome.interfaces.RouteCalculator;
+import lorentzonsolutions.rhome.routeCalculators.NearestNeighbourRouteCalculator;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
 public class RouteOrderActivity extends AppCompatActivity {
@@ -35,8 +36,8 @@ public class RouteOrderActivity extends AppCompatActivity {
 
         try {
             ArrayList<String> places = new ArrayList<>();
-            for(GooglePlaceInformation googlePlaceInformation : StorageUtil.INSTANCE.getFastestRoute()) {
-                places.add(googlePlaceInformation.name);
+            for(GooglePlace googlePlace : StorageUtil.INSTANCE.getFastestRoute()) {
+                places.add(googlePlace.name);
             }
 
             ArrayAdapter<String> routeListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, places);
@@ -80,17 +81,17 @@ public class RouteOrderActivity extends AppCompatActivity {
     }
 
     private void initRouteCalculation() {
-        RouteCalculator calculator = new RouteCalculator();
-        List<GooglePlaceInformation> fastestRoute = calculator.calculateFastestTime(StorageUtil.INSTANCE.getSelectedPlacesList(), true);
+        RouteCalculator calculator = new NearestNeighbourRouteCalculator();
+        List<GooglePlace> fastestRoute = calculator.calculateFastestRoute(StorageUtil.INSTANCE.getSelectedPlacesList());
         StorageUtil.INSTANCE.setFastestRoute(fastestRoute);
+
         Log.d(TAG, "Calculated fastest route: ");
-        for(GooglePlaceInformation place : fastestRoute) {
+
+        for(GooglePlace place : fastestRoute) {
             Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
         }
 
         double totalDistance = calculator.calculateTotalRouteDistance(fastestRoute);
         Log.d(TAG, "Total distance: " + totalDistance + " km.");
-
-        // Starting route activity
     }
 }

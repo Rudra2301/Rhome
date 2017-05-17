@@ -1,4 +1,4 @@
-package lorentzonsolutions.rhome.shared;
+package lorentzonsolutions.rhome.googleWebApi;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Class representing a place parsed from JSON data collected from the Google Web API.
  */
 
-public class GooglePlaceInformation implements Comparable, Parcelable{
+public class GooglePlace implements Comparable, Parcelable{
     public String name;
     public double latitude;
     public double longitude;
@@ -34,7 +34,7 @@ public class GooglePlaceInformation implements Comparable, Parcelable{
     public boolean visited;
 
 
-    private GooglePlaceInformation(BuildPlace builder) {
+    private GooglePlace(BuildPlace builder) {
         this.name = builder.name;
         this.latitude = builder.latitude;
         this.longitude = builder.longitude;
@@ -58,7 +58,7 @@ public class GooglePlaceInformation implements Comparable, Parcelable{
     }
 
     // Used by the parcelable interface to recreate the object.
-    public GooglePlaceInformation(Parcel in) {
+    public GooglePlace(Parcel in) {
 
         this.name = in.readString();
         this.latitude = in.readDouble();
@@ -78,21 +78,21 @@ public class GooglePlaceInformation implements Comparable, Parcelable{
         this.minutesByBicycleToEndLocation = in.readInt();
         this.minutesByWalkToEndLocation = in.readInt();
     }
-    public static final Parcelable.Creator<GooglePlaceInformation> CREATOR = new Parcelable.Creator<GooglePlaceInformation>() {
+    public static final Parcelable.Creator<GooglePlace> CREATOR = new Parcelable.Creator<GooglePlace>() {
 
-        public GooglePlaceInformation createFromParcel(Parcel in) {
-            return new GooglePlaceInformation(in);
+        public GooglePlace createFromParcel(Parcel in) {
+            return new GooglePlace(in);
         }
 
-        public GooglePlaceInformation[] newArray(int size) {
-            return new GooglePlaceInformation[size];
+        public GooglePlace[] newArray(int size) {
+            return new GooglePlace[size];
         }
     };
 
 
     @Override
     public int compareTo(Object o) {
-        GooglePlaceInformation obj = (GooglePlaceInformation) o;
+        GooglePlace obj = (GooglePlace) o;
         return this.distanceToStartLocation - obj.distanceToStartLocation;
     }
 
@@ -210,8 +210,8 @@ public class GooglePlaceInformation implements Comparable, Parcelable{
             this.minutesByWalkToEndLocation = minutes;
             return this;
         }
-        public GooglePlaceInformation build() {
-            return new GooglePlaceInformation(this);
+        public GooglePlace build() {
+            return new GooglePlace(this);
         }
     }
 
@@ -258,9 +258,9 @@ public class GooglePlaceInformation implements Comparable, Parcelable{
     public boolean equals(Object o) {
         if(o == null) return false;
         if(o == this) return true;
-        if(!(o instanceof GooglePlaceInformation)) return false;
+        if(!(o instanceof GooglePlace)) return false;
 
-        GooglePlaceInformation test = (GooglePlaceInformation) o;
+        GooglePlace test = (GooglePlace) o;
 
         if(test.googlePlaceID == null || this.googlePlaceID == null) return false;
         return test.googlePlaceID.equals(this.googlePlaceID);

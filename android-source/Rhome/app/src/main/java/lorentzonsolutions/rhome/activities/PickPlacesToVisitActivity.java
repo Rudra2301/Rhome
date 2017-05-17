@@ -22,7 +22,7 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import lorentzonsolutions.rhome.R;
-import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
+import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 import lorentzonsolutions.rhome.utils.URLIconDownloader;
@@ -148,9 +148,9 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
     }
 
     // Adapter for list
-    class SelectedPlaceListAdapter extends ArrayAdapter<GooglePlaceInformation> {
+    class SelectedPlaceListAdapter extends ArrayAdapter<GooglePlace> {
 
-        public SelectedPlaceListAdapter(Context context, List<GooglePlaceInformation> placesList) {
+        public SelectedPlaceListAdapter(Context context, List<GooglePlace> placesList) {
             super(context, 0, placesList);
         }
 
@@ -158,7 +158,7 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             if(convertView == null) convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_place_selected, parent, false);
 
-            GooglePlaceInformation place = getItem(position);
+            GooglePlace place = getItem(position);
 
             TextView selectedPlaceName = (TextView) convertView.findViewById(R.id.selected_place_name);
             TextView selectedPlaceAddress = (TextView) convertView.findViewById(R.id.selected_place_address);
@@ -178,11 +178,11 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
     class SetPlaceIcon extends AsyncTask<Void, Void, Void> {
 
         private final WeakReference<ImageView> iconView;
-        private GooglePlaceInformation place;
+        private GooglePlace place;
         private Drawable icon;
 
 
-        public SetPlaceIcon(GooglePlaceInformation place, ImageView iconView) {
+        public SetPlaceIcon(GooglePlace place, ImageView iconView) {
             this.iconView = new WeakReference<ImageView>(iconView);
             this.place = place;
         }

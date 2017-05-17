@@ -31,7 +31,7 @@ import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.googleWebApi.GoogleWebApiUtil;
 import lorentzonsolutions.rhome.interfaces.WebApiUtil;
-import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
+import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
 public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapReadyCallback,
@@ -148,17 +148,17 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
         }
     }
 
-    private void placeMarkersForRoute(List<GooglePlaceInformation> route) {
-        for(GooglePlaceInformation place : route) {
+    private void placeMarkersForRoute(List<GooglePlace> route) {
+        for(GooglePlace place : route) {
             MarkerOptions marker = new MarkerOptions();
             marker.position(new LatLng(place.latitude, place.longitude)).title(place.name);
             mMap.addMarker(marker);
         }
     }
 
-    private List<LatLng> makeLatLngList(List<GooglePlaceInformation> googlePlaceInformationList) {
+    private List<LatLng> makeLatLngList(List<GooglePlace> googlePlaceList) {
         List<LatLng> latLngList = new ArrayList<>();
-        for(GooglePlaceInformation place : googlePlaceInformationList) latLngList.add(new LatLng(place.latitude, place.longitude));
+        for(GooglePlace place : googlePlaceList) latLngList.add(new LatLng(place.latitude, place.longitude));
         return latLngList;
     }
 

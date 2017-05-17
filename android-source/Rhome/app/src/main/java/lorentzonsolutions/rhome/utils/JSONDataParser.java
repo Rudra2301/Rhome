@@ -1,4 +1,4 @@
-package lorentzonsolutions.rhome.googleWebApi;
+package lorentzonsolutions.rhome.utils;
 
 import android.location.Location;
 import android.util.Log;
@@ -13,18 +13,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import lorentzonsolutions.rhome.shared.DistanceDurationInfoObject;
-import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
-import lorentzonsolutions.rhome.utils.StorageUtil;
+import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceDuration;
+import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceDurationCalculator;
+import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceModes;
+import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 
 /**
- * This class parses JSON data in string to a list of GooglePlaceInformation object.
+ * This class parses JSON data in string to a list of GooglePlace object.
  */
 
 public class JSONDataParser {
     private final String TAG = JSONDataParser.class.toString();
 
-    private DistanceDurationCalculator distanceDurationCalculator = new DistanceDurationCalculator();
+    private GoogleDistanceDurationCalculator googleDistanceDurationCalculator = new GoogleDistanceDurationCalculator();
 
     /**
      * Parses the data collected from a nearby search request against the Google Maps Web API.
@@ -33,7 +34,7 @@ public class JSONDataParser {
      * @param nearbyRequestResponseData
      * @return
      */
-    public List<GooglePlaceInformation> parseNearbySearchData(String nearbyRequestResponseData) {
+    public List<GooglePlace> parseNearbySearchData(String nearbyRequestResponseData) {
 
         Log.i(TAG, "Attempting to parse nearby locations data.");
         JSONObject jsonObject;
@@ -51,13 +52,13 @@ public class JSONDataParser {
         return parseNearbySearchResultJSONArray(jsonArray);
     }
 
-    private List<GooglePlaceInformation> parseNearbySearchResultJSONArray(JSONArray jsonArray) {
-        List<GooglePlaceInformation> listOfPlaces = new ArrayList<>();
+    private List<GooglePlace> parseNearbySearchResultJSONArray(JSONArray jsonArray) {
+        List<GooglePlace> listOfPlaces = new ArrayList<>();
 
         int length = jsonArray.length();
         for(int i = 0; i < length; i++) {
             try {
-                GooglePlaceInformation place = buildNearbyPlaceInformation((JSONObject) jsonArray.get(i));
+                GooglePlace place = buildNearbyPlaceInformation((JSONObject) jsonArray.get(i));
                 listOfPlaces.add(place);
                 Log.i(TAG, "Place added");
             } catch (JSONException e) {
@@ -70,7 +71,7 @@ public class JSONDataParser {
 
     }
 
-    private GooglePlaceInformation buildNearbyPlaceInformation(JSONObject placeObject) {
+    private GooglePlace buildNearbyPlaceInformation(JSONObject placeObject) {
         Log.i(TAG, "Building nearby place information.");
 
         String name = "N/A";
@@ -105,17 +106,17 @@ public class JSONDataParser {
             Location start = StorageUtil.INSTANCE.getSelectedStartLocation();
             Location end = StorageUtil.INSTANCE.getSelectedEndLocation();
             if(start != null) {
-                String distanceData = distanceDurationCalculator.calculateDistance(start.getLatitude(), start.getLongitude(), latitude, longitude);
-                DistanceDurationInfoObject distanceDurationInfoObject = parseDistanceCalculationData(distanceData);
-                distanceToStartLocation = distanceDurationInfoObject.distance;
-                durationByCarToStartLocation = distanceDurationInfoObject.duration;
+                String distanceData = googleDistanceDurationCalculator.calculateDistance(start.getLatitude(), start.getLongitude(), latitude, longitude, GoogleDistanceModes.DRIVING);
+                GoogleDistanceDuration googleDistanceDuration = parseDistanceCalculationData(distanceData);
+                distanceToStartLocation = googleDistanceDuration.distance;
+                durationByCarToStartLocation = googleDistanceDuration.duration;
             }
             // TODO. Calculate distance to end.
             if(end != null) {
-                String distanceData = distanceDurationCalculator.calculateDistance(end.getLatitude(), end.getLongitude(), latitude, longitude);
-                DistanceDurationInfoObject distanceDurationInfoObject = parseDistanceCalculationData(distanceData);
-                distanceToEndLocation = distanceDurationInfoObject.distance;
-                durationByCarToEndLocation = distanceDurationInfoObject.duration;
+                String distanceData = googleDistanceDurationCalculator.calculateDistance(end.getLatitude(), end.getLongitude(), latitude, longitude, GoogleDistanceModes.DRIVING);
+                GoogleDistanceDuration googleDistanceDuration = parseDistanceCalculationData(distanceData);
+                distanceToEndLocation = googleDistanceDuration.distance;
+                durationByCarToEndLocation = googleDistanceDuration.duration;
             }
 
             // These can be null
@@ -140,7 +141,7 @@ public class JSONDataParser {
             Log.e(TAG, "Error parsing place.");
             e.printStackTrace();
         }
-        GooglePlaceInformation result = new GooglePlaceInformation.BuildPlace(name, latitude, longitude)
+        GooglePlace result = new GooglePlace.BuildPlace(name, latitude, longitude)
                 .address(address)
                 .iconAddress(iconAddress)
                 .isOpen(isOpen)
@@ -159,9 +160,9 @@ public class JSONDataParser {
         return result;
     }
 
-    public GooglePlaceInformation parseReverseGeocodeDataToPlaceInformation(String reverseGeocodeData) {
+    public GooglePlace parseReverseGeocodeDataToPlaceInformation(String reverseGeocodeData) {
 
-        GooglePlaceInformation place = null;
+        GooglePlace place = null;
 
         String name = "Location";
         double latitude = 0.0;
@@ -208,7 +209,7 @@ public class JSONDataParser {
             return null;
         }
 
-        GooglePlaceInformation result = new GooglePlaceInformation.BuildPlace(name, latitude, longitude)
+        GooglePlace result = new GooglePlace.BuildPlace(name, latitude, longitude)
                 .address(address)
                 .iconAddress(iconAddress)
                 .isOpen(isOpen)
@@ -222,7 +223,7 @@ public class JSONDataParser {
 
     }
 
-    public DistanceDurationInfoObject parseDistanceCalculationData(String distanceData) {
+    public GoogleDistanceDuration parseDistanceCalculationData(String distanceData) {
         int distance = -1;
         int duration = -1;
         // Info at: https://developers.google.com/maps/documentation/distance-matrix/intro#DistanceMatrixRequests
@@ -264,7 +265,7 @@ public class JSONDataParser {
             Log.e(TAG, "Error parsing distance/duration data.");
             e.printStackTrace();
         }
-        return new DistanceDurationInfoObject(distance, duration);
+        return new GoogleDistanceDuration(distance, duration);
     }
 
     // TODO. Throw wrapped exception

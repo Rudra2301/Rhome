@@ -3,13 +3,12 @@ package lorentzonsolutions.rhome.utils.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 import android.util.Log;
 
 import java.util.List;
 
 import lorentzonsolutions.rhome.interfaces.Storage;
-import lorentzonsolutions.rhome.shared.GoogleLocationTypes;
+import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
 import static lorentzonsolutions.rhome.utils.database.DatabaseConstants.*;
 
 /**

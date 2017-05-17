@@ -18,12 +18,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import lorentzonsolutions.rhome.R;
-import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
+import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 
 public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
     private final String TAG = "PLACE_MAP";
 
-    private GooglePlaceInformation place;
+    private GooglePlace place;
 
     // Google API
     private GoogleMap mMap;

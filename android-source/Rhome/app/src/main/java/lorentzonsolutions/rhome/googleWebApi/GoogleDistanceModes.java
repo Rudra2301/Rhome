@@ -1,6 +1,6 @@
 package lorentzonsolutions.rhome.googleWebApi;
 
-enum GoogleDistanceModes {
+public enum GoogleDistanceModes {
 
     DRIVING("driving"), WALKING("walking"), BICYCLING("walking");
 

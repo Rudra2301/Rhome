@@ -1,4 +1,4 @@
-package lorentzonsolutions.rhome.googleWebApi;
+package lorentzonsolutions.rhome.utils;
 
 import android.util.Log;
 
@@ -10,14 +10,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 
-class UrlDataReceiver {
+public class UrlDataReceiver {
 
     private String TAG = UrlDataReceiver.class.toString();
 
     private String responseData;
 
 
-    String readURL(String urlString) {
+    public String readURL(String urlString) {
         try{
             System.out.println("Connecting using url:  \n" + urlString);
             URL url = new URL(urlString);

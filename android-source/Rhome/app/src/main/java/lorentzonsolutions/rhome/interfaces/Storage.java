@@ -2,7 +2,7 @@ package lorentzonsolutions.rhome.interfaces;
 
 import java.util.List;
 
-import lorentzonsolutions.rhome.shared.GoogleLocationTypes;
+import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
 
 /**
  * Interface for creating a storage.

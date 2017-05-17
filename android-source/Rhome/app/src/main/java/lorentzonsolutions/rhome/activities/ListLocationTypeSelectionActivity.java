@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lorentzonsolutions.rhome.R;
-import lorentzonsolutions.rhome.shared.GoogleLocationTypes;
+import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
 import lorentzonsolutions.rhome.utils.Resources;
 
 public class ListLocationTypeSelectionActivity extends AppCompatActivity {

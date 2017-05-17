@@ -23,7 +23,7 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.exceptions.RouteException;
-import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
+import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.StorageUtil;
 
@@ -31,7 +31,7 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
 
     private final String TAG = ListMinorRoutesActivity.class.toString();
 
-    ArrayAdapter<List<GooglePlaceInformation>> adapter;
+    ArrayAdapter<List<GooglePlace>> adapter;
     ListView minorRouteList;
 
     @Override
@@ -63,7 +63,7 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     // Get the location type selected
-                    List<GooglePlaceInformation> minorRoute = (List<GooglePlaceInformation>) parent.getItemAtPosition(position);
+                    List<GooglePlace> minorRoute = (List<GooglePlace>) parent.getItemAtPosition(position);
                     Log.d(TAG, "Minor route selected: " + minorRoute);
 
                     startNavigation(minorRoute, false);
@@ -88,9 +88,9 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
 
 
     // Adapter for list
-    class MinorRoutesListAdapter extends ArrayAdapter<List<GooglePlaceInformation>> {
+    class MinorRoutesListAdapter extends ArrayAdapter<List<GooglePlace>> {
 
-        public MinorRoutesListAdapter(Context context, List<List<GooglePlaceInformation>> placesList) {
+        public MinorRoutesListAdapter(Context context, List<List<GooglePlace>> placesList) {
             super(context, 0, placesList);
         }
 
@@ -100,9 +100,9 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
                     .from(getContext())
                     .inflate(R.layout.list_item_minor_routes, parent, false);
 
-            List<GooglePlaceInformation> minorRoute = getItem(position);
-            GooglePlaceInformation from = minorRoute.get(0);
-            GooglePlaceInformation to = minorRoute.get(1);
+            List<GooglePlace> minorRoute = getItem(position);
+            GooglePlace from = minorRoute.get(0);
+            GooglePlace to = minorRoute.get(1);
 
             TextView title = (TextView) convertView.findViewById(R.id.minor_route_list_item_header);
             String header = getResources().getString(R.string.minor_item_header);
@@ -142,7 +142,7 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         int select = item.getItemId();
         // 0 -> Navigate from current. 1 -> Turn by turn navigation
-        List<GooglePlaceInformation> minorRoute = (List<GooglePlaceInformation>) minorRouteList.getAdapter().getItem(info.position);
+        List<GooglePlace> minorRoute = (List<GooglePlace>) minorRouteList.getAdapter().getItem(info.position);
 
         if(select == 0) {
             // Navigate from current
@@ -155,9 +155,9 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
         return true;
     }
 
-    private void startNavigation(List<GooglePlaceInformation> minorRoute, boolean turnByTurn) {
-        GooglePlaceInformation fromLocation = minorRoute.get(0);
-        GooglePlaceInformation toLocation = minorRoute.get(1);
+    private void startNavigation(List<GooglePlace> minorRoute, boolean turnByTurn) {
+        GooglePlace fromLocation = minorRoute.get(0);
+        GooglePlace toLocation = minorRoute.get(1);
 
         String uri = "";
 

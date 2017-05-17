@@ -2,13 +2,12 @@ package lorentzonsolutions.rhome.utils;
 
 import android.location.Address;
 import android.location.Location;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lorentzonsolutions.rhome.exceptions.RouteException;
-import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
+import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 
 /**
  * Handles storage functionality. Singleton class using enum approach.
@@ -35,51 +34,51 @@ public enum StorageUtil {
     }
 
     //SELECTED PLACES
-    private List<GooglePlaceInformation> selectedPlaces = new ArrayList<>();
-    public void addSelectedPlace(GooglePlaceInformation place) {
+    private List<GooglePlace> selectedPlaces = new ArrayList<>();
+    public void addSelectedPlace(GooglePlace place) {
         selectedPlaces.add(place);
         // TODO. Increment value of place type in DB.
     }
-    public void removeSelectedPlace(GooglePlaceInformation place) {
+    public void removeSelectedPlace(GooglePlace place) {
         selectedPlaces.remove(place);
         // TODO. Decrease value of place type in DB.
     }
     // TODO. Return copy. Not reference to the actual object.
-    public List<GooglePlaceInformation> getSelectedPlacesList() {
+    public List<GooglePlace> getSelectedPlacesList() {
         return this.selectedPlaces;
     }
 
     // PLACES NOT TO SHOW
-    private List<GooglePlaceInformation> placesNotToShow = new ArrayList<>();
-    public void removeFromNeverShowList(GooglePlaceInformation place) {
+    private List<GooglePlace> placesNotToShow = new ArrayList<>();
+    public void removeFromNeverShowList(GooglePlace place) {
         if(placesNotToShow.contains(place)) placesNotToShow.remove(place);
     }
-    public void addToNeverShowList(GooglePlaceInformation place) {
+    public void addToNeverShowList(GooglePlace place) {
         placesNotToShow.add(place);
     }
     // TODO. Return copy.
-    public List<GooglePlaceInformation> getPlacesNotToShow() {
+    public List<GooglePlace> getPlacesNotToShow() {
         return this.placesNotToShow;
     }
 
     // FASTEST ROUTE
-    private List<GooglePlaceInformation> fastestRoute = new ArrayList<>();
-    public List<GooglePlaceInformation> getFastestRoute() throws RouteException{
+    private List<GooglePlace> fastestRoute = new ArrayList<>();
+    public List<GooglePlace> getFastestRoute() throws RouteException{
         if(fastestRoute.size() == 0)throw new RouteException("No route calculated!");
         return fastestRoute;
     }
-    public void setFastestRoute(List<GooglePlaceInformation> fastestRoute) {
+    public void setFastestRoute(List<GooglePlace> fastestRoute) {
         this.fastestRoute = fastestRoute;
     }
 
     // PLACE TO PLACE LIST
-    public List<List<GooglePlaceInformation>> splitToMinorRoutes(List<GooglePlaceInformation> route) {
-        List<List<GooglePlaceInformation>> splitted = new ArrayList<>();
+    public List<List<GooglePlace>> splitToMinorRoutes(List<GooglePlace> route) {
+        List<List<GooglePlace>> splitted = new ArrayList<>();
 
-        GooglePlaceInformation placeBefore = null;
+        GooglePlace placeBefore = null;
         for(int i = 0; i < route.size(); i++) {
-            List<GooglePlaceInformation> minorRoute = new ArrayList<>();
-            GooglePlaceInformation placeNow = route.get(i);
+            List<GooglePlace> minorRoute = new ArrayList<>();
+            GooglePlace placeNow = route.get(i);
             if(placeBefore != null) {
                 minorRoute.add(placeBefore); minorRoute.add(placeNow);
                 splitted.add(minorRoute);
@@ -89,7 +88,7 @@ public enum StorageUtil {
 
         System.out.println("Minor routes list calculated");
         int calc = 1;
-        for(List<GooglePlaceInformation> minor : splitted) {
+        for(List<GooglePlace> minor : splitted) {
             System.out.println(calc + " st route: \n" + minor);
             calc++;
         }

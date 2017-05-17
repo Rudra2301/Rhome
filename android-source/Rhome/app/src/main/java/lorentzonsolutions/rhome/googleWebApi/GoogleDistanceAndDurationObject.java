@@ -1,14 +1,15 @@
-package lorentzonsolutions.rhome.shared;
+package lorentzonsolutions.rhome.googleWebApi;
 
 /**
- * Helper object for holding information about a distance and duration between two places.
+ * A helper class to contain the distance and durations data between places.
  */
-public class DistanceDurationInfoObject {
+
+public class GoogleDistanceAndDurationObject {
 
     public int distance;
     public int duration;
 
-    public DistanceDurationInfoObject(int distance, int duration) {
+    public GoogleDistanceAndDurationObject(int distance, int duration) {
         this.distance = distance;
         this.duration = duration;
     }
@@ -17,4 +18,5 @@ public class DistanceDurationInfoObject {
     public String toString() {
         return "Total minutes: " + duration + ". Hours: " + duration/60 + ". Minutes: " + duration%60;
     }
+
 }

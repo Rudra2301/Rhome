@@ -9,8 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import lorentzonsolutions.rhome.interfaces.WebApiUtil;
-import lorentzonsolutions.rhome.shared.GooglePlaceInformation;
+import lorentzonsolutions.rhome.utils.JSONDataParser;
 import lorentzonsolutions.rhome.utils.Resources;
+import lorentzonsolutions.rhome.utils.UrlDataReceiver;
 
 /**
  * Implementation of WebApiUtil that retrieves information from Googles Web API.
@@ -32,7 +33,7 @@ public class GoogleWebApiUtil implements WebApiUtil {
      * @return
      */
     @Override
-    public List<GooglePlaceInformation> getNearbyLocationsList(double locationLatitude, double locationLongitude, int radius, String type) {
+    public List<GooglePlace> getNearbyLocationsList(double locationLatitude, double locationLongitude, int radius, String type) {
         String url = buildNearbySearchUrl(locationLatitude, locationLongitude, radius, type);
         String data = urlDataReceiver.readURL(url);
         return jsonDataParser.parseNearbySearchData(data);
@@ -61,7 +62,7 @@ public class GoogleWebApiUtil implements WebApiUtil {
      * @return
      */
     @Override
-    public GooglePlaceInformation getLocationFromLatLng(LatLng location) {
+    public GooglePlace getLocationFromLatLng(LatLng location) {
         String locationData = urlDataReceiver.readURL(buildLocationByLatLngUrl(location.latitude, location.longitude));
         return jsonDataParser.parseReverseGeocodeDataToPlaceInformation(locationData);
     }
@@ -70,7 +71,7 @@ public class GoogleWebApiUtil implements WebApiUtil {
     // ---------------------- URL BUILDERS --------------------------- //
 
     // GOOGLE PLACE WEB API
-    private String buildNearbySearchUrl(double locationLatitude, double locationLongitude, int radius, String type) {
+    private static String buildNearbySearchUrl(double locationLatitude, double locationLongitude, int radius, String type) {
 
         return "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" +
                 locationLatitude + "," +
@@ -81,7 +82,7 @@ public class GoogleWebApiUtil implements WebApiUtil {
     }
 
     // GOOGLE DIRECTIONS WEB API
-    private String buildDirectionsForRouteUrl(LatLng start, LatLng end) {
+    private static String buildDirectionsForRouteUrl(LatLng start, LatLng end) {
 
         String start_url = "origin=" + start.latitude + "," + start.longitude;
         String end_url = "destination=" + end.latitude + "," + end.longitude;
@@ -94,11 +95,23 @@ public class GoogleWebApiUtil implements WebApiUtil {
     }
 
     // GOOGLE GEOCODE API
-    private String buildLocationByLatLngUrl(double latitude, double longitude) {
+    private static String buildLocationByLatLngUrl(double latitude, double longitude) {
 
         return "https://maps.googleapis.com/maps/api/geocode/json?latlng=" +
                 latitude + "," +
                 longitude +
+                "&key=" + WEB_API_KEY;
+    }
+
+    // GOOGLE DISTANCE MATRIX API
+    public static String buildDistanceMatrixUrl(double fromLatitude, double fromLongitude, double toLatidtude, double toLongitude, GoogleDistanceModes mode) {
+
+        return "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" +
+                fromLatitude + "," +
+                fromLongitude + "&destinations=" +
+                toLatidtude + "," +
+                toLongitude +
+                "&mode=" + mode +
                 "&key=" + WEB_API_KEY;
     }
 }

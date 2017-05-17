@@ -1,6 +1,6 @@
 package lorentzonsolutions.rhome.utils.database;
 
-import lorentzonsolutions.rhome.shared.GoogleLocationTypes;
+import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
 
 /**
  * Contains the constants and queries for app database.
