@@ -34,6 +34,9 @@ public class StartActivity extends AppCompatActivity implements ActivityCompat.O
         requestPermissions();
     }
 
+    /**
+     * Requests the permissions to access device location information.
+     */
     private void requestPermissions() {
 
         ActivityCompat.requestPermissions(this,

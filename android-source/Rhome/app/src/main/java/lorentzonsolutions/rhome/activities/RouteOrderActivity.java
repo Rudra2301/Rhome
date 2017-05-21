@@ -19,7 +19,7 @@ import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.RouteCalculator;
 import lorentzonsolutions.rhome.routeCalculators.NearestNeighbourRouteCalculator;
-import lorentzonsolutions.rhome.utils.StorageUtil;
+import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
 
 public class RouteOrderActivity extends AppCompatActivity {
 
@@ -36,7 +36,7 @@ public class RouteOrderActivity extends AppCompatActivity {
 
         try {
             ArrayList<String> places = new ArrayList<>();
-            for(GooglePlace googlePlace : StorageUtil.INSTANCE.getFastestRoute()) {
+            for(GooglePlace googlePlace : TemporalStorageUtil.INSTANCE.getFastestRoute()) {
                 places.add(googlePlace.name);
             }
 
@@ -82,8 +82,8 @@ public class RouteOrderActivity extends AppCompatActivity {
 
     private void initRouteCalculation() {
         RouteCalculator calculator = new NearestNeighbourRouteCalculator();
-        List<GooglePlace> fastestRoute = calculator.calculateFastestRoute(StorageUtil.INSTANCE.getSelectedPlacesList());
-        StorageUtil.INSTANCE.setFastestRoute(fastestRoute);
+        List<GooglePlace> fastestRoute = calculator.calculateFastestRoute(TemporalStorageUtil.INSTANCE.getSelectedPlacesList());
+        TemporalStorageUtil.INSTANCE.setFastestRoute(fastestRoute);
 
         Log.d(TAG, "Calculated fastest route: ");
 

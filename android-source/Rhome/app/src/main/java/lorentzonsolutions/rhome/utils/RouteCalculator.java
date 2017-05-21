@@ -17,10 +17,10 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 
 public class RouteCalculator {
     private final String TAG = "ROUTE_CALCULATOR";
-    private Location startLocation = StorageUtil.INSTANCE.getSelectedStartLocation();
+    private Location startLocation = TemporalStorageUtil.INSTANCE.getSelectedStartLocation();
     private GooglePlace startPlace = new GooglePlace.BuildPlace("Start location", startLocation.getLatitude(), startLocation.getLongitude()).build();
 
-    private Location endLocation = StorageUtil.INSTANCE.getSelectedEndLocation();
+    private Location endLocation = TemporalStorageUtil.INSTANCE.getSelectedEndLocation();
     private GooglePlace endPlace = new GooglePlace.BuildPlace("End location", endLocation.getLatitude(), endLocation.getLongitude()).build();
 
 

@@ -31,7 +31,7 @@ import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.googleWebApi.GoogleWebApiUtil;
 import lorentzonsolutions.rhome.interfaces.WebApiUtil;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
-import lorentzonsolutions.rhome.utils.StorageUtil;
+import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
 
 public class ListNearbyPlacesActivity extends AppCompatActivity {
 
@@ -48,7 +48,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
     private ArrayAdapter<GooglePlace> listAdapter;
     private List<GooglePlace> places;
 
-    private StorageUtil storageUtil;
+    private TemporalStorageUtil temporalStorageUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
 
         Log.d(TAG, "Searching for location of type: " + selectedType);
 
-        storageUtil = StorageUtil.INSTANCE;
+        temporalStorageUtil = TemporalStorageUtil.INSTANCE;
 
         places = new ArrayList<>();
 
@@ -78,14 +78,14 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
                 if(!isListUpdating) {
                     GooglePlace place = (GooglePlace) parent.getItemAtPosition(position);
                     // Check if the place already exists in the selected place list. If so, remove it.
-                    if(storageUtil.getSelectedPlacesList().contains(place)) {
-                        storageUtil.removeSelectedPlace(place);
+                    if(temporalStorageUtil.getSelectedPlacesList().contains(place)) {
+                        temporalStorageUtil.removeSelectedPlace(place);
                         Log.d(TAG, "Place removed from selected.");
                         makeSnackBar("Place removed.");
                     }
                     // If not, add it.
                     else {
-                        storageUtil.addSelectedPlace(place);
+                        temporalStorageUtil.addSelectedPlace(place);
                         Log.d(TAG, "Place added to selected.");
                         makeSnackBar("Place added.");
                     }
@@ -149,7 +149,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
             startActivity(intent);
         }
         else if(select == 1) {
-            storageUtil.addToNeverShowList(placeClicked);
+            temporalStorageUtil.addToNeverShowList(placeClicked);
             // TODO. Dont show in list, update.
         }
 
@@ -182,8 +182,8 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            double searchPointLatitude = storageUtil.getSelectedStartLocation().getLatitude();
-            double searchPointLongitude = storageUtil.getSelectedStartLocation().getLongitude();
+            double searchPointLatitude = temporalStorageUtil.getSelectedStartLocation().getLatitude();
+            double searchPointLongitude = temporalStorageUtil.getSelectedStartLocation().getLongitude();
 
             // Fetching data.
             List<GooglePlace> googlePlaceList = webApiUtil.getNearbyLocationsList(
@@ -268,7 +268,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
 
 
             // TODO. Check the best method to check this.
-            if(storageUtil.getSelectedPlacesList().contains(place)) {
+            if(temporalStorageUtil.getSelectedPlacesList().contains(place)) {
 
                 placeItem.setBackgroundColor(getResources().getColor(R.color.accent_material_light_1));
 

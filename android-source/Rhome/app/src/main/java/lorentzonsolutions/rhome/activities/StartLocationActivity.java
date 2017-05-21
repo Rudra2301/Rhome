@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,11 +40,11 @@ import java.util.Locale;
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.utils.LocationConverter;
 import lorentzonsolutions.rhome.utils.Resources;
-import lorentzonsolutions.rhome.utils.StorageUtil;
+import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
 
 public class StartLocationActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener {
 
     // Tag for logging.
     private static final String TAG = "START_LOCATION_ACTIVITY";
@@ -54,7 +53,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
 
-    private boolean isMapReady = false;
+    private boolean mapIsReady = false;
     private boolean isUpdatingSelectedAddress = false;
 
     // Location variable
@@ -70,7 +69,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
 
 
     // Storage object singleton
-    StorageUtil storageUtil = StorageUtil.INSTANCE;
+    TemporalStorageUtil temporalStorageUtil = TemporalStorageUtil.INSTANCE;
 
     // Location converter singleton
     LocationConverter locationConverter = LocationConverter.INSTANCE;
@@ -80,7 +79,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        isMapReady = false;
+        mapIsReady = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_location);
 
@@ -102,7 +101,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "Map loaded and ready.");
-        isMapReady = true;
+        mapIsReady = true;
         mMap = googleMap;
 
         // Initializing listeners
@@ -113,7 +112,6 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     public void onConnected(@Nullable Bundle bundle) {
         Log.i(TAG, "Connected to the Google API.");
 
-        // Getting the current location
         getCurrentLocation();
         if(currentLocation != null){
             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
@@ -137,7 +135,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             return;
         }
 
-        if (isMapReady) {
+        if (mapIsReady) {
             // Setting the location as selected location
             selectedLocation = locationConverter.latLngToLocation(location);
             new UpdateSelectedAddress(info, mMap).execute();
@@ -237,7 +235,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             makeSnackBar("Updating address in progress. Please wait.");
         } else {
             if(selectedLocation != null) {
-                storageUtil.setSelectedStartLocation(selectedLocation);
+                temporalStorageUtil.setSelectedStartLocation(selectedLocation);
                 makeSnackBar("Start location has been set.");
             } else {
                 makeSnackBar("Fetching location. Please wait.");
@@ -283,7 +281,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
                 }
                 else {
                     selectedAddress = addresses.get(0);
-                    storageUtil.setSelectedStartAddress(selectedAddress);
+                    temporalStorageUtil.setSelectedStartAddress(selectedAddress);
                     //updateSelectedLocationInfo();
                 }
             }

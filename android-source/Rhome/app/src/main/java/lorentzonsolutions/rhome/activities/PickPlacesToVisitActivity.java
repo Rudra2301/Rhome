@@ -24,14 +24,14 @@ import java.util.List;
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.utils.Resources;
-import lorentzonsolutions.rhome.utils.StorageUtil;
+import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
 import lorentzonsolutions.rhome.utils.URLIconDownloader;
 
 public class PickPlacesToVisitActivity extends AppCompatActivity {
 
     private static String TAG = PickPlacesToVisitActivity.class.toString();
 
-    StorageUtil storage = StorageUtil.INSTANCE;
+    TemporalStorageUtil storage = TemporalStorageUtil.INSTANCE;
 
     Button addPlaceButton;
     Button doneButton;

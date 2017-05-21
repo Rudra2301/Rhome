@@ -25,7 +25,7 @@ import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.utils.Resources;
-import lorentzonsolutions.rhome.utils.StorageUtil;
+import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
 
 public class ListMinorRoutesActivity extends AppCompatActivity {
 
@@ -53,7 +53,7 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
     private void initRoutes() {
 
         try {
-            adapter = new MinorRoutesListAdapter(this, StorageUtil.INSTANCE.splitToMinorRoutes(StorageUtil.INSTANCE.getFastestRoute()));
+            adapter = new MinorRoutesListAdapter(this, TemporalStorageUtil.INSTANCE.splitToMinorRoutes(TemporalStorageUtil.INSTANCE.getFastestRoute()));
 
             minorRouteList = (ListView) findViewById(R.id.list_of_minor_routes);
             minorRouteList.setAdapter(adapter);
@@ -88,9 +88,9 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
 
 
     // Adapter for list
-    class MinorRoutesListAdapter extends ArrayAdapter<List<GooglePlace>> {
+    private class MinorRoutesListAdapter extends ArrayAdapter<List<GooglePlace>> {
 
-        public MinorRoutesListAdapter(Context context, List<List<GooglePlace>> placesList) {
+        MinorRoutesListAdapter(Context context, List<List<GooglePlace>> placesList) {
             super(context, 0, placesList);
         }
 
@@ -123,6 +123,7 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
     }
 
     // ContextMenu for longclick
+    // On long click, the user gets two options: Navigate from current position, or get directions just between the places in the list.
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         // Check if the view firing the event is the list of places
@@ -155,6 +156,8 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
         return true;
     }
 
+    // This initializes the activity for navigation. As of now the only valid navigation application to use is google maps.
+    // We specify this by setting the package to com.google.android.apps.maps on the intent.
     private void startNavigation(List<GooglePlace> minorRoute, boolean turnByTurn) {
         GooglePlace fromLocation = minorRoute.get(0);
         GooglePlace toLocation = minorRoute.get(1);

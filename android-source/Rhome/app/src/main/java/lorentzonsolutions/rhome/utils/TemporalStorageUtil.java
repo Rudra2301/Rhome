@@ -14,7 +14,7 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
  */
 
 
-public enum StorageUtil {
+public enum TemporalStorageUtil {
     INSTANCE;
 
     // START AND END LOCATIONS

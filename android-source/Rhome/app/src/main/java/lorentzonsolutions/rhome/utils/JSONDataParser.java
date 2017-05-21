@@ -103,8 +103,8 @@ public class JSONDataParser {
             googlePlaceID = placeObject.getString("place_id");
 
             // Calculates the distance to start location
-            Location start = StorageUtil.INSTANCE.getSelectedStartLocation();
-            Location end = StorageUtil.INSTANCE.getSelectedEndLocation();
+            Location start = TemporalStorageUtil.INSTANCE.getSelectedStartLocation();
+            Location end = TemporalStorageUtil.INSTANCE.getSelectedEndLocation();
             if(start != null) {
                 String distanceData = googleDistanceDurationCalculator.calculateDistance(start.getLatitude(), start.getLongitude(), latitude, longitude, GoogleDistanceModes.DRIVING);
                 GoogleDistanceDuration googleDistanceDuration = parseDistanceCalculationData(distanceData);

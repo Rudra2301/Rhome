@@ -32,7 +32,7 @@ import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.googleWebApi.GoogleWebApiUtil;
 import lorentzonsolutions.rhome.interfaces.WebApiUtil;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
-import lorentzonsolutions.rhome.utils.StorageUtil;
+import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
 
 public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -100,8 +100,8 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
         mMap = googleMap;
 
         // Setting camera in position.
-        LatLng cameraPosition = new LatLng(StorageUtil.INSTANCE.getSelectedStartLocation().getLatitude(),
-                StorageUtil.INSTANCE.getSelectedStartLocation().getLongitude());
+        LatLng cameraPosition = new LatLng(TemporalStorageUtil.INSTANCE.getSelectedStartLocation().getLatitude(),
+                TemporalStorageUtil.INSTANCE.getSelectedStartLocation().getLongitude());
         CameraPosition position = CameraPosition.builder()
                 .bearing(0)
                 .tilt(0)
@@ -120,8 +120,8 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
         List<LatLng> latLngRoute;
 
         try {
-            latLngRoute = makeLatLngList(StorageUtil.INSTANCE.getFastestRoute());
-            placeMarkersForRoute(StorageUtil.INSTANCE.getFastestRoute());
+            latLngRoute = makeLatLngList(TemporalStorageUtil.INSTANCE.getFastestRoute());
+            placeMarkersForRoute(TemporalStorageUtil.INSTANCE.getFastestRoute());
 
             if(latLngRoute != null && latLngRoute.size() >= 3) {
                 Iterator iterator = latLngRoute.iterator();

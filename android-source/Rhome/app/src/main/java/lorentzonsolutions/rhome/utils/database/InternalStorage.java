@@ -15,7 +15,7 @@ import static lorentzonsolutions.rhome.utils.database.DatabaseConstants.*;
  * Class for handling database connection.
  */
 
-public class InternalStorage extends SQLiteOpenHelper implements Storage{
+public class InternalStorage extends SQLiteOpenHelper implements Storage {
 
 
     private static String TAG = InternalStorage.class.toString();
@@ -26,13 +26,14 @@ public class InternalStorage extends SQLiteOpenHelper implements Storage{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.d(TAG, "Database created.");
         db.execSQL(CREATE_TABLE_LOCATION_TYPES);
 
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        Log.d(TAG, "Database upgraded.");
         // db.execSQL(LOCATION_TYPE_DELETE);
         // onCreate(db);
     }

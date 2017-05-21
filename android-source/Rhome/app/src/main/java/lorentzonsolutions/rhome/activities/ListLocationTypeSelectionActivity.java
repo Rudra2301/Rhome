@@ -23,8 +23,7 @@ import lorentzonsolutions.rhome.utils.Resources;
 
 public class ListLocationTypeSelectionActivity extends AppCompatActivity {
 
-    private final String TAG = "LIST_LOCATION_TYPE";
-    private final Context thisContext = this;
+    private final String TAG = ListLocationTypeSelectionActivity.class.toString();
 
     private ListView locationTypeList;
     private ArrayAdapter<GoogleLocationTypes> listAdapter;
@@ -40,7 +39,6 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
         // Creating adapter
         listAdapter = new LocationTypeListAdapter(this, googleLocationTypes);
 
-
         // Setting adapter to list view
         locationTypeList = (ListView) findViewById(R.id.list_of_location_types);
         locationTypeList.setAdapter(listAdapter);
@@ -53,6 +51,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
                 GoogleLocationTypes type = (GoogleLocationTypes) parent.getItemAtPosition(position);
                 Log.d(TAG, "Type selected: " + type.getAsReadable());
 
+                // Start a new intent and pass the selected type value to this activity.
                 Intent intent = new Intent(Resources.getInstance().getContext(), ListNearbyPlacesActivity.class);
                 intent.putExtra("selected_type", type.getAsGoogleType());
                 startActivity(intent);
@@ -67,13 +66,12 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     // Adapter for list
-    class LocationTypeListAdapter extends ArrayAdapter<GoogleLocationTypes> {
+    private class LocationTypeListAdapter extends ArrayAdapter<GoogleLocationTypes> {
 
-        public LocationTypeListAdapter(Context context, List<GoogleLocationTypes> placesList) {
+        LocationTypeListAdapter(Context context, List<GoogleLocationTypes> placesList) {
             super(context, 0, placesList);
         }
 
@@ -83,6 +81,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
                     .from(getContext())
                     .inflate(R.layout.list_item_location_type, parent, false);
 
+            // Set a customized layout on the list items.
             GoogleLocationTypes type = getItem(position);
             TextView typeName = (TextView) convertView.findViewById(R.id.place_type);
             typeName.setText(type.getAsReadable());

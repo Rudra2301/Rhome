@@ -40,7 +40,7 @@ import java.util.Locale;
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.utils.LocationConverter;
 import lorentzonsolutions.rhome.utils.Resources;
-import lorentzonsolutions.rhome.utils.StorageUtil;
+import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
 
 // TODO. End location should be optional.
 public class EndLocationActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -48,7 +48,7 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
         GoogleApiClient.OnConnectionFailedListener {
 
     // Tag for logging.
-    private static final String TAG = "END_LOCATION_ACTIVITY";
+    private static final String TAG = EndLocationActivity.class.toString();
 
     // Google API
     private GoogleMap mMap;
@@ -70,7 +70,7 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
 
 
     // Storage object singleton
-    StorageUtil storageUtil = StorageUtil.INSTANCE;
+    TemporalStorageUtil temporalStorageUtil = TemporalStorageUtil.INSTANCE;
 
     // Location converter singleton
     LocationConverter locationConverter = LocationConverter.INSTANCE;
@@ -159,7 +159,6 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
     // Using the GoogleApiClient builder to set the reference of mGoogleApiClient.
     private void buildGoogleApiClient() {
 
-        // TODO. Enable autoManage like: .enableAutoManage(this *FragmentActivity*, this *OnConnectionFailedListener) in builder.
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -199,7 +198,6 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
                 getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
-
         // Setting listener to the onPlaceFragment
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
@@ -231,7 +229,7 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
             makeSnackBar("List is updating. Please wait.");
         }
         else {
-            storageUtil.setSelectedEndLocation(selectedLocation);
+            temporalStorageUtil.setSelectedEndLocation(selectedLocation);
             makeSnackBar("End location has been set!");
         }
     }
@@ -289,7 +287,7 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
                 }
                 else {
                     selectedAddress = addresses.get(0);
-                    storageUtil.setSelectedEndAddress(selectedAddress);
+                    temporalStorageUtil.setSelectedEndAddress(selectedAddress);
                     //updateSelectedLocationInfo();
                 }
             }

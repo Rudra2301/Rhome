@@ -11,7 +11,7 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.interfaces.RouteCalculator;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
-import lorentzonsolutions.rhome.utils.StorageUtil;
+import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
 
 /**
  * This class creates an object to help with calculating a route from a to b with stop on N places in between.
@@ -21,10 +21,10 @@ public class NearestNeighbourRouteCalculator implements RouteCalculator {
 
     private final String TAG = NearestNeighbourRouteCalculator.class.toString();
 
-    private Location startLocation = StorageUtil.INSTANCE.getSelectedStartLocation();
+    private Location startLocation = TemporalStorageUtil.INSTANCE.getSelectedStartLocation();
     private GooglePlace startPlace = new GooglePlace.BuildPlace("Start location", startLocation.getLatitude(), startLocation.getLongitude()).build();
 
-    private Location endLocation = StorageUtil.INSTANCE.getSelectedEndLocation();
+    private Location endLocation = TemporalStorageUtil.INSTANCE.getSelectedEndLocation();
     private GooglePlace endPlace = new GooglePlace.BuildPlace("End location", endLocation.getLatitude(), endLocation.getLongitude()).build();
 
     /**
