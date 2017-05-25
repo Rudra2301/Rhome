@@ -10,11 +10,11 @@ import android.widget.TextView;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.utils.Resources;
-import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
+import lorentzonsolutions.rhome.utils.SessionStorage;
 
 public class PickStartAndEndActivity extends AppCompatActivity {
 
-    TemporalStorageUtil storage = TemporalStorageUtil.INSTANCE;
+    SessionStorage storage = SessionStorage.INSTANCE;
     Button setStart;
     TextView startLocationHeaderText;
     TextView startLocationInfoText;

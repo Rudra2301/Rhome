@@ -40,7 +40,7 @@ import java.util.Locale;
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.utils.LocationConverter;
 import lorentzonsolutions.rhome.utils.Resources;
-import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
+import lorentzonsolutions.rhome.utils.SessionStorage;
 
 // TODO. End location should be optional.
 public class EndLocationActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -68,9 +68,8 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
     TextView info;
     TextView infoHeader;
 
-
     // Storage object singleton
-    TemporalStorageUtil temporalStorageUtil = TemporalStorageUtil.INSTANCE;
+    SessionStorage sessionStorage = SessionStorage.INSTANCE;
 
     // Location converter singleton
     LocationConverter locationConverter = LocationConverter.INSTANCE;
@@ -84,21 +83,29 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_location);
 
+        assignViews();
+
+        // Setting up the Google Api Client
+        buildGoogleApiClient();
+    }
+
+    /**
+     * Setting the references of the views used by this activity.
+     *
+     */
+    private void assignViews() {
+
         myLocationButton = (Button) findViewById(R.id.select_end_use_current_position_button);
         setEndLocationButton = (Button) findViewById(R.id.select_end_done_button);
         info = (TextView) findViewById(R.id.select_end_info_text);
         infoHeader = (TextView) findViewById(R.id.select_end_info_header);
 
-        // Setting up the Google Api Client
-        buildGoogleApiClient();
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Obtain the SupportMapFragment and init the async initialization of the map.
         SupportMapFragment mapFragmentMyLocation = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
         mapFragmentMyLocation.getMapAsync(this);
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -130,6 +137,10 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
         Log.i(TAG, "Connection to Google API failed :\n " + connectionResult.getErrorMessage());
     }
 
+    /**
+     * Moves the camera to given location.
+     * @param location {@link Location}
+     */
     private void moveCamera(LatLng location) {
         if (location == null) {
             Log.i(TAG, "Location is missing.");
@@ -156,20 +167,27 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
         setEndLocationButton.setEnabled(true);
     }
 
-    // Using the GoogleApiClient builder to set the reference of mGoogleApiClient.
+    /**
+     * Uses GoogleApiClient builder to set the reference of {@link GoogleApiClient} for mGoogleApiClient
+     */
     private void buildGoogleApiClient() {
 
         if (mGoogleApiClient == null) {
+
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .enableAutoManage(this,this)
                     .build();
+
         }
     }
 
-    // Events for buttons etc.
+    /**
+     * Initialize event listeners.
+     *
+     */
     private void initEvents() {
 
         // On map marker clicks
@@ -223,24 +241,36 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
         });
     }
 
-    // Stores the selected location as endlocation
+    /**
+     * Set the end location in storage to the current selected.
+     *
+     */
     private void setEndLocation() {
         if(isUpdatingSelectedAddress) {
             makeSnackBar("List is updating. Please wait.");
         }
         else {
-            temporalStorageUtil.setSelectedEndLocation(selectedLocation);
+            sessionStorage.setSelectedEndLocation(selectedLocation);
             makeSnackBar("End location has been set!");
+            Log.d(TAG, "End location set to: " + selectedLocation.toString());
         }
     }
 
+    /**
+     * Shows a snack bar to the user with given message.
+     *
+     * @param message
+     */
     private void makeSnackBar(String message) {
         Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
                 message, Snackbar.LENGTH_LONG);
         mySnackbar.show();
     }
 
-    // Function for collecting the last known location, aka current location.
+    /**
+     * Gets the current location. (Last known location)
+     *
+     */
     private void getCurrentLocation() {
         // Get the last known location (uaka current)
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -250,15 +280,19 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
         currentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
     }
 
-    // INNER CLASS FOR FETCHING ADDRESS ASYNC ------------------------------------------------------
+    /**
+     * Inner class for fetching addresses.
+     *
+     */
     private class UpdateSelectedAddress extends AsyncTask<Void, Void, Void> {
-        // Using weak references to update view objects on main thread.
+
+        // Using weak references to update view objects on main thread. Not allowed to directly manipulate views in background thread.
         private final WeakReference<TextView> infoTextViewWeakReference;
         private final WeakReference<GoogleMap> googleMapWeakReference;
 
         private UpdateSelectedAddress(TextView infoTextViewWeakReference, GoogleMap map) {
             this.infoTextViewWeakReference = new WeakReference<>(infoTextViewWeakReference);
-            this.googleMapWeakReference = new WeakReference<GoogleMap>(map);
+            this.googleMapWeakReference = new WeakReference<>(map);
         }
 
         @Override
@@ -280,7 +314,7 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
                 }
                 else {
                     selectedAddress = addresses.get(0);
-                    temporalStorageUtil.setSelectedEndAddress(selectedAddress);
+                    sessionStorage.setSelectedEndAddress(selectedAddress);
                     //updateSelectedLocationInfo();
                 }
             }

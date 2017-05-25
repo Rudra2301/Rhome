@@ -1,7 +1,10 @@
 package lorentzonsolutions.rhome.interfaces;
 
 /**
- * Created by johanlorentzon on 2017-05-25.
+ * Interface for this applications activities.
+ *
+ * @author Johan Lorentzon
+ *
  */
 
 public interface RhomeActivity {

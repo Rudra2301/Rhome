@@ -32,7 +32,7 @@ import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.googleWebApi.GoogleWebApiUtil;
 import lorentzonsolutions.rhome.interfaces.WebApiUtil;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
-import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
+import lorentzonsolutions.rhome.utils.SessionStorage;
 
 public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -100,8 +100,8 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
         mMap = googleMap;
 
         // Setting camera in position.
-        LatLng cameraPosition = new LatLng(TemporalStorageUtil.INSTANCE.getSelectedStartLocation().getLatitude(),
-                TemporalStorageUtil.INSTANCE.getSelectedStartLocation().getLongitude());
+        LatLng cameraPosition = new LatLng(SessionStorage.INSTANCE.getSelectedStartLocation().getLatitude(),
+                SessionStorage.INSTANCE.getSelectedStartLocation().getLongitude());
         CameraPosition position = CameraPosition.builder()
                 .bearing(0)
                 .tilt(0)
@@ -119,33 +119,28 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
         // Drawing route
         List<LatLng> latLngRoute;
 
-        try {
-            latLngRoute = makeLatLngList(TemporalStorageUtil.INSTANCE.getFastestRoute());
-            placeMarkersForRoute(TemporalStorageUtil.INSTANCE.getFastestRoute());
+        latLngRoute = makeLatLngList(SessionStorage.INSTANCE.getFastestRoute());
+        placeMarkersForRoute(SessionStorage.INSTANCE.getFastestRoute());
 
-            if(latLngRoute != null && latLngRoute.size() >= 3) {
-                Iterator iterator = latLngRoute.iterator();
-                LatLng start = (LatLng) iterator.next();
-                LatLng next;
-                while (iterator.hasNext()) {
-                    next = (LatLng) iterator.next();
+        if(latLngRoute != null && latLngRoute.size() >= 3) {
+            Iterator iterator = latLngRoute.iterator();
+            LatLng start = (LatLng) iterator.next();
+            LatLng next;
+            while (iterator.hasNext()) {
+                next = (LatLng) iterator.next();
 
-                    LatLng startLatLng = new LatLng(start.latitude, start.longitude);
-                    LatLng endLatLng = new LatLng(next.latitude, next.longitude);
+                LatLng startLatLng = new LatLng(start.latitude, start.longitude);
+                LatLng endLatLng = new LatLng(next.latitude, next.longitude);
 
-                    BuildDirectionsData buildDirectionsData = new BuildDirectionsData();
-                    buildDirectionsData.execute(startLatLng, endLatLng);
+                BuildDirectionsData buildDirectionsData = new BuildDirectionsData();
+                buildDirectionsData.execute(startLatLng, endLatLng);
 
-                    start = next;
-                }
-            } else {
-                Log.d(TAG, "Route is not set or does not contain any selected places.");
+                start = next;
             }
-
-        } catch (RouteException e) {
-            Log.d(TAG, "Exception getting route. \n" + e.getMessage());
-            e.printStackTrace();
+        } else {
+            Log.d(TAG, "Route is not set or does not contain any selected places.");
         }
+
     }
 
     private void placeMarkersForRoute(List<GooglePlace> route) {

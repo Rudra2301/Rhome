@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,75 +18,78 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import lorentzonsolutions.rhome.R;
-import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
-import lorentzonsolutions.rhome.utils.Resources;
-import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
+import lorentzonsolutions.rhome.interfaces.RhomeActivity;
+import lorentzonsolutions.rhome.utils.SessionStorage;
 
-public class ListMinorRoutesActivity extends AppCompatActivity {
+/**
+ * Activity class for listing the Minor Routes calculated.
+ *
+ * @author Johan Lorentzon
+ *
+ */
+public class ListMinorRoutesActivity extends AppCompatActivity implements RhomeActivity {
 
     private final String TAG = ListMinorRoutesActivity.class.toString();
 
-    ArrayAdapter<List<GooglePlace>> adapter;
-    ListView minorRouteList;
+    private ArrayAdapter<List<GooglePlace>> adapter;
+    private ListView minorRouteList;
+    private FloatingActionButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_minor_routes);
 
-        initRoutes();
+        assignViews();
+        initEvents();
     }
 
     @Override
     protected void onResume() {
 
-        // TODO. Check if position is near any destination postition. If so, ask if minor route is completed.
-        initRoutes();
+        // TODO. Check if position is near any destination position. If so, ask if minor route is completed.
+        assignViews();
+        initEvents();
         super.onResume();
     }
 
-    private void initRoutes() {
+    @Override
+    public void initEvents() {
+        adapter = new MinorRoutesListAdapter(this, SessionStorage.INSTANCE.splitToMinorRoutes(SessionStorage.INSTANCE.getFastestRoute()));
+        minorRouteList.setAdapter(adapter);
 
-        try {
-            adapter = new MinorRoutesListAdapter(this, TemporalStorageUtil.INSTANCE.splitToMinorRoutes(TemporalStorageUtil.INSTANCE.getFastestRoute()));
+        minorRouteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Get the location type selected
+                List<GooglePlace> minorRoute = (List<GooglePlace>) parent.getItemAtPosition(position);
+                Log.d(TAG, "Minor route selected: " + minorRoute);
 
-            minorRouteList = (ListView) findViewById(R.id.list_of_minor_routes);
-            minorRouteList.setAdapter(adapter);
+                startNavigation(minorRoute, false);
+            }
+        });
 
-            // Setting onClick listener
-            minorRouteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    // Get the location type selected
-                    List<GooglePlace> minorRoute = (List<GooglePlace>) parent.getItemAtPosition(position);
-                    Log.d(TAG, "Minor route selected: " + minorRoute);
+        registerForContextMenu(minorRouteList);
 
-                    startNavigation(minorRoute, false);
-                }
-            });
-
-            registerForContextMenu(minorRouteList);
-
-            FloatingActionButton backButton = (FloatingActionButton) findViewById(R.id.activity_minor_route_list_back_button);
-            backButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
-
-        } catch (RouteException re) {
-            Log.d(TAG, "No fastest route detected, could not create list.");
-        }
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
+    @Override
+    public void assignViews() {
+        minorRouteList = (ListView) findViewById(R.id.list_of_minor_routes);
+        backButton = (FloatingActionButton) findViewById(R.id.activity_minor_route_list_back_button);
+    }
 
     // Adapter for list
     private class MinorRoutesListAdapter extends ArrayAdapter<List<GooglePlace>> {
@@ -122,12 +126,10 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
         }
     }
 
-    // ContextMenu for longclick
-    // On long click, the user gets two options: Navigate from current position, or get directions just between the places in the list.
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
         // Check if the view firing the event is the list of places
-        if(v.getId() == R.id.list_of_minor_routes) {
+        if(view.getId() == R.id.list_of_minor_routes) {
             menu.setHeaderTitle(R.string.minor_route_context_header);
             String[] menuItems = getResources().getStringArray(R.array.minor_route_context);
             // Add the menu items
@@ -137,7 +139,6 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
         }
     }
 
-    // Event for catching context menu item selected
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
@@ -156,13 +157,19 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
         return true;
     }
 
-    // This initializes the activity for navigation. As of now the only valid navigation application to use is google maps.
-    // We specify this by setting the package to com.google.android.apps.maps on the intent.
+    /**
+     * Class for initializing the activity for navigation. As of now the only valid navigation application to use is google maps.
+     *
+     * Valid package for navigation is set to com.google.android.apps.maps for the intent.
+     *
+     * @param minorRoute
+     * @param turnByTurn
+     */
     private void startNavigation(List<GooglePlace> minorRoute, boolean turnByTurn) {
         GooglePlace fromLocation = minorRoute.get(0);
         GooglePlace toLocation = minorRoute.get(1);
 
-        String uri = "";
+        String uri;
 
         if(turnByTurn) {
             uri = "http://maps.google.com/maps?" +
@@ -184,11 +191,19 @@ public class ListMinorRoutesActivity extends AppCompatActivity {
         } else {
             // No apps to handle navigation
             Log.d(TAG, "There are no available apps on device to handle navigation.");
-            Toast.makeText(Resources.getInstance()
-                            .getContext(), "Could not find any navigation application. Please install one to proceed.",
-                    Toast.LENGTH_SHORT).show();
+            makeSnackBar("Could not find any navigation application. Please install one to proceed.");
+         }
+    }
 
-        }
+    /**
+     * Shows a snack bar to the user with given message.
+     *
+     * @param message
+     */
+    private void makeSnackBar(String message) {
+        Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
+                message, Snackbar.LENGTH_LONG);
+        mySnackbar.show();
     }
 
 }

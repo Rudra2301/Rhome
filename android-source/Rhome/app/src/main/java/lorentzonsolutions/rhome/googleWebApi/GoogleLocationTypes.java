@@ -1,11 +1,13 @@
 package lorentzonsolutions.rhome.googleWebApi;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Enum containing the Google Maps API location types.
+ *
+ * @author Johan Lorentzon
+ *
  */
 
 public enum GoogleLocationTypes {

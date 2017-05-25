@@ -22,37 +22,50 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
+import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.database.InternalStorage;
 
-public class ListLocationTypeSelectionActivity extends AppCompatActivity {
+/**
+ * Activity to show summary of places to visit.
+ *
+ * @author Johan Lorentzon
+ *
+ */
+public class ListLocationTypeSelectionActivity extends AppCompatActivity implements RhomeActivity {
 
     Context context = this;
 
     private final String TAG = ListLocationTypeSelectionActivity.class.toString();
 
-    private ListView locationTypeList;
     private ArrayAdapter<GoogleLocationTypes> listAdapter;
     private boolean favouritesShowing = false;
-    private List<GoogleLocationTypes> googleLocationTypes;
+    private List<GoogleLocationTypes> googleLocationTypes = new ArrayList<>();
 
-    Button toggleFavourites;
+    // Views.
+    private FloatingActionButton backButton;
+    private Button toggleFavourites;
+    private ListView locationTypeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_location_type_selection);
 
-        googleLocationTypes = new ArrayList<>();
-        for(GoogleLocationTypes type: GoogleLocationTypes.values()) googleLocationTypes.add(type);
+        assignViews();
+        initEvents();
+        initList();
+    }
 
-        // Creating adapter
-        listAdapter = new LocationTypeListAdapter(this, googleLocationTypes);
-
-        // Setting adapter to list view
+    @Override
+    public void assignViews() {
         locationTypeList = (ListView) findViewById(R.id.list_of_location_types);
-        locationTypeList.setAdapter(listAdapter);
+        backButton = (FloatingActionButton) findViewById(R.id.activity_location_type_floating_back_button);
+        toggleFavourites = (Button) findViewById(R.id.toggle_favourites_button);
+    }
 
+    @Override
+    public void initEvents() {
         // On click listener for list items.
         locationTypeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,7 +81,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton backButton = (FloatingActionButton) findViewById(R.id.activity_location_type_floating_back_button);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +90,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
         });
 
         // Favourites logic
-        toggleFavourites = (Button) findViewById(R.id.toggle_favourites_button);
+
         toggleFavourites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +109,17 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
 
     }
 
+    private void initList() {
+        for(GoogleLocationTypes type: GoogleLocationTypes.values()) googleLocationTypes.add(type);
+
+        // Creating adapter
+        listAdapter = new LocationTypeListAdapter(this, googleLocationTypes);
+
+        // Setting adapter to list view
+
+        locationTypeList.setAdapter(listAdapter);
+    }
+
     private void listShowsAll() {
         googleLocationTypes.clear();
         Collections.addAll(googleLocationTypes, GoogleLocationTypes.values());
@@ -107,7 +131,9 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
         new FetchMostVisited().execute();
     }
 
-    // Adapter for list
+    /**
+     * Inner list adapter class for location type list.
+     */
     private class LocationTypeListAdapter extends ArrayAdapter<GoogleLocationTypes> {
 
         LocationTypeListAdapter(Context context, List<GoogleLocationTypes> placesList) {
@@ -128,7 +154,9 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Async inner class for collecting most visited places from database and populate list.
+     */
     private class FetchMostVisited extends AsyncTask<Void, GoogleLocationTypes, Void> {
         InternalStorage storage = new InternalStorage(context);
 

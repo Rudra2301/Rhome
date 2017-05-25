@@ -10,7 +10,6 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.interfaces.RouteCalculator;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
-import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
 
 /**
  * This class creates an object to help with calculating a route from a to b with stop on N places in between.

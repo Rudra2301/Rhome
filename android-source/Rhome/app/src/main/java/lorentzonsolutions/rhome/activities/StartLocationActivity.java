@@ -40,7 +40,7 @@ import java.util.Locale;
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.utils.LocationConverter;
 import lorentzonsolutions.rhome.utils.Resources;
-import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
+import lorentzonsolutions.rhome.utils.SessionStorage;
 
 public class StartLocationActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -69,7 +69,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
 
 
     // Storage object singleton
-    TemporalStorageUtil temporalStorageUtil = TemporalStorageUtil.INSTANCE;
+    SessionStorage sessionStorage = SessionStorage.INSTANCE;
 
     // Location converter singleton
     LocationConverter locationConverter = LocationConverter.INSTANCE;
@@ -235,7 +235,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
             makeSnackBar("Updating address in progress. Please wait.");
         } else {
             if(selectedLocation != null) {
-                temporalStorageUtil.setSelectedStartLocation(selectedLocation);
+                sessionStorage.setSelectedStartLocation(selectedLocation);
                 makeSnackBar("Start location has been set.");
             } else {
                 makeSnackBar("Fetching location. Please wait.");
@@ -281,7 +281,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
                 }
                 else {
                     selectedAddress = addresses.get(0);
-                    temporalStorageUtil.setSelectedStartAddress(selectedAddress);
+                    sessionStorage.setSelectedStartAddress(selectedAddress);
                     //updateSelectedLocationInfo();
                 }
             }

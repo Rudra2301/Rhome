@@ -23,7 +23,7 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.RouteCalculator;
 import lorentzonsolutions.rhome.routeCalculators.DistanceCalculatorUtil;
 import lorentzonsolutions.rhome.routeCalculators.NearestNeighbourRouteCalculator;
-import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
+import lorentzonsolutions.rhome.utils.SessionStorage;
 import lorentzonsolutions.rhome.utils.database.InternalStorage;
 
 public class RouteOrderActivity extends AppCompatActivity {
@@ -40,20 +40,18 @@ public class RouteOrderActivity extends AppCompatActivity {
         initRouteCalculation();
         incrementSelectedPlaces();
 
-        try {
-            ArrayList<String> places = new ArrayList<>();
-            for(GooglePlace googlePlace : TemporalStorageUtil.INSTANCE.getFastestRoute()) {
-                places.add(googlePlace.name);
-            }
 
-            ArrayAdapter<String> routeListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, places);
-
-            ListView routeView = (ListView) findViewById(R.id.fastest_route);
-
-            routeView.setAdapter(routeListAdapter);
-        } catch (RouteException e) {
-            e.printStackTrace();
+        ArrayList<String> places = new ArrayList<>();
+        for(GooglePlace googlePlace : SessionStorage.INSTANCE.getFastestRoute()) {
+            places.add(googlePlace.name);
         }
+
+        ArrayAdapter<String> routeListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, places);
+
+        ListView routeView = (ListView) findViewById(R.id.fastest_route);
+
+        routeView.setAdapter(routeListAdapter);
+
 
         // Button for route map activity
         Button routeMapButton = (Button) findViewById(R.id.button_show_route_on_map);
@@ -87,7 +85,7 @@ public class RouteOrderActivity extends AppCompatActivity {
     }
 
     private void incrementSelectedPlaces() {
-        List<GooglePlace> places = TemporalStorageUtil.INSTANCE.getSelectedPlacesList();
+        List<GooglePlace> places = SessionStorage.INSTANCE.getSelectedPlacesList();
         List<GoogleLocationTypes> allSelectedTypes = new ArrayList<>();
         List<String> allTypesString = new ArrayList<>();
 
@@ -110,12 +108,12 @@ public class RouteOrderActivity extends AppCompatActivity {
 
     private void initRouteCalculation() {
         RouteCalculator calculator = new NearestNeighbourRouteCalculator();
-        Location startLocation = TemporalStorageUtil.INSTANCE.getSelectedStartLocation();
-        Location endLocation = TemporalStorageUtil.INSTANCE.getSelectedEndLocation();
+        Location startLocation = SessionStorage.INSTANCE.getSelectedStartLocation();
+        Location endLocation = SessionStorage.INSTANCE.getSelectedEndLocation();
 
-        List<GooglePlace> fastestRoute = calculator.calculateFastestRoute(TemporalStorageUtil.INSTANCE.getSelectedPlacesList(), startLocation, endLocation);
+        List<GooglePlace> fastestRoute = calculator.calculateFastestRoute(SessionStorage.INSTANCE.getSelectedPlacesList(), startLocation, endLocation);
 
-        TemporalStorageUtil.INSTANCE.setFastestRoute(fastestRoute);
+        SessionStorage.INSTANCE.setFastestRoute(fastestRoute);
 
         Log.d(TAG, "Calculated fastest route: ");
 

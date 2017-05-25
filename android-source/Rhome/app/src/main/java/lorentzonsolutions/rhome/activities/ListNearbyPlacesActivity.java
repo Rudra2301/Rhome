@@ -29,11 +29,18 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.googleWebApi.GoogleWebApiUtil;
+import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.interfaces.WebApiUtil;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
-import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
+import lorentzonsolutions.rhome.utils.SessionStorage;
 
-public class ListNearbyPlacesActivity extends AppCompatActivity {
+/**
+ * Activity class for listing nearby places.
+ *
+ * @author Johan Lorentzon
+ *
+ */
+public class ListNearbyPlacesActivity extends AppCompatActivity implements RhomeActivity{
 
     private final String TAG = ListNearbyPlacesActivity.class.toString();
 
@@ -46,9 +53,9 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
 
     private ListView nearbyPlacesList;
     private ArrayAdapter<GooglePlace> listAdapter;
-    private List<GooglePlace> places;
+    private List<GooglePlace> places = new ArrayList<>();
 
-    private TemporalStorageUtil temporalStorageUtil;
+    private SessionStorage sessionStorage = SessionStorage.INSTANCE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,64 +65,15 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
         // Getting the value from the intent invoking this
         Intent intent = getIntent();
         selectedType = intent.getStringExtra("selected_type");
-
         Log.d(TAG, "Searching for location of type: " + selectedType);
 
-        temporalStorageUtil = TemporalStorageUtil.INSTANCE;
-
-        places = new ArrayList<>();
-
-        listAdapter = new PlaceListAdapter(getApplicationContext(), places);
-
-        nearbyPlacesList = (ListView) findViewById(R.id.nearby_locations);
-        nearbyPlacesList.setAdapter(listAdapter);
-        
-
-        nearbyPlacesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if(!isListUpdating) {
-                    GooglePlace place = (GooglePlace) parent.getItemAtPosition(position);
-                    // Check if the place already exists in the selected place list. If so, remove it.
-                    if(temporalStorageUtil.getSelectedPlacesList().contains(place)) {
-                        temporalStorageUtil.removeSelectedPlace(place);
-                        Log.d(TAG, "Place removed from selected.");
-                        makeSnackBar("Place removed.");
-                    }
-                    // If not, add it.
-                    else {
-                        temporalStorageUtil.addSelectedPlace(place);
-                        Log.d(TAG, "Place added to selected.");
-                        makeSnackBar("Place added.");
-                    }
-
-                    // Notify adapter that data has changed.
-                    listAdapter.notifyDataSetChanged();
-                }
-                else {
-                    makeSnackBar("List updating. Please wait.");
-                }
-            }
-        });
-
-        // Context menu for items in list
-        registerForContextMenu(nearbyPlacesList);
-
-        FloatingActionButton backButton = (FloatingActionButton) findViewById(R.id.list_nearby_locations_back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        assignViews();
+        initEvents();
 
         // Initializing async task to populate list.
         new NearbyLocationCollector().execute();
-
     }
 
-    // ContextMenu for longclick
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         // Check if the view firing the event is the list of places
@@ -149,11 +107,67 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
             startActivity(intent);
         }
         else if(select == 1) {
-            temporalStorageUtil.addToNeverShowList(placeClicked);
+            sessionStorage.addToNeverShowList(placeClicked);
             // TODO. Dont show in list, update.
         }
 
         return true;
+    }
+
+    @Override
+    public void initEvents() {
+        listAdapter = new PlaceListAdapter(getApplicationContext(), places);
+
+        nearbyPlacesList.setAdapter(listAdapter);
+
+
+        nearbyPlacesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                if(!isListUpdating) {
+                    GooglePlace place = (GooglePlace) parent.getItemAtPosition(position);
+                    // Check if the place already exists in the selected place list. If so, remove it.
+                    if(sessionStorage.getSelectedPlacesList().contains(place)) {
+                        sessionStorage.removeSelectedPlace(place);
+                        Log.d(TAG, "Place removed from selected.");
+                        makeSnackBar("Place removed.");
+                    }
+                    // If not, add it.
+                    else {
+                        sessionStorage.addSelectedPlace(place);
+                        Log.d(TAG, "Place added to selected.");
+                        makeSnackBar("Place added.");
+                    }
+
+                    // Notify adapter that data has changed.
+                    listAdapter.notifyDataSetChanged();
+                }
+                else {
+                    makeSnackBar("List updating. Please wait.");
+                }
+            }
+        });
+
+        // Context menu for items in list
+        registerForContextMenu(nearbyPlacesList);
+
+        FloatingActionButton backButton = (FloatingActionButton) findViewById(R.id.list_nearby_locations_back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
+    }
+
+    @Override
+    public void assignViews() {
+        nearbyPlacesList = (ListView) findViewById(R.id.nearby_locations);
+
+
     }
 
 
@@ -182,8 +196,8 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
 
-            double searchPointLatitude = temporalStorageUtil.getSelectedStartLocation().getLatitude();
-            double searchPointLongitude = temporalStorageUtil.getSelectedStartLocation().getLongitude();
+            double searchPointLatitude = sessionStorage.getSelectedStartLocation().getLatitude();
+            double searchPointLongitude = sessionStorage.getSelectedStartLocation().getLongitude();
 
             // Fetching data.
             List<GooglePlace> googlePlaceList = webApiUtil.getNearbyLocationsList(
@@ -268,7 +282,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity {
 
 
             // TODO. Check the best method to check this.
-            if(temporalStorageUtil.getSelectedPlacesList().contains(place)) {
+            if(sessionStorage.getSelectedPlacesList().contains(place)) {
 
                 placeItem.setBackgroundColor(getResources().getColor(R.color.accent_material_light_1));
 
