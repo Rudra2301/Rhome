@@ -1,10 +1,12 @@
 package lorentzonsolutions.rhome.utils.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lorentzonsolutions.rhome.interfaces.Storage;
@@ -28,6 +30,9 @@ public class InternalStorage extends SQLiteOpenHelper implements Storage {
     public void onCreate(SQLiteDatabase db) {
         Log.d(TAG, "Database created.");
         db.execSQL(CREATE_TABLE_LOCATION_TYPES);
+        // Add all location types to db
+        for(GoogleLocationTypes type: GoogleLocationTypes.values())
+            db.execSQL(query_insertNewType(type));
 
     }
 
@@ -38,27 +43,42 @@ public class InternalStorage extends SQLiteOpenHelper implements Storage {
         // onCreate(db);
     }
 
+
+    // Methods inherited from Storage interface.
     @Override
-    public void increaseForTypes(GoogleLocationTypes[] types) {
-        for (GoogleLocationTypes type : types) {
-            Log.d(TAG, "Incrementing type: " + type);
-        }
+    public void incrementType(GoogleLocationTypes type) {
+        Log.d(TAG, "Incrementing type: " + type);
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(query_incrementCountForType(type));
     }
 
     @Override
-    public void decreaseForTypes(GoogleLocationTypes[] types) {
-        for (GoogleLocationTypes type : types) {
-            Log.d(TAG, "Decreasing type: " + type);
-        }
-    }
-
-    @Override
-    public int getCountForType(GoogleLocationTypes type) {
-        return 0;
+    public void resetType(GoogleLocationTypes type) {
+        Log.d(TAG, "Resetting count for type: " + type);
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(query_resetCountForType(type));
     }
 
     @Override
     public List<GoogleLocationTypes> getOrderedListOfTypesFromDB() {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] selectionArgs = {};
+        Cursor c = db.rawQuery(query_getAllByDescOrder(), selectionArgs);
+        List<GoogleLocationTypes> orderedTypesList = new ArrayList<>();
+
+        while(c.moveToNext()) {
+            String typeString = c.getString(c.getColumnIndex(TYPE_COLUMN_NAME));
+            GoogleLocationTypes type = getGoogleTypeFromString(typeString);
+            if(type != null) orderedTypesList.add(type);
+        }
+
+        return orderedTypesList;
+    }
+
+    private GoogleLocationTypes getGoogleTypeFromString(String typeString) {
+        for(GoogleLocationTypes type: GoogleLocationTypes.values()) {
+            if(type.getAsGoogleType().equals(typeString)) return type;
+        }
         return null;
     }
 

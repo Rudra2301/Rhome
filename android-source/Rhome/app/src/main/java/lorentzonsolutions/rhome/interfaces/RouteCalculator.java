@@ -1,5 +1,7 @@
 package lorentzonsolutions.rhome.interfaces;
 
+import android.location.Location;
+
 import java.util.List;
 
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
@@ -11,6 +13,5 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 
 public interface RouteCalculator {
 
-    List<GooglePlace> calculateFastestRoute(List<GooglePlace> places);
-    double calculateTotalRouteDistance(List<GooglePlace> route);
+    List<GooglePlace> calculateFastestRoute(List<GooglePlace> places, Location startLocation, Location endLocation);
 }

@@ -43,7 +43,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
         locationTypeList = (ListView) findViewById(R.id.list_of_location_types);
         locationTypeList.setAdapter(listAdapter);
 
-        // Setting onClick listener
+        // On click listener for list items.
         locationTypeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -51,7 +51,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
                 GoogleLocationTypes type = (GoogleLocationTypes) parent.getItemAtPosition(position);
                 Log.d(TAG, "Type selected: " + type.getAsReadable());
 
-                // Start a new intent and pass the selected type value to this activity.
+                // Instantiate a new intent and pass the selected type value to this. Start activity.
                 Intent intent = new Intent(Resources.getInstance().getContext(), ListNearbyPlacesActivity.class);
                 intent.putExtra("selected_type", type.getAsGoogleType());
                 startActivity(intent);

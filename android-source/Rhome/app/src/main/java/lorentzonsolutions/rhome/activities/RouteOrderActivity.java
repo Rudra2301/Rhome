@@ -2,6 +2,7 @@ package lorentzonsolutions.rhome.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.RouteCalculator;
+import lorentzonsolutions.rhome.interfaces.Storage;
+import lorentzonsolutions.rhome.routeCalculators.DistanceCalculatorUtil;
 import lorentzonsolutions.rhome.routeCalculators.NearestNeighbourRouteCalculator;
 import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
 
@@ -82,7 +85,11 @@ public class RouteOrderActivity extends AppCompatActivity {
 
     private void initRouteCalculation() {
         RouteCalculator calculator = new NearestNeighbourRouteCalculator();
-        List<GooglePlace> fastestRoute = calculator.calculateFastestRoute(TemporalStorageUtil.INSTANCE.getSelectedPlacesList());
+        Location startLocation = TemporalStorageUtil.INSTANCE.getSelectedStartLocation();
+        Location endLocation = TemporalStorageUtil.INSTANCE.getSelectedEndLocation();
+
+        List<GooglePlace> fastestRoute = calculator.calculateFastestRoute(TemporalStorageUtil.INSTANCE.getSelectedPlacesList(), startLocation, endLocation);
+
         TemporalStorageUtil.INSTANCE.setFastestRoute(fastestRoute);
 
         Log.d(TAG, "Calculated fastest route: ");
@@ -91,7 +98,7 @@ public class RouteOrderActivity extends AppCompatActivity {
             Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
         }
 
-        double totalDistance = calculator.calculateTotalRouteDistance(fastestRoute);
+        double totalDistance = DistanceCalculatorUtil.calculateTotalRouteDistance(fastestRoute);
         Log.d(TAG, "Total distance: " + totalDistance + " km.");
     }
 }

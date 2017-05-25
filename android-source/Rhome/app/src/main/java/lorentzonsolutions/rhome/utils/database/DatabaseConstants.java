@@ -4,6 +4,9 @@ import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
 
 /**
  * Contains the constants and queries for app database.
+ *
+ * @author Johan Lorentzon
+ *
  */
 
 public class DatabaseConstants {
@@ -11,27 +14,44 @@ public class DatabaseConstants {
     public static final String APP_DATABASE_NAME = "RhomeAppDB";
     public static final int APP_DATABASE_VERSION = 1;
 
-    public static final String TABLE_LOCATION_TYPES = "location_types_table";
-    public static final String TYPE = "name";
-    public static final String COUNT = "count";
+    public static final String TABLE_NAME_LOCATION_TYPES = "LOCATION_TYPES";
+    public static final String TYPE_COLUMN_NAME = "TYPE_NAME";
+    public static final String COUNT_COLUMN_NAME = "COUNT";
 
-    public static final String CREATE_TABLE_LOCATION_TYPES = "CREATE table " +
-            TABLE_LOCATION_TYPES + "(" +
-            TYPE + " text primary key," +
-            COUNT + " text " +
-            ")";
+    public static final String CREATE_TABLE_LOCATION_TYPES = "CREATE TABLE " +
+            TABLE_NAME_LOCATION_TYPES + "(" +
+            TYPE_COLUMN_NAME + " TEXT PRIMARY KEY NOT NULL," +
+            COUNT_COLUMN_NAME + " INT NOT NULL " +
+            ");";
 
-    public static final String LOCATION_TYPE_DELETE = "DROP TABLE IF EXISTS " + TABLE_LOCATION_TYPES;
+    public static final String LOCATION_TYPE_DELETE = "DROP TABLE IF EXISTS " + TABLE_NAME_LOCATION_TYPES;
+
+
 
     public static String query_getCountForType(GoogleLocationTypes type) {
-        return "SELECT " + COUNT + " FROM " + TABLE_LOCATION_TYPES + " WHERE " + TYPE + " = " + type.getAsGoogleType() + ";";
-    }
-    public static String query_updateCountForType(GoogleLocationTypes type, int newCount) {
-        return "UPDATE " + TABLE_LOCATION_TYPES + " SET " + COUNT + " = " + newCount + " WHERE " + TYPE + " = " + type.getAsGoogleType();
+        return "SELECT COUNT FROM " + TABLE_NAME_LOCATION_TYPES + " WHERE NAME=\"" + type.getAsGoogleType() + "\";";
     }
 
-    public static String query_insertTypeWithValueOne(GoogleLocationTypes type) {
-        return "INSERT INTO " + TABLE_LOCATION_TYPES + "[(" + TYPE + ", " + COUNT + ")] VALUES (" + type.getAsGoogleType() + ", " + 1 + ")";
+    public static String query_incrementCountForType(GoogleLocationTypes type) {
+        return "UPDDATE " + TABLE_NAME_LOCATION_TYPES +
+                " SET " + COUNT_COLUMN_NAME + "=" + COUNT_COLUMN_NAME + "+1" +
+                " WHERE " + TYPE_COLUMN_NAME + "=\"" + type.getAsGoogleType() + "\";";
+    }
+
+    public static String query_insertNewType(GoogleLocationTypes type) {
+        return "INSERT INTO " + TABLE_NAME_LOCATION_TYPES + " VALUES (" + type.getAsGoogleType() + ", " + 0 + ");";
+    }
+
+    public static String query_resetCountForType(GoogleLocationTypes type) {
+        return "UPDATE " + TABLE_NAME_LOCATION_TYPES +
+                " SET " + COUNT_COLUMN_NAME + "=0" +
+                " WHERE " + TYPE_COLUMN_NAME + "=" + type.getAsGoogleType() + ";";
+    }
+
+    public static String query_getAllByDescOrder() {
+        return "SELECT * FROM " + TABLE_NAME_LOCATION_TYPES +
+                " WHERE " + COUNT_COLUMN_NAME + " > 0" +
+                " ORDER BY " + COUNT_COLUMN_NAME + " DESC";
     }
 
 
