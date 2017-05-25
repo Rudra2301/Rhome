@@ -30,15 +30,19 @@ import java.util.List;
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.googleWebApi.GoogleWebApiUtil;
+import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.interfaces.WebApiUtil;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.utils.SessionStorage;
 
 public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener, RhomeActivity {
 
     private final String TAG = MinorRoutesMapActivity.class.toString();
+
+    SupportMapFragment mapFragment;
+    FloatingActionButton backButton;
 
     // Google API
     private GoogleMap mMap;
@@ -51,12 +55,14 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
 
         buildGoogleApiClient();
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_route);
+        assignViews();
+        initEvents();
 
         mapFragment.getMapAsync(this);
+    }
 
-        FloatingActionButton backButton = (FloatingActionButton) findViewById(R.id.activity_route_map_back_button);
+    @Override
+    public void initEvents() {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,10 +71,15 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
-    // Using the GoogleApiClient builder to set the reference of mGoogleApiClient.
+    @Override
+    public void assignViews() {
+        backButton = (FloatingActionButton) findViewById(R.id.activity_route_map_back_button);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map_route);
+    }
+
     private void buildGoogleApiClient() {
 
-        // TODO. Enable autoManage like: .enableAutoManage(this *FragmentActivity*, this *OnConnectionFailedListener) in builder.
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -157,26 +168,6 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
         return latLngList;
     }
 
-    // ------------------------ ASYNC TASK CLASSES -------------------------------- //
-
-    private class BuildDirectionsData extends AsyncTask<LatLng, Void, List<List<HashMap<String, String>>>> {
-
-        @Override
-        protected List<List<HashMap<String, String>>> doInBackground(LatLng... latLngs) {
-            WebApiUtil webApiUtil = new GoogleWebApiUtil();
-            LatLng start = latLngs[0];
-            LatLng end = latLngs[1];
-            List<List<HashMap<String, String>>> result = webApiUtil.getPolylineData(start, end);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-            super.onPostExecute(result);
-            drawPolyline(result);
-        }
-    }
-
     private void drawPolyline(List<List<HashMap<String, String>>> result) {
         ArrayList<LatLng> points;
         PolylineOptions lineOptions = null;
@@ -209,5 +200,26 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
         // Drawing polyline in the Google Map for the i-th route
         mMap.addPolyline(lineOptions);
     }
+
+    // ------------------------ ASYNC TASK CLASSES -------------------------------- //
+
+    private class BuildDirectionsData extends AsyncTask<LatLng, Void, List<List<HashMap<String, String>>>> {
+
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(LatLng... latLngs) {
+            WebApiUtil webApiUtil = new GoogleWebApiUtil();
+            LatLng start = latLngs[0];
+            LatLng end = latLngs[1];
+            List<List<HashMap<String, String>>> result = webApiUtil.getPolylineData(start, end);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            super.onPostExecute(result);
+            drawPolyline(result);
+        }
+    }
+
 
 }

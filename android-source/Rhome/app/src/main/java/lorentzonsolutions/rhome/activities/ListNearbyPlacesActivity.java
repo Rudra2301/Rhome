@@ -62,7 +62,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity implements Rhome
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_nearby_places);
 
-        // Getting the value from the intent invoking this
+        // Getting the value from the intent invoking this. Value collected is the type to search for.
         Intent intent = getIntent();
         selectedType = intent.getStringExtra("selected_type");
         Log.d(TAG, "Searching for location of type: " + selectedType);
@@ -72,6 +72,11 @@ public class ListNearbyPlacesActivity extends AppCompatActivity implements Rhome
 
         // Initializing async task to populate list.
         new NearbyLocationCollector().execute();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -170,6 +175,12 @@ public class ListNearbyPlacesActivity extends AppCompatActivity implements Rhome
 
     }
 
+    private void makeSnackBar(String message) {
+        Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
+                message, Snackbar.LENGTH_LONG);
+        mySnackbar.show();
+    }
+
 
     // INNER ASYNC TASK FOR ACCESSING NETWORK AND RETRIEVE DATA
 
@@ -229,11 +240,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity implements Rhome
         }
     }
 
-    private void makeSnackBar(String message) {
-        Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
-                message, Snackbar.LENGTH_LONG);
-        mySnackbar.show();
-    }
+
 
     // Adapter for list
     class PlaceListAdapter extends ArrayAdapter<GooglePlace> {
@@ -251,7 +258,6 @@ public class ListNearbyPlacesActivity extends AppCompatActivity implements Rhome
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_place, parent, false);
 
             // TODO. Fix duration info.
-            // Lookup view for data population
             TextView placeName = (TextView) convertView.findViewById(R.id.place_name);
             TextView placeAddress = (TextView) convertView.findViewById(R.id.place_address);
             TextView placeDistance = (TextView) convertView.findViewById(R.id.place_distance);
