@@ -48,8 +48,10 @@ public class InternalStorage extends SQLiteOpenHelper implements Storage {
     @Override
     public void incrementType(GoogleLocationTypes type) {
         Log.d(TAG, "Incrementing type: " + type);
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL(query_incrementCountForType(type));
+        if (type != null) {
+            SQLiteDatabase db = getWritableDatabase();
+            db.execSQL(query_incrementCountForType(type));
+        }
     }
 
     @Override
@@ -68,18 +70,24 @@ public class InternalStorage extends SQLiteOpenHelper implements Storage {
 
         while(c.moveToNext()) {
             String typeString = c.getString(c.getColumnIndex(TYPE_COLUMN_NAME));
-            GoogleLocationTypes type = getGoogleTypeFromString(typeString);
+            GoogleLocationTypes type = GoogleLocationTypes.getGoogleTypeFromString(typeString);
             if(type != null) orderedTypesList.add(type);
         }
 
         return orderedTypesList;
     }
 
-    private GoogleLocationTypes getGoogleTypeFromString(String typeString) {
-        for(GoogleLocationTypes type: GoogleLocationTypes.values()) {
-            if(type.getAsGoogleType().equals(typeString)) return type;
+    @Override
+    public int getCountForType(GoogleLocationTypes type) {
+        String[] selectionArgs = {};
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query_getCountForType(type), selectionArgs);
+        int count = 0;
+        while (c.moveToNext()) {
+            count = c.getInt(c.getColumnIndex(COUNT_COLUMN_NAME));
         }
-        return null;
+        return count;
     }
+
 
 }

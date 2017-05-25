@@ -1,5 +1,6 @@
 package lorentzonsolutions.rhome.googleWebApi;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public enum GoogleLocationTypes {
     PAINTER("painter", "Painter"), PARKING("parking", "Parking"), PET_STORE("pet_store", "Pet Store"), PHARMACY("pharmacy", "Pharmacy"),
     PHYSIOTHERAPIST("physiotherapist", "Physiotherapist"), PLUMBER("plumber", "Plumber"), POLICE("police", "Police"), POST_OFFICE("post_office", "Post Office"),
     REAL_ESTATE_AGENCY("real_estate_agency", "Real Estate Agency"), RV_PARK("rv_park", "RV Park"), SCHOOL("school", "School"), SHOE_STORE("shoe_store", "Shoe Store"),
-    SHOPPING_MALL("shopping_mall", "Shopping Mall"), SPA("spa", "Spa"), STADIUM("stadium", "Stadium"), STORE("store", "Store"), SYNAGOGUE("synagogue", "Synagogue"),
+    SHOPPING_MALL("shopping_mall", "Shopping Mall"), SPA("spa", "Spa"), STADIUM("stadium", "Stadium"), SYNAGOGUE("synagogue", "Synagogue"),
     TRAIN_STATION("train_station", "Train Station"), TRAVEL_AGENCY("travel_agency", "Travel Agency"), UNIVERSITY("university", "University"),
     VETERINARY_CARE("veterinary_care", "Veterinary Care"), ZOO("zoo", "Zoo");
 
@@ -53,21 +54,32 @@ public enum GoogleLocationTypes {
     // Building a map of the thing to do and type associated with that activity
     public static Map<GoogleLocationTypes, String> mapOfWhatToDo;
 
+    public static GoogleLocationTypes getGoogleTypeFromString(String typeString) {
+        for(GoogleLocationTypes type: GoogleLocationTypes.values()) {
+            if(type.getAsGoogleType().equals(typeString)) return type;
+        }
+        return null;
+    }
+
+
+
     static {
         // TODO. Build this elsewhere and use resources (R.string...)
+
         mapOfWhatToDo = new HashMap<>();
         mapOfWhatToDo.put(AIRPORT, "Go to the airport");
         mapOfWhatToDo.put(AMUSEMENT_PARK, "Go to the amusement park");
         mapOfWhatToDo.put(CLOTHING_STORE, "Buy clothes");
         mapOfWhatToDo.put(ATM, "Withdraw money");
 
-        mapOfWhatToDo.put(MOVIE_THEATER, "Go to the movies");
-
-        mapOfWhatToDo.put(LIQUOR_STORE, "Buy liquor");
-
         mapOfWhatToDo.put(BAKERY, "Go to the bakery");
 
         mapOfWhatToDo.put(CAR_REPAIR, "Repair the car");
+        mapOfWhatToDo.put(CHURCH, "Go to church");
+
+        mapOfWhatToDo.put(LIQUOR_STORE, "Buy liquor");
+
+        mapOfWhatToDo.put(MOVIE_THEATER, "Go to the movies");
 
         mapOfWhatToDo.put(ZOO, "Visit the zoo");
 
@@ -76,6 +88,8 @@ public enum GoogleLocationTypes {
 
 /*
 
+Store is not included because of the wideness of this type.
+store
 
 Not included
 

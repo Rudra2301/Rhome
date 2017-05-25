@@ -32,13 +32,18 @@
     <string name="select_places_to_visit_place_list_header">Selected places</string>
     <string name="select_places_to_visit_add_place_button">Add new place</string>
     <string name="select_places_to_visit_done_button">Done!</string>
+    <string name="select_places_context_menu_header">Options</string>
+
+    <string-array name="select_places_context_menu">
+        <item>Remove place from list</item>
+        <item>Back</item>
+    </string-array>
 
     <!-- Select what to do activity -->
     <string name="what_to_do_header">What do you want to do?</string>
     <string name="what_to_do_search_placeholder">Enter text</string>
     <string name="what_to_do_search_button_text">Search</string>
     <string name="what_to_do_list_types_button">Show list of location types</string>
-    <string name="what_to_do_favourite_list_button">Show favourites</string>
 
     <!--  OLD ONES BELOW -->
     <!-- Main Activity -->
@@ -73,6 +78,8 @@
     <string name="list_location_type_header">Select type of location</string>
     <string name="button_my_location">Use current location</string>
     <string name="button_pick_selected">Use selected position</string>
+    <string name="toggle_favourites_button_showing_favourites">Show favourite types</string>
+    <string name="toggle_favourites_button_showing_all">Show all types</string>
 
     <!-- ListNearbyPlacesOfType Activity -->
     <string name="list_nearby_locations_header">Places found nearby</string>

@@ -27,5 +27,13 @@ public interface Storage {
      */
     List<GoogleLocationTypes> getOrderedListOfTypesFromDB();
 
+    /**
+     * Returns the count for the type in db.
+     *
+     * @param type
+     * @return the count for type recorded in db.
+     */
+    int getCountForType(GoogleLocationTypes type);
+
 
 }

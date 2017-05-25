@@ -2,6 +2,7 @@ package lorentzonsolutions.rhome.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,29 +12,38 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
 import lorentzonsolutions.rhome.utils.Resources;
+import lorentzonsolutions.rhome.utils.database.InternalStorage;
 
 public class ListLocationTypeSelectionActivity extends AppCompatActivity {
+
+    Context context = this;
 
     private final String TAG = ListLocationTypeSelectionActivity.class.toString();
 
     private ListView locationTypeList;
     private ArrayAdapter<GoogleLocationTypes> listAdapter;
+    private boolean favouritesShowing = false;
+    private List<GoogleLocationTypes> googleLocationTypes;
+
+    Button toggleFavourites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_location_type_selection);
 
-        List<GoogleLocationTypes> googleLocationTypes = new ArrayList<>();
+        googleLocationTypes = new ArrayList<>();
         for(GoogleLocationTypes type: GoogleLocationTypes.values()) googleLocationTypes.add(type);
 
         // Creating adapter
@@ -66,6 +76,35 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
             }
         });
 
+        // Favourites logic
+        toggleFavourites = (Button) findViewById(R.id.toggle_favourites_button);
+        toggleFavourites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(favouritesShowing) {
+                    favouritesShowing = false;
+                    toggleFavourites.setText(R.string.toggle_favourites_button_showing_all);
+                    listShowsAll();
+                }
+                else {
+                    listShowsFavourites();
+                    toggleFavourites.setText(R.string.toggle_favourites_button_showing_favourites);
+                    favouritesShowing = true;
+                }
+            }
+        });
+
+    }
+
+    private void listShowsAll() {
+        googleLocationTypes.clear();
+        Collections.addAll(googleLocationTypes, GoogleLocationTypes.values());
+        listAdapter.notifyDataSetChanged();
+    }
+
+    private void listShowsFavourites() {
+        googleLocationTypes.clear();
+        new FetchMostVisited().execute();
     }
 
     // Adapter for list
@@ -86,6 +125,39 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity {
             TextView typeName = (TextView) convertView.findViewById(R.id.place_type);
             typeName.setText(type.getAsReadable());
             return convertView;
+        }
+    }
+
+
+    private class FetchMostVisited extends AsyncTask<Void, GoogleLocationTypes, Void> {
+        InternalStorage storage = new InternalStorage(context);
+
+        @Override
+        protected void onPreExecute() {
+            Log.d(TAG, "Started Async task for getting favourites from DB.");
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            List<GoogleLocationTypes> favourites = storage.getOrderedListOfTypesFromDB();
+            for(GoogleLocationTypes type: favourites) {
+                googleLocationTypes.add(type);
+                publishProgress(type);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(GoogleLocationTypes... params) {
+            GoogleLocationTypes typeDone = params[0];
+            Log.d(TAG, "Added most visited to list: " + typeDone.getAsGoogleType());
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.d(TAG, "List updated with most visited.");
+            listAdapter.notifyDataSetChanged();
+
         }
     }
 

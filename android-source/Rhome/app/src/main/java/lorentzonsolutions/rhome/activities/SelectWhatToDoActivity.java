@@ -57,8 +57,6 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
         hideSoftKeyboard();
     }
 
-
-
     @Override
     protected void onResume() {
         populateList();
@@ -68,6 +66,7 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
     }
 
     private void populateList() {
+        searchResults.clear();
         for (Map.Entry e: GoogleLocationTypes.mapOfWhatToDo.entrySet()) {
             searchResults.add(new SearchResult((GoogleLocationTypes) e.getKey(), (String) e.getValue()));
         }

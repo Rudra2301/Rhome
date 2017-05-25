@@ -8,9 +8,13 @@ import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -53,7 +57,7 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
         initListeners();
         setStartAndEncLocationInfo();
 
-        updateList();
+        updateDondeButtonVisibility();
         selectedListAdapter.notifyDataSetChanged();
 
     }
@@ -101,23 +105,18 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
     protected void onResume() {
         setViews();
         selectedListAdapter.notifyDataSetChanged();
-        updateList();
+        updateDondeButtonVisibility();
         super.onResume();
     }
 
-    private void updateList() {
+    private void updateDondeButtonVisibility() {
         if(storage.getSelectedPlacesList() != null && storage.getSelectedPlacesList().size() != 0) {
             doneButton.setVisibility(View.VISIBLE);
             doneButton.setEnabled(true);
             placeListHeader.setVisibility(View.VISIBLE);
-
-            doneButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Resources.getInstance().getContext(), RouteOrderActivity.class);
-                    startActivity(intent);
-                }
-            });
+        } else {
+            doneButton.setEnabled(false);
+            placeListHeader.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -138,6 +137,17 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
                 }
             }
         });
+
+        registerForContextMenu(selectedPlacesList);
+
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Resources.getInstance().getContext(), RouteOrderActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +182,42 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
 
             return convertView;
         }
+    }
+
+    // ContextMenu for longclick
+    // User can choose to remove item from the list.
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        // Check if the view firing the event is the list of places
+        if(v.getId() == R.id.selected_places_list) {
+            menu.setHeaderTitle(R.string.select_places_context_menu_header);
+            String[] menuItems = getResources().getStringArray(R.array.select_places_context_menu);
+
+            // Add the menu items
+            for(int i = 0; i < menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
+            }
+        }
+    }
+
+    // Event for catching context menu item selected
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        int select = item.getItemId();
+        // 0 -> Navigate from current. 1 -> Turn by turn navigation
+        GooglePlace place = (GooglePlace) selectedPlacesList.getAdapter().getItem(info.position);
+
+        // Option 1 - Remove. 2 - Back.
+        if(select == 0) {
+            // Navigate from current
+            storage.removeSelectedPlace(place);
+            selectedListAdapter.notifyDataSetChanged();
+            updateDondeButtonVisibility();
+        }
+        else if(select == 1) {}
+
+        return true;
     }
 
     // Async task for fetching the icon image

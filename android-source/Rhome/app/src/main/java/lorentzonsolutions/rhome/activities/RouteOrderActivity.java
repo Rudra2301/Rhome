@@ -3,6 +3,7 @@ package lorentzonsolutions.rhome.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,12 +18,13 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.exceptions.RouteException;
+import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.RouteCalculator;
-import lorentzonsolutions.rhome.interfaces.Storage;
 import lorentzonsolutions.rhome.routeCalculators.DistanceCalculatorUtil;
 import lorentzonsolutions.rhome.routeCalculators.NearestNeighbourRouteCalculator;
 import lorentzonsolutions.rhome.utils.TemporalStorageUtil;
+import lorentzonsolutions.rhome.utils.database.InternalStorage;
 
 public class RouteOrderActivity extends AppCompatActivity {
 
@@ -36,6 +38,7 @@ public class RouteOrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_route_order);
 
         initRouteCalculation();
+        incrementSelectedPlaces();
 
         try {
             ArrayList<String> places = new ArrayList<>();
@@ -83,6 +86,28 @@ public class RouteOrderActivity extends AppCompatActivity {
         });
     }
 
+    private void incrementSelectedPlaces() {
+        List<GooglePlace> places = TemporalStorageUtil.INSTANCE.getSelectedPlacesList();
+        List<GoogleLocationTypes> allSelectedTypes = new ArrayList<>();
+        List<String> allTypesString = new ArrayList<>();
+
+        for(GooglePlace place : places) {
+            for(int i = 0; i < place.types.length; i++) {
+                GoogleLocationTypes googleLocationType = GoogleLocationTypes.getGoogleTypeFromString(place.types[i]);
+                if(googleLocationType != null) {
+                    allSelectedTypes.add(GoogleLocationTypes.getGoogleTypeFromString(place.types[i]));
+                }
+                allTypesString.add(place.types[i]);
+            }
+        }
+        Log.d(TAG, "All types: ");
+        Log.d(TAG, allTypesString.toString());
+
+        new IncrementAllSelectedPlaces().execute(allSelectedTypes);
+
+
+    }
+
     private void initRouteCalculation() {
         RouteCalculator calculator = new NearestNeighbourRouteCalculator();
         Location startLocation = TemporalStorageUtil.INSTANCE.getSelectedStartLocation();
@@ -100,5 +125,53 @@ public class RouteOrderActivity extends AppCompatActivity {
 
         double totalDistance = DistanceCalculatorUtil.calculateTotalRouteDistance(fastestRoute);
         Log.d(TAG, "Total distance: " + totalDistance + " km.");
+    }
+
+
+    // INNER ASYNC TASK FOR ACCESSING NETWORK AND RETRIEVE DATA
+
+    /*
+    Async task <first, second , third> list explanation.
+    First   -> for use in doInBackGround(first... firsts). This method returns the value to the onPostExecute. As: return third;
+                Use publishProgress(second) to call the onProgressUpdate(). Send the value specified as second.
+    Second  -> for use in onProgressUpdate(second... seconds)
+    Third   -> for use in onPostExecute(third third). The return value from the doInBackground
+     */
+    private class IncrementAllSelectedPlaces extends AsyncTask<List<GoogleLocationTypes>, GoogleLocationTypes, Void> {
+        InternalStorage storage = new InternalStorage(context);
+
+        @Override
+        protected void onPreExecute() {
+            Log.d(TAG, "Started Async task for incrementing count for selected places in DB.");
+
+        }
+
+        @Override
+        protected Void doInBackground(List<GoogleLocationTypes>... params) {
+            List<GoogleLocationTypes> selectedTypes = params[0];
+            for(GoogleLocationTypes type: selectedTypes) {
+                storage.incrementType(type);
+                publishProgress(type);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(GoogleLocationTypes... params) {
+            GoogleLocationTypes typeDone = params[0];
+            Log.d(TAG, "Incremented type: " + typeDone.getAsGoogleType());
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.d(TAG, "Types of selected places incremented in DB. Count in DB as follows:");
+            List<GoogleLocationTypes> dbCountForTypes = storage.getOrderedListOfTypesFromDB();
+            for(GoogleLocationTypes type: dbCountForTypes) {
+                int count = storage.getCountForType(type);
+                Log.d(TAG, type.getAsGoogleType() + " : " + count);
+            }
+
+        }
     }
 }

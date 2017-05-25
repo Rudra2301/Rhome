@@ -29,23 +29,23 @@ public class DatabaseConstants {
 
 
     public static String query_getCountForType(GoogleLocationTypes type) {
-        return "SELECT COUNT FROM " + TABLE_NAME_LOCATION_TYPES + " WHERE NAME=\"" + type.getAsGoogleType() + "\";";
+        return "SELECT COUNT FROM " + TABLE_NAME_LOCATION_TYPES + " WHERE " + TYPE_COLUMN_NAME + "=\"" + type.getAsGoogleType() + "\"";
     }
 
     public static String query_incrementCountForType(GoogleLocationTypes type) {
-        return "UPDDATE " + TABLE_NAME_LOCATION_TYPES +
+        return "UPDATE " + TABLE_NAME_LOCATION_TYPES +
                 " SET " + COUNT_COLUMN_NAME + "=" + COUNT_COLUMN_NAME + "+1" +
-                " WHERE " + TYPE_COLUMN_NAME + "=\"" + type.getAsGoogleType() + "\";";
+                " WHERE " + TYPE_COLUMN_NAME + "=\"" + type.getAsGoogleType() + "\"";
     }
 
     public static String query_insertNewType(GoogleLocationTypes type) {
-        return "INSERT INTO " + TABLE_NAME_LOCATION_TYPES + " VALUES (" + type.getAsGoogleType() + ", " + 0 + ");";
+        return "INSERT INTO " + TABLE_NAME_LOCATION_TYPES + " VALUES (\"" + type.getAsGoogleType() + "\", " + 0 + ")";
     }
 
     public static String query_resetCountForType(GoogleLocationTypes type) {
         return "UPDATE " + TABLE_NAME_LOCATION_TYPES +
                 " SET " + COUNT_COLUMN_NAME + "=0" +
-                " WHERE " + TYPE_COLUMN_NAME + "=" + type.getAsGoogleType() + ";";
+                " WHERE " + TYPE_COLUMN_NAME + "=" + type.getAsGoogleType() + "";
     }
 
     public static String query_getAllByDescOrder() {

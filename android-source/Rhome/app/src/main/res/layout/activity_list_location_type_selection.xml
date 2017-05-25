@@ -21,11 +21,21 @@
         android:layout_marginBottom="20dp"
         android:textSize="30sp"/>
 
+    <Button
+        android:id="@+id/toggle_favourites_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/toggle_favourites_button_showing_favourites"
+        style="@style/Base.Widget.AppCompat.Button.Colored"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/location_type_header"/>
+
     <ListView
         android:id="@+id/list_of_location_types"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/location_type_header"/>
+        android:layout_below="@id/toggle_favourites_button"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/activity_location_type_floating_back_button"
