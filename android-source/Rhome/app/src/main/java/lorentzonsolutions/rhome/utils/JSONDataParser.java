@@ -20,6 +20,8 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 
 /**
  * This class parses JSON data in string to a list of GooglePlace object.
+ *
+ * @author Johan Lorentzon
  */
 
 public class JSONDataParser {

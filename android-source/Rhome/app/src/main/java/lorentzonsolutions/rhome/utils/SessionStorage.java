@@ -14,6 +14,8 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 /**
  * Handles storage functionality temporarily while application is active. Singleton class using enum approach.
  *
+ * @author Johan Lorentzon
+ *
  */
 
 

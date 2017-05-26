@@ -13,6 +13,8 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 
 /**
  * This class creates an object to help with calculating a route from a to b with stop on N places in between.
+ *
+ * @author Johan Lorentzon
  */
 
 public class NearestNeighbourRouteCalculator implements RouteCalculator {

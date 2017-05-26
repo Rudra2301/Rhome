@@ -15,6 +15,9 @@ import static lorentzonsolutions.rhome.utils.database.DatabaseConstants.*;
 
 /**
  * Class for handling database connection.
+ *
+ * @author Johan Lorentzon
+ *
  */
 
 public class InternalStorage extends SQLiteOpenHelper implements Storage {

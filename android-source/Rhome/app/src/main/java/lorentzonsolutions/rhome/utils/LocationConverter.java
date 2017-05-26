@@ -7,6 +7,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Class to convert between location types.
+ *
+ * @author Johan Lorentzon
+ *
  */
 public enum LocationConverter {
     INSTANCE;

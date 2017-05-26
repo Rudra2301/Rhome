@@ -39,7 +39,7 @@ import lorentzonsolutions.rhome.utils.database.InternalStorage;
  */
 public class ListLocationTypeSelectionActivity extends AppCompatActivity implements RhomeActivity {
 
-    Context context = this;
+    private final Context context = this;
 
     private final String TAG = ListLocationTypeSelectionActivity.class.toString();
 
@@ -89,7 +89,7 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity impleme
                 Log.d(TAG, "Type selected: " + type.getAsReadable());
 
                 // Instantiate a new intent and pass the selected type value to this. Start activity.
-                Intent intent = new Intent(Resources.getInstance().getContext(), ListNearbyPlacesActivity.class);
+                Intent intent = new Intent(context, ListNearbyPlacesActivity.class);
                 intent.putExtra("selected_type", type.getAsGoogleType());
                 startActivity(intent);
             }
@@ -240,7 +240,6 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity impleme
         protected void onPostExecute(Void aVoid) {
             Log.d(TAG, "List updated with most visited.");
             listAdapter.notifyDataSetChanged();
-
         }
     }
 

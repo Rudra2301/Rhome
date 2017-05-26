@@ -29,7 +29,6 @@ import java.util.List;
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.RhomeActivity;
-import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.SessionStorage;
 import lorentzonsolutions.rhome.utils.URLIconDownloader;
 
@@ -42,6 +41,8 @@ import lorentzonsolutions.rhome.utils.URLIconDownloader;
 public class PickPlacesToVisitActivity extends AppCompatActivity implements RhomeActivity {
 
     private static String TAG = PickPlacesToVisitActivity.class.toString();
+
+    private final Context context = this;
 
     SessionStorage storage = SessionStorage.INSTANCE;
 
@@ -85,14 +86,14 @@ public class PickPlacesToVisitActivity extends AppCompatActivity implements Rhom
             @Override
             public void onClick(View v) {
                 if(storage.getSelectedStartLocation() != null && storage.getSelectedEndLocation() != null) {
-                    Intent intent = new Intent(Resources.getInstance().getContext(), SelectWhatToDoActivity.class);
+                    Intent intent = new Intent(context, SelectWhatToDoActivity.class);
                     startActivity(intent);
                 }
                 else if(storage.getSelectedStartLocation() == null) {
-                    Toast.makeText(Resources.getInstance().getContext(), "You must select a start location.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "You must select a start location.", Toast.LENGTH_SHORT).show();
                 }
                 else if(storage.getSelectedEndLocation() == null){
-                    Toast.makeText(Resources.getInstance().getContext(), "You must select an end location.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "You must select an end location.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -102,7 +103,7 @@ public class PickPlacesToVisitActivity extends AppCompatActivity implements Rhom
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Resources.getInstance().getContext(), RouteOrderActivity.class);
+                Intent intent = new Intent(context, RouteOrderActivity.class);
                 startActivity(intent);
             }
         });

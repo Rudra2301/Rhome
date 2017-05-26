@@ -40,6 +40,7 @@ public class SelectWhatToDoActivity extends AppCompatActivity implements RhomeAc
     // TODO. Make the input field responsive. The result should appear live without having to click the search button.
 
     private static String TAG = SelectWhatToDoActivity.class.toString();
+    private final Context context = this;
 
     FloatingActionButton backButton;
     ListView searchResultList;
@@ -98,7 +99,7 @@ public class SelectWhatToDoActivity extends AppCompatActivity implements RhomeAc
 
                 Log.d(TAG, "Type selected: " + itemClicked.type.getAsGoogleType() + "\n Value string: " + itemClicked.value);
 
-                Intent intent = new Intent(Resources.getInstance().getContext(), ListNearbyPlacesActivity.class);
+                Intent intent = new Intent(context, ListNearbyPlacesActivity.class);
                 intent.putExtra("selected_type", itemClicked.type.getAsGoogleType());
                 startActivity(intent);
 
@@ -108,7 +109,7 @@ public class SelectWhatToDoActivity extends AppCompatActivity implements RhomeAc
         showListOfTypesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Resources.getInstance().getContext(), ListLocationTypeSelectionActivity.class);
+                Intent intent = new Intent(context, ListLocationTypeSelectionActivity.class);
                 startActivity(intent);
             }
         });

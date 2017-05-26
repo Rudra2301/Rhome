@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Typeface;
 
 /**
- * This class is for creating typefonts.
+ * Class for creating typefonts.
+ *
+ * @author Johan Lorentzon
  */
 
 public class FontCreator {

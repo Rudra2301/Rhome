@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 /**
  * Class representing a place parsed from JSON data collected from the Google Web API.
+ *
+ * @author Johan Lorentzon
  */
 
 public class GooglePlace implements Comparable, Parcelable{

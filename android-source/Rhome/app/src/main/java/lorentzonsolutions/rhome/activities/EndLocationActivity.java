@@ -1,5 +1,6 @@
 package lorentzonsolutions.rhome.activities;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -47,8 +48,8 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    // Tag for logging.
     private static final String TAG = EndLocationActivity.class.toString();
+    private final Context context = this;
 
     // Google API
     private GoogleMap mMap;
@@ -74,7 +75,7 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
     // Location converter singleton
     LocationConverter locationConverter = LocationConverter.INSTANCE;
 
-    Geocoder geocoder = new Geocoder(Resources.getInstance().getContext(), Locale.getDefault());
+    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -252,7 +253,7 @@ public class EndLocationActivity extends FragmentActivity implements OnMapReadyC
         else {
             sessionStorage.setSelectedEndLocation(selectedLocation);
             makeSnackBar("End location has been set!");
-            Log.d(TAG, "End location set to: " + selectedLocation.toString());
+            Log.d(TAG, "End location has been set.");
         }
     }
 

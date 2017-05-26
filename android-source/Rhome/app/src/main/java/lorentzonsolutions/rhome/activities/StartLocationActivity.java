@@ -1,5 +1,6 @@
 package lorentzonsolutions.rhome.activities;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -39,15 +40,14 @@ import java.util.Locale;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.utils.LocationConverter;
-import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.SessionStorage;
 
 public class StartLocationActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    // Tag for logging.
-    private static final String TAG = "START_LOCATION_ACTIVITY";
+    private static final String TAG = StartLocationActivity.class.toString();
+    private final Context context = this;
 
     // Google API
     private GoogleMap mMap;
@@ -74,7 +74,7 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
     // Location converter singleton
     LocationConverter locationConverter = LocationConverter.INSTANCE;
 
-    Geocoder geocoder = new Geocoder(Resources.getInstance().getContext(), Locale.getDefault());
+    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,20 +223,21 @@ public class StartLocationActivity extends AppCompatActivity implements OnMapRea
         setStartLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setEndLocation();
+                setStartLocation();
                 finish();
             }
         });
     }
 
     // Stores the selected location as startlocation
-    private void setEndLocation() {
+    private void setStartLocation() {
         if (isUpdatingSelectedAddress) {
             makeSnackBar("Updating address in progress. Please wait.");
         } else {
             if(selectedLocation != null) {
                 sessionStorage.setSelectedStartLocation(selectedLocation);
                 makeSnackBar("Start location has been set.");
+                Log.d(TAG, "Start location has been set.");
             } else {
                 makeSnackBar("Fetching location. Please wait.");
             }

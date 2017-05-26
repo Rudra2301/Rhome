@@ -289,7 +289,7 @@ public class ListNearbyPlacesActivity extends AppCompatActivity implements Rhome
             placeDistance.setText("Distance " + distanceInKm + " km");
 
             int timeInMinutes = place.minutesByCarToStartLocation /60;
-            placeDuration.setText("Duration by car" + timeInMinutes + " min");
+            placeDuration.setText("Duration by car " + timeInMinutes + " min");
 
 
             // TODO. Check the best method to check this.

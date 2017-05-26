@@ -9,7 +9,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-
+/**
+ * Class for reading data from URL.
+ *
+ * @author Johan Lorentzon
+ *
+ */
 public class UrlDataReceiver {
 
     private String TAG = UrlDataReceiver.class.toString();
@@ -17,6 +22,12 @@ public class UrlDataReceiver {
     private String responseData;
 
 
+    /**
+     * Takes a URL string and connects to this, returns the data read from endpoint.
+     *
+     * @param urlString
+     * @return a string representation of the data read from the URL endpoint.
+     */
     public String readURL(String urlString) {
         try{
             System.out.println("Connecting using url:  \n" + urlString);

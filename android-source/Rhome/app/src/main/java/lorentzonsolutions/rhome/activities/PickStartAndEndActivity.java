@@ -1,5 +1,6 @@
 package lorentzonsolutions.rhome.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.support.v7.app.AppCompatActivity;
@@ -21,16 +22,19 @@ import lorentzonsolutions.rhome.utils.SessionStorage;
  */
 public class PickStartAndEndActivity extends AppCompatActivity implements RhomeActivity {
 
-    SessionStorage storage = SessionStorage.INSTANCE;
-    Button setStart;
-    TextView startLocationHeaderText;
-    TextView startLocationInfoText;
+    private final String TAG = PickStartAndEndActivity.class.toString();
+    private final Context context = this;
 
-    Button setEnd;
-    TextView endLocationHeaderText;
-    TextView endLocationInfoText;
+    private SessionStorage storage = SessionStorage.INSTANCE;
+    private Button setStart;
+    private TextView startLocationHeaderText;
+    private TextView startLocationInfoText;
 
-    Button doneButton;
+    private Button setEnd;
+    private TextView endLocationHeaderText;
+    private TextView endLocationInfoText;
+
+    private Button doneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,7 @@ public class PickStartAndEndActivity extends AppCompatActivity implements RhomeA
         setStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Resources.getInstance().getContext(), StartLocationActivity.class);
+                Intent intent = new Intent(context, StartLocationActivity.class);
                 startActivity(intent);
             }
         });
@@ -72,7 +76,7 @@ public class PickStartAndEndActivity extends AppCompatActivity implements RhomeA
         setEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Resources.getInstance().getContext(), EndLocationActivity.class);
+                Intent intent = new Intent(context, EndLocationActivity.class);
                 startActivity(intent);
             }
         });
@@ -80,7 +84,7 @@ public class PickStartAndEndActivity extends AppCompatActivity implements RhomeA
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Resources.getInstance().getContext(), PickPlacesToVisitActivity.class);
+                Intent intent = new Intent(context, PickPlacesToVisitActivity.class);
                 startActivity(intent);
             }
         });

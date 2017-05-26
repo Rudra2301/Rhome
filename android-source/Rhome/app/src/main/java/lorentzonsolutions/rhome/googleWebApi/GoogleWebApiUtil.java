@@ -15,6 +15,9 @@ import lorentzonsolutions.rhome.utils.UrlDataReceiver;
 
 /**
  * Implementation of WebApiUtil that retrieves information from Googles Web API.
+ *
+ * @author Johan Lorentzon
+ *
  */
 
 public class GoogleWebApiUtil implements WebApiUtil {

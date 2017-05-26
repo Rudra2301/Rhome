@@ -1,6 +1,7 @@
 package lorentzonsolutions.rhome.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -15,6 +16,7 @@ import lorentzonsolutions.rhome.utils.Resources;
 public class StartActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, RhomeActivity {
 
     private final String TAG = StartActivity.class.toString();
+    private final Context context = this;
     private static final int LOCATION_PERMISSIONS = 101;
 
     @Override
@@ -22,13 +24,11 @@ public class StartActivity extends AppCompatActivity implements ActivityCompat.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        Resources.getInstance().setContext(this);
-
         Button goButton = (Button) findViewById(R.id.go_button);
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Resources.getInstance().getContext(), PickStartAndEndActivity.class);
+                Intent intent = new Intent(context, PickStartAndEndActivity.class);
                 startActivity(intent);
             }
         });
