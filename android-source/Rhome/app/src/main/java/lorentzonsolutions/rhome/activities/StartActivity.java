@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import lorentzonsolutions.rhome.R;
+import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.utils.Resources;
 
-public class StartActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class StartActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, RhomeActivity {
 
+    private final String TAG = StartActivity.class.toString();
     private static final int LOCATION_PERMISSIONS = 101;
 
     @Override
@@ -50,5 +52,15 @@ public class StartActivity extends AppCompatActivity implements ActivityCompat.O
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         // Nothing needs to be done.
+    }
+
+    @Override
+    public void initEvents() {
+
+    }
+
+    @Override
+    public void assignViews() {
+
     }
 }

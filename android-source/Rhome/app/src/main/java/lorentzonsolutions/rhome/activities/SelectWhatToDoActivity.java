@@ -26,24 +26,27 @@ import java.util.Map;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
+import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.utils.Resources;
 
 /**
  * Activity to search for user input in list of thing to do. List items is clickable and start the activity
  * for search nearby locations of the selected type.
+ *
+ * @author Johan Lorentzon
  */
-public class SelectWhatToDoActivity extends AppCompatActivity {
+public class SelectWhatToDoActivity extends AppCompatActivity implements RhomeActivity {
+
+    // TODO. Make the input field responsive. The result should appear live without having to click the search button.
 
     private static String TAG = SelectWhatToDoActivity.class.toString();
 
-    // Components
     FloatingActionButton backButton;
     ListView searchResultList;
     TextInputEditText searchInput;
     Button searchButton;
     Button showListOfTypesButton;
 
-    // Search result components
     List<SearchResult> searchResults = new ArrayList<>();
     ArrayAdapter adapter;
 
@@ -53,32 +56,22 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_what_to_do);
 
         populateList();
-        initComponents();
+        assignViews();
+        initEvents();
         hideSoftKeyboard();
     }
 
     @Override
     protected void onResume() {
         populateList();
-        initComponents();
+        assignViews();
+        initEvents();
         hideSoftKeyboard();
         super.onResume();
     }
 
-    private void populateList() {
-        searchResults.clear();
-        for (Map.Entry e: GoogleLocationTypes.mapOfWhatToDo.entrySet()) {
-            searchResults.add(new SearchResult((GoogleLocationTypes) e.getKey(), (String) e.getValue()));
-        }
-    }
-
-    private void initComponents() {
-        backButton = (FloatingActionButton) findViewById(R.id.what_to_do_floating_back_button);
-        searchResultList = (ListView) findViewById(R.id.what_to_do_search_result_list);
-        searchInput = (TextInputEditText) findViewById(R.id.what_to_do_search_field);
-        searchButton = (Button) findViewById(R.id.what_to_do_search_button);
-        showListOfTypesButton = (Button) findViewById(R.id.what_to_do_list_types_button);
-
+    @Override
+    public void initEvents() {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,10 +82,6 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
         adapter = new SearchResultListAdapter(this, searchResults);
         searchResultList.setAdapter(adapter);
 
-        initListeners();
-    }
-
-    private void initListeners() {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,12 +112,33 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
-    /*
-    Method to call for one an character is entered in search field.
+    @Override
+    public void assignViews() {
+        backButton = (FloatingActionButton) findViewById(R.id.what_to_do_floating_back_button);
+        searchResultList = (ListView) findViewById(R.id.what_to_do_search_result_list);
+        searchInput = (TextInputEditText) findViewById(R.id.what_to_do_search_field);
+        searchButton = (Button) findViewById(R.id.what_to_do_search_button);
+        showListOfTypesButton = (Button) findViewById(R.id.what_to_do_list_types_button);
+
+        searchInput.clearFocus();
+
+    }
+
+    private void populateList() {
+        searchResults.clear();
+        for (Map.Entry e: GoogleLocationTypes.mapOfWhatToDo.entrySet()) {
+            searchResults.add(new SearchResult((GoogleLocationTypes) e.getKey(), (String) e.getValue()));
+        }
+    }
+
+    /**
+     * Method matches the word with any value in the map of things to do. Updates the list and notifies the adapter.
+     *
+     * @param word
      */
-    // TODO. Make search responsive. Should listen to all input and update list.
     private void search(String word) {
         searchResults.clear();
         if(word.equals("")) populateList();
@@ -146,18 +156,28 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Shows a snack bar to the user with given message.
+     *
+     * @param message
+     */
     private void makeSnackBar(String message) {
         Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
                 message, Snackbar.LENGTH_LONG);
         mySnackbar.show();
     }
 
+    /**
+     * Method for hiding the input keyboard on the users screen.
+     *
+     */
     public void hideSoftKeyboard() {
         if(getCurrentFocus()!=null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
+
 
     class SearchResult {
 
@@ -169,7 +189,9 @@ public class SelectWhatToDoActivity extends AppCompatActivity {
         String value;
     }
 
-    // Adapter for list
+    /**
+     * Inner class for list adapter.
+     */
     class SearchResultListAdapter extends ArrayAdapter<SearchResult> {
 
         public SearchResultListAdapter(Context context, List<SearchResult> placesList) {

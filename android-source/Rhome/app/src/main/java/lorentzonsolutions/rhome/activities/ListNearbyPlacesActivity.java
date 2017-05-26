@@ -175,6 +175,11 @@ public class ListNearbyPlacesActivity extends AppCompatActivity implements Rhome
 
     }
 
+    /**
+     * Shows a snack bar to the user with given message.
+     *
+     * @param message
+     */
     private void makeSnackBar(String message) {
         Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
                 message, Snackbar.LENGTH_LONG);

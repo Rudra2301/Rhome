@@ -45,7 +45,7 @@ public class DatabaseConstants {
     public static String query_resetCountForType(GoogleLocationTypes type) {
         return "UPDATE " + TABLE_NAME_LOCATION_TYPES +
                 " SET " + COUNT_COLUMN_NAME + "=0" +
-                " WHERE " + TYPE_COLUMN_NAME + "=" + type.getAsGoogleType() + "";
+                " WHERE " + TYPE_COLUMN_NAME + "=\"" + type.getAsGoogleType() + "\"";
     }
 
     public static String query_getAllByDescOrder() {

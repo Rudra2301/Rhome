@@ -9,10 +9,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import lorentzonsolutions.rhome.R;
+import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.SessionStorage;
 
-public class PickStartAndEndActivity extends AppCompatActivity {
+/**
+ * Activity class for activity pick start and end locations.
+ *
+ * @author Johan Lorentzon
+ *
+ */
+public class PickStartAndEndActivity extends AppCompatActivity implements RhomeActivity {
 
     SessionStorage storage = SessionStorage.INSTANCE;
     Button setStart;
@@ -30,7 +37,8 @@ public class PickStartAndEndActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_start_and_end);
 
-        initComponents();
+        assignViews();
+        initEvents();
         startButtonFunctionality();
         startLocationInformationText();
         endButtonFunctionality();
@@ -40,6 +48,8 @@ public class PickStartAndEndActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        assignViews();
+        initEvents();
         startButtonFunctionality();
         startLocationInformationText();
         endButtonFunctionality();
@@ -49,15 +59,8 @@ public class PickStartAndEndActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    private void initComponents() {
-        doneButton = (Button) findViewById(R.id.step_one_done_button);
-        startLocationHeaderText = (TextView) findViewById(R.id.step_one_start_location_header);
-        startLocationInfoText = (TextView) findViewById(R.id.step_one_start_location_information);
-        setEnd = (Button) findViewById(R.id.step_one_select_end);
-        setStart = (Button) findViewById(R.id.step_one_select_start);
-        endLocationHeaderText = (TextView) findViewById(R.id.step_one_end_location_header);
-        endLocationInfoText = (TextView) findViewById(R.id.step_one_end_location_information);
-
+    @Override
+    public void initEvents() {
         setStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,9 +84,22 @@ public class PickStartAndEndActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
+    @Override
+    public void assignViews() {
+        doneButton = (Button) findViewById(R.id.step_one_done_button);
+        startLocationHeaderText = (TextView) findViewById(R.id.step_one_start_location_header);
+        startLocationInfoText = (TextView) findViewById(R.id.step_one_start_location_information);
+        setEnd = (Button) findViewById(R.id.step_one_select_end);
+        setStart = (Button) findViewById(R.id.step_one_select_start);
+        endLocationHeaderText = (TextView) findViewById(R.id.step_one_end_location_header);
+        endLocationInfoText = (TextView) findViewById(R.id.step_one_end_location_information);
+    }
+
+    /**
+     * Handles the activation of the done button.
+     */
     private void doneButtonFunctionality() {
         // Check if locations have been picked
         if(storage.getSelectedStartLocation() != null && storage.getSelectedEndLocation() != null) {

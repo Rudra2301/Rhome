@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,11 +28,18 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
+import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.SessionStorage;
 import lorentzonsolutions.rhome.utils.URLIconDownloader;
 
-public class PickPlacesToVisitActivity extends AppCompatActivity {
+/**
+ * Activity class for activity pick places.
+ *
+ * @author Johan Lorentzon
+ *
+ */
+public class PickPlacesToVisitActivity extends AppCompatActivity implements RhomeActivity {
 
     private static String TAG = PickPlacesToVisitActivity.class.toString();
 
@@ -53,75 +61,26 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_places_to_visit);
 
-        setViews();
-        initListeners();
+        assignViews();
+        initEvents();
         setStartAndEncLocationInfo();
 
-        updateDondeButtonVisibility();
+        updateDoneButtonVisibility();
         selectedListAdapter.notifyDataSetChanged();
-
-    }
-
-    private void setViews() {
-        addPlaceButton = (Button) findViewById(R.id.step_two_add_place_button);
-        doneButton = (Button) findViewById(R.id.pick_places_to_visit_done_button);
-        backButton = (FloatingActionButton) findViewById(R.id.step_two_floating_back_button);
-        startLocationInfo = (TextView) findViewById(R.id.step_two_start_location_info_text);
-        endLocationInfo = (TextView) findViewById(R.id.step_two_end_location_info_text);
-        selectedPlacesList = (ListView) findViewById(R.id.selected_places_list);
-        selectedListAdapter = new SelectedPlaceListAdapter(this, storage.getSelectedPlacesList());
-        selectedPlacesList.setAdapter(selectedListAdapter);
-        placeListHeader = (TextView) findViewById(R.id.step_two_place_list_header);
-    }
-
-    private void setStartAndEncLocationInfo() {
-
-        Address start = storage.getSelectedStartAddress();
-        Address end = storage.getSelectedEndAddress();
-
-        StringBuilder startBuilder = new StringBuilder();
-        StringBuilder endBuilder = new StringBuilder();
-
-        for(int i = 0; i < start.getMaxAddressLineIndex(); i++) {
-            if(i == start.getMaxAddressLineIndex() -1) {
-                startBuilder.append(start.getAddressLine(i) );
-            }
-            else startBuilder.append(start.getAddressLine(i) + ", ");
-        }
-
-        for(int i = 0; i < end.getMaxAddressLineIndex(); i++) {
-            if(i == end.getMaxAddressLineIndex() -1) {
-                endBuilder.append(end.getAddressLine(i) );
-            }
-            else endBuilder.append(end.getAddressLine(i) + ", ");
-        }
-
-        startLocationInfo.setText(startBuilder.toString());
-        endLocationInfo.setText(endBuilder.toString());
 
     }
 
     @Override
     protected void onResume() {
-        setViews();
+        assignViews();
+        initEvents();
         selectedListAdapter.notifyDataSetChanged();
-        updateDondeButtonVisibility();
+        updateDoneButtonVisibility();
         super.onResume();
     }
 
-    private void updateDondeButtonVisibility() {
-        if(storage.getSelectedPlacesList() != null && storage.getSelectedPlacesList().size() != 0) {
-            doneButton.setVisibility(View.VISIBLE);
-            doneButton.setEnabled(true);
-            placeListHeader.setVisibility(View.VISIBLE);
-        } else {
-            doneButton.setEnabled(false);
-            placeListHeader.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void initListeners() {
-
+    @Override
+    public void initEvents() {
         addPlaceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,9 +114,66 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
                 finish();
             }
         });
+
     }
 
-    // Adapter for list
+    @Override
+    public void assignViews() {
+        addPlaceButton = (Button) findViewById(R.id.step_two_add_place_button);
+        doneButton = (Button) findViewById(R.id.pick_places_to_visit_done_button);
+        backButton = (FloatingActionButton) findViewById(R.id.step_two_floating_back_button);
+        startLocationInfo = (TextView) findViewById(R.id.step_two_start_location_info_text);
+        endLocationInfo = (TextView) findViewById(R.id.step_two_end_location_info_text);
+        selectedPlacesList = (ListView) findViewById(R.id.selected_places_list);
+        selectedListAdapter = new SelectedPlaceListAdapter(this, storage.getSelectedPlacesList());
+        selectedPlacesList.setAdapter(selectedListAdapter);
+        placeListHeader = (TextView) findViewById(R.id.step_two_place_list_header);
+    }
+
+    /**
+     * Fetching information about start and end locations from storage and updates text in views.
+     */
+    private void setStartAndEncLocationInfo() {
+
+        Address start = storage.getSelectedStartAddress();
+        Address end = storage.getSelectedEndAddress();
+
+        StringBuilder startBuilder = new StringBuilder();
+        StringBuilder endBuilder = new StringBuilder();
+
+        for(int i = 0; i < start.getMaxAddressLineIndex(); i++) {
+            if(i == start.getMaxAddressLineIndex() -1) {
+                startBuilder.append(start.getAddressLine(i) );
+            }
+            else startBuilder.append(start.getAddressLine(i) + ", ");
+        }
+
+        for(int i = 0; i < end.getMaxAddressLineIndex(); i++) {
+            if(i == end.getMaxAddressLineIndex() -1) {
+                endBuilder.append(end.getAddressLine(i) );
+            }
+            else endBuilder.append(end.getAddressLine(i) + ", ");
+        }
+
+        startLocationInfo.setText(startBuilder.toString());
+        endLocationInfo.setText(endBuilder.toString());
+
+    }
+
+    /**
+     * Method handles deactivation of done button. Checks so that there are any places selected.
+     */
+    private void updateDoneButtonVisibility() {
+        if(storage.getSelectedPlacesList() != null && storage.getSelectedPlacesList().size() != 0) {
+            doneButton.setVisibility(View.VISIBLE);
+            doneButton.setEnabled(true);
+            placeListHeader.setVisibility(View.VISIBLE);
+        } else {
+            doneButton.setEnabled(false);
+            placeListHeader.setVisibility(View.INVISIBLE);
+        }
+    }
+
     class SelectedPlaceListAdapter extends ArrayAdapter<GooglePlace> {
 
         public SelectedPlaceListAdapter(Context context, List<GooglePlace> placesList) {
@@ -184,12 +200,17 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
         }
     }
 
-    // ContextMenu for longclick
-    // User can choose to remove item from the list.
+    /**
+     * Creating context menu with the choice of removing a selected place.
+     *
+     * @param menu
+     * @param view
+     * @param menuInfo
+     */
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
         // Check if the view firing the event is the list of places
-        if(v.getId() == R.id.selected_places_list) {
+        if(view.getId() == R.id.selected_places_list) {
             menu.setHeaderTitle(R.string.select_places_context_menu_header);
             String[] menuItems = getResources().getStringArray(R.array.select_places_context_menu);
 
@@ -213,14 +234,16 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
             // Navigate from current
             storage.removeSelectedPlace(place);
             selectedListAdapter.notifyDataSetChanged();
-            updateDondeButtonVisibility();
+            updateDoneButtonVisibility();
         }
         else if(select == 1) {}
 
         return true;
     }
 
-    // Async task for fetching the icon image
+    /**
+     * Async class for downloading image data for place selected.
+     */
     class SetPlaceIcon extends AsyncTask<Void, Void, Void> {
 
         private final WeakReference<ImageView> iconView;
@@ -228,14 +251,15 @@ public class PickPlacesToVisitActivity extends AppCompatActivity {
         private Drawable icon;
 
 
-        public SetPlaceIcon(GooglePlace place, ImageView iconView) {
-            this.iconView = new WeakReference<ImageView>(iconView);
+        SetPlaceIcon(GooglePlace place, ImageView iconView) {
+            this.iconView = new WeakReference<>(iconView);
             this.place = place;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             icon = URLIconDownloader.loadImageFromUrl(place.iconAddress);
+            Log.d(TAG, "Downloading image data.");
             return null;
         }
         @Override

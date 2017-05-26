@@ -78,8 +78,14 @@
     <string name="list_location_type_header">Select type of location</string>
     <string name="button_my_location">Use current location</string>
     <string name="button_pick_selected">Use selected position</string>
-    <string name="toggle_favourites_button_showing_favourites">Show favourite types</string>
-    <string name="toggle_favourites_button_showing_all">Show all types</string>
+    <string name="toggle_favourites_button_show_favourites">Show favourite types</string>
+    <string name="toggle_favourites_button_show_all">Show all types</string>
+
+    <string-array name="list_location_type_context_menu">
+        <item>Reset most visited count</item>
+        <item>Back</item>
+    </string-array>
+
 
     <!-- ListNearbyPlacesOfType Activity -->
     <string name="list_nearby_locations_header">Places found nearby</string>

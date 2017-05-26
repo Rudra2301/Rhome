@@ -19,9 +19,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
+import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 
-public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
-    private final String TAG = "PLACE_MAP";
+public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        RhomeActivity{
+
+    private final String TAG = ShowOnMap.class.toString();
 
     private GooglePlace place;
 
@@ -46,6 +51,16 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
 
         mapFragmentMyLocation.getMapAsync(this);
 
+    }
+
+    @Override
+    public void initEvents() {
+        // Nothing to init.
+    }
+
+    @Override
+    public void assignViews() {
+        // No views to assign.
     }
 
     @Override
@@ -77,13 +92,10 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
     public void onMapReady(GoogleMap googleMap) {
         Log.i(TAG, "Map loaded and ready.");
         mMap = googleMap;
-
     }
 
-    // Using the GoogleApiClient builder to set the reference of mGoogleApiClient.
     private void buildGoogleApiClient() {
 
-        // TODO. Enable autoManage like: .enableAutoManage(this *FragmentActivity*, this *OnConnectionFailedListener) in builder.
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -106,4 +118,6 @@ public class ShowOnMap extends FragmentActivity implements OnMapReadyCallback, G
 
 
     }
+
+
 }

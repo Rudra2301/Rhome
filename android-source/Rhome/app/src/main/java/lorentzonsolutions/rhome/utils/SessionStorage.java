@@ -2,6 +2,7 @@ package lorentzonsolutions.rhome.utils;
 
 import android.location.Address;
 import android.location.Location;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +19,8 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 
 public enum SessionStorage {
     INSTANCE;
+
+    public static String TAG = SessionStorage.INSTANCE.getClass().toString();
 
     // START AND END LOCATIONS
     private Location selectedStartLocation;
@@ -41,9 +44,11 @@ public enum SessionStorage {
     private List<GooglePlace> selectedPlaces = new ArrayList<>();
 
     public void addSelectedPlace(GooglePlace place) {
+        Log.d(TAG, "Place added to list of selected");
         selectedPlaces.add(place);
     }
     public void removeSelectedPlace(GooglePlace place) {
+        Log.d(TAG, "Place removed from list of selected.");
         selectedPlaces.remove(place);
     }
     public List<GooglePlace> getSelectedPlacesList() {
@@ -51,10 +56,14 @@ public enum SessionStorage {
     }
 
     public void removeFromNeverShowList(GooglePlace place) {
-        if(placesNotToShow.contains(place)) placesNotToShow.remove(place);
+        if(placesNotToShow.contains(place)) {
+            placesNotToShow.remove(place);
+            Log.d(TAG, "Place removed from no-show list. Place: " + place);
+        }
     }
     public void addToNeverShowList(GooglePlace place) {
         placesNotToShow.add(place);
+        Log.d(TAG, "Place added to no-show list. Place: " + place);
     }
 
     public List<GooglePlace> getPlacesNotToShow() {
@@ -64,7 +73,9 @@ public enum SessionStorage {
     public List<GooglePlace> getFastestRoute() {
         return new ArrayList<>(fastestRoute);
     }
+
     public void setFastestRoute(List<GooglePlace> fastestRoute) {
+        Log.d(TAG, "Fastest route updated.");
         this.fastestRoute = fastestRoute;
     }
 
@@ -75,6 +86,7 @@ public enum SessionStorage {
      * @return a list of lists for place-to-place route.
      */
     public List<List<GooglePlace>> splitToMinorRoutes(List<GooglePlace> route) {
+        Log.d(TAG, "Splitting route list to place-to-place routes.");
         List<List<GooglePlace>> splitted = new ArrayList<>();
 
         GooglePlace placeBefore = null;
@@ -88,10 +100,10 @@ public enum SessionStorage {
             placeBefore = placeNow;
         }
 
-        System.out.println("Minor routes list calculated");
+        Log.d(TAG, "Minor routes list calculated");
         int calc = 1;
         for(List<GooglePlace> minor : splitted) {
-            System.out.println(calc + " st route: \n" + minor);
+            Log.d(TAG, calc + " st route: \n" + minor);
             calc++;
         }
         return splitted;

@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,6 +26,7 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.R;
 import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
+import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.database.InternalStorage;
@@ -54,7 +59,16 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity impleme
 
         assignViews();
         initEvents();
-        initList();
+        updateList();
+    }
+
+    @Override
+    protected void onResume() {
+        assignViews();
+        initEvents();
+        favouritesShowing = false;
+        updateList();
+        super.onResume();
     }
 
     @Override
@@ -89,46 +103,87 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity impleme
             }
         });
 
-        // Favourites logic
-
         toggleFavourites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(favouritesShowing) {
-                    favouritesShowing = false;
-                    toggleFavourites.setText(R.string.toggle_favourites_button_showing_all);
-                    listShowsAll();
-                }
-                else {
-                    listShowsFavourites();
-                    toggleFavourites.setText(R.string.toggle_favourites_button_showing_favourites);
-                    favouritesShowing = true;
-                }
+                updateList();
             }
         });
 
-    }
-
-    private void initList() {
-        for(GoogleLocationTypes type: GoogleLocationTypes.values()) googleLocationTypes.add(type);
-
-        // Creating adapter
         listAdapter = new LocationTypeListAdapter(this, googleLocationTypes);
-
-        // Setting adapter to list view
-
         locationTypeList.setAdapter(listAdapter);
+
+        registerForContextMenu(locationTypeList);
+
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        // Check if the view firing the event is the list of places
+        if(view.getId() == R.id.list_of_location_types) {
+            menu.setHeaderTitle(R.string.select_places_context_menu_header);
+            String[] menuItems = getResources().getStringArray(R.array.list_location_type_context_menu);
+
+            // Add the menu items
+            for(int i = 0; i < menuItems.length; i++) {
+                menu.add(Menu.NONE, i, i, menuItems[i]);
+            }
+        }
+    }
+
+    // Event for catching context menu item selected
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        int select = item.getItemId();
+
+        GoogleLocationTypes type = (GoogleLocationTypes) locationTypeList.getAdapter().getItem(info.position);
+
+        // Option 1 - Remove. 2 - Back.
+        if(select == 0) {
+            // Navigate from current
+            new ResetMostVisitedCount().execute(type);
+        }
+        else if(select == 1) {}
+
+        return true;
+    }
+
+    /**
+     * Updates the list to show all types.
+     */
     private void listShowsAll() {
         googleLocationTypes.clear();
         Collections.addAll(googleLocationTypes, GoogleLocationTypes.values());
         listAdapter.notifyDataSetChanged();
+        favouritesShowing = false;
+        toggleFavourites.setText(R.string.toggle_favourites_button_show_favourites);
+        makeSnackBar("Showing all types!");
     }
 
+    /**
+     * Updates the list to show favourites from database.
+     */
     private void listShowsFavourites() {
         googleLocationTypes.clear();
+        favouritesShowing = true;
+        Log.d(TAG, "FAVOURITES SHOWING!");
+        toggleFavourites.setText(R.string.toggle_favourites_button_show_all);
         new FetchMostVisited().execute();
+        makeSnackBar("Showing your most picked types!");
+    }
+
+    /**
+     * Updating the list. Either showing all types or favourites depending on what the user has choosen.
+     */
+    private void updateList() {
+
+        if(favouritesShowing) {
+            listShowsAll();
+        }
+        else {
+            listShowsFavourites();
+        }
     }
 
     /**
@@ -187,6 +242,44 @@ public class ListLocationTypeSelectionActivity extends AppCompatActivity impleme
             listAdapter.notifyDataSetChanged();
 
         }
+    }
+
+    /**
+     * Async inner class for resetting count for a type in database.
+     */
+    private class ResetMostVisitedCount extends AsyncTask<GoogleLocationTypes, Void, GoogleLocationTypes> {
+        InternalStorage storage = new InternalStorage(context);
+
+        @Override
+        protected void onPreExecute() {
+            Log.d(TAG, "Started Async task for resetting count in DB.");
+        }
+
+        @Override
+        protected GoogleLocationTypes doInBackground(GoogleLocationTypes... params) {
+            GoogleLocationTypes type = params[0];
+            storage.resetType(type);
+            return type;
+        }
+
+        @Override
+        protected void onPostExecute(GoogleLocationTypes type) {
+            GoogleLocationTypes resetType = type;
+            Log.d(TAG, "Count reset for " + resetType);
+            favouritesShowing = !favouritesShowing;
+            updateList();
+        }
+    }
+
+    /**
+     * Shows a snack bar to the user with given message.
+     *
+     * @param message
+     */
+    private void makeSnackBar(String message) {
+        Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
+                message, Snackbar.LENGTH_LONG);
+        mySnackbar.show();
     }
 
 

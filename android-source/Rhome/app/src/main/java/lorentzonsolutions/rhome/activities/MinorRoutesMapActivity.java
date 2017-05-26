@@ -44,7 +44,6 @@ public class MinorRoutesMapActivity extends AppCompatActivity implements OnMapRe
     SupportMapFragment mapFragment;
     FloatingActionButton backButton;
 
-    // Google API
     private GoogleMap mMap;
     private GoogleApiClient mGoogleApiClient;
 
