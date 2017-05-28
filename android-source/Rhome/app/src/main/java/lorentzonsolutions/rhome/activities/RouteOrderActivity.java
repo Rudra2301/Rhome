@@ -22,6 +22,7 @@ import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.interfaces.RouteCalculator;
+import lorentzonsolutions.rhome.routeCalculators.ChanceByBruteForce;
 import lorentzonsolutions.rhome.routeCalculators.DistanceCalculatorUtil;
 import lorentzonsolutions.rhome.routeCalculators.NearestNeighbourRouteCalculator;
 import lorentzonsolutions.rhome.utils.SessionStorage;
@@ -130,23 +131,41 @@ public class RouteOrderActivity extends AppCompatActivity implements RhomeActivi
      * Method starts the route calculator to calculate the best possible route.
      */
     private void initRouteCalculation() {
-        // TODO. Complement with ChanceByBruteForce calculator.
-        RouteCalculator calculator = new NearestNeighbourRouteCalculator();
+        // TODO. Make progressbar for when calculating. Do in background task.
+
+        RouteCalculator nearestNeighbourRouteCalculator = new NearestNeighbourRouteCalculator();
+        RouteCalculator bruteForceRouteCalculator = new ChanceByBruteForce();
+
         Location startLocation = SessionStorage.INSTANCE.getSelectedStartLocation();
         Location endLocation = SessionStorage.INSTANCE.getSelectedEndLocation();
 
-        List<GooglePlace> fastestRoute = calculator.calculateFastestRoute(SessionStorage.INSTANCE.getSelectedPlacesList(), startLocation, endLocation);
+        List<GooglePlace> fastestRouteNearestNeighbour =
+                nearestNeighbourRouteCalculator.calculateFastestRoute(SessionStorage.INSTANCE.getSelectedPlacesList(), startLocation, endLocation);
 
-        SessionStorage.INSTANCE.setFastestRoute(fastestRoute);
+        List<GooglePlace> fastestRouteBruteForceCalculator =
+                bruteForceRouteCalculator.calculateFastestRoute(SessionStorage.INSTANCE.getSelectedPlacesList(), startLocation, endLocation);
 
-        Log.d(TAG, "Calculated fastest route: ");
+        double bruteForceDistance = DistanceCalculatorUtil.calculateTotalRouteDistance(fastestRouteBruteForceCalculator);
+        double nearestNeighbourDistance = DistanceCalculatorUtil.calculateTotalRouteDistance(fastestRouteNearestNeighbour);
 
-        for(GooglePlace place : fastestRoute) {
-            Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
+        if(bruteForceDistance < nearestNeighbourDistance) {
+            Log.d(TAG, "BEST ROUTE: BruteForceCalculation calculated fastest distance with: " + bruteForceDistance + " km.");
+            Log.d(TAG, "NearestNeighbour calculated fastest distance with: " + nearestNeighbourDistance + " km.");
+            SessionStorage.INSTANCE.setFastestRoute(fastestRouteBruteForceCalculator);
+
+            for(GooglePlace place : fastestRouteBruteForceCalculator) {
+                Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
+            }
+
+        } else {
+            Log.d(TAG, "BEST ROUTE: NearestNeighbour calculated fastest distance with: " + nearestNeighbourDistance + " km.");
+            Log.d(TAG, "BruteForce calculated fastest distance with: " + bruteForceDistance + " km.");
+            SessionStorage.INSTANCE.setFastestRoute(fastestRouteNearestNeighbour);
+
+            for(GooglePlace place : fastestRouteNearestNeighbour) {
+                Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
+            }
         }
-
-        double totalDistance = DistanceCalculatorUtil.calculateTotalRouteDistance(fastestRoute);
-        Log.d(TAG, "Total distance: " + totalDistance + " km.");
     }
 
     /**
