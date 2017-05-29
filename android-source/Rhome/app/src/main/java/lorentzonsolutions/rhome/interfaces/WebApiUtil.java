@@ -11,7 +11,7 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
  * Interface for interaction with a locations API.
  *
  * @author Johan Lorentzon
- * 
+ *
  */
 
 public interface WebApiUtil {
