@@ -284,15 +284,12 @@ public class ListNearbyPlacesActivity extends AppCompatActivity implements Rhome
                 placeIsOpen.setTextColor(Color.RED);
             }
 
-            // TODO. Fix so that this doesn't return 0 if there is over 100m near.
             int distanceInKm = place.distanceToStartLocation/1000;
             placeDistance.setText("Distance " + distanceInKm + " km");
 
             int timeInMinutes = place.minutesByCarToStartLocation /60;
             placeDuration.setText("Duration by car " + timeInMinutes + " min");
 
-
-            // TODO. Check the best method to check this.
             if(sessionStorage.getSelectedPlacesList().contains(place)) {
 
                 placeItem.setBackgroundColor(getResources().getColor(R.color.accent_material_light_1));

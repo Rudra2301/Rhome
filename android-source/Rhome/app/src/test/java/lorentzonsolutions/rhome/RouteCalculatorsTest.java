@@ -23,6 +23,7 @@ import lorentzonsolutions.rhome.routeCalculators.NearestNeighbourRouteCalculator
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doReturn;
 
 
 /**
@@ -36,6 +37,7 @@ import static org.junit.Assert.assertTrue;
 @PrepareForTest({Log.class})
 public class RouteCalculatorsTest {
 
+    List<GooglePlace> simpleRoute;
     List<GooglePlace> advancedRoute;
     List<GooglePlace> maxedRoute;
 
@@ -45,40 +47,69 @@ public class RouteCalculatorsTest {
     Location start;
     Location end;
 
+    Location simpleFirst;
+    Location simpleLast;
+
+    // Variables for simple list.
+    GooglePlace simpleTwo;
+    GooglePlace simpleThree;
+    GooglePlace simpleFour;
+
     @Before
     public void before() {
+        PowerMockito.mockStatic(Log.class);
+
         bruteForceUnderTest = new ChanceByBruteForce();
         nearestNeighbourUnderTest = new NearestNeighbourRouteCalculator();
 
+        simpleRoute = new ArrayList<>();
         advancedRoute = new ArrayList<>();
         maxedRoute = new ArrayList<>();
-
-        PowerMockito.mockStatic(Log.class);
 
         // Mocking locations
         start = Mockito.mock(Location.class);
         end = Mockito.mock(Location.class);
 
-        Mockito.doReturn(57.722853).when(start).getLatitude();
-        Mockito.doReturn(11.939049).when(start).getLongitude();
+        doReturn(57.722853).when(start).getLatitude();
+        doReturn(11.939049).when(start).getLongitude();
 
-        Mockito.doReturn(57.672583).when(end).getLatitude();
-        Mockito.doReturn(11.997757).when(end).getLongitude();
+        doReturn(57.672583).when(end).getLatitude();
+        doReturn(11.997757).when(end).getLongitude();
 
         GooglePlace place2 = new GooglePlace.BuildPlace("PLACE2", 57.704147, 12.012863).build();
-        GooglePlace place3 = new GooglePlace.BuildPlace("PLACE2", 57.738067, 12.057152).build();
-        GooglePlace place4 = new GooglePlace.BuildPlace("PLACE2", 57.681761, 11.953125).build();
-        GooglePlace place5 = new GooglePlace.BuildPlace("PLACE2", 57.668543, 12.057152).build();
-        GooglePlace place6 = new GooglePlace.BuildPlace("PLACE2", 57.712951, 11.975441).build();
-        GooglePlace place7 = new GooglePlace.BuildPlace("PLACE2", 57.731102, 12.01767).build();
+        GooglePlace place3 = new GooglePlace.BuildPlace("PLACE3", 57.738067, 12.057152).build();
+        GooglePlace place4 = new GooglePlace.BuildPlace("PLACE4", 57.681761, 11.953125).build();
+        GooglePlace place5 = new GooglePlace.BuildPlace("PLACE5", 57.668543, 12.057152).build();
+        GooglePlace place6 = new GooglePlace.BuildPlace("PLACE6", 57.712951, 11.975441).build();
+        GooglePlace place7 = new GooglePlace.BuildPlace("PLACE7", 57.731102, 12.01767).build();
 
         GooglePlace extra1 = new GooglePlace.BuildPlace("EXTRA1", 57.722853, 11.939049).build();
         GooglePlace extra2 = new GooglePlace.BuildPlace("EXTRA1", 57.672583, 11.997757).build();
 
-        advancedRoute.add(place2); advancedRoute.add(place3); advancedRoute.add(place4);
-        advancedRoute.add(place5); advancedRoute.add(place6); advancedRoute.add(place7);
+        advancedRoute.add(place2); advancedRoute.add(place4); advancedRoute.add(place3);
+        advancedRoute.add(place7); advancedRoute.add(place6); advancedRoute.add(place5);
 
         maxedRoute.addAll(advancedRoute); maxedRoute.add(extra1); maxedRoute.add(extra2);
+
+        // ------------ SIMPLE ROUTE ------------------- //
+        simpleFirst = Mockito.mock(Location.class);
+        simpleLast = Mockito.mock(Location.class);
+
+        doReturn(57.685249).when(simpleFirst).getLatitude();
+        doReturn(11.926346).when(simpleFirst).getLongitude();
+
+        doReturn(57.730919).when(simpleLast).getLatitude();
+        doReturn(12.113113).when(simpleLast).getLongitude();
+
+        simpleTwo = new GooglePlace.BuildPlace("simpleTwo", 57.69314, 11.968231).build();
+        simpleThree = new GooglePlace.BuildPlace("simpleThree", 57.701763, 12.010803).build();
+        simpleFour = new GooglePlace.BuildPlace("simpleFour", 57.714235, 12.055092).build();
+
+        simpleRoute.add(simpleThree); simpleRoute.add(simpleFour); simpleRoute.add(simpleTwo);
+
+        simpleFour.distanceToEndLocation = 10; simpleFour.distanceToStartLocation = 20;
+        simpleThree.distanceToEndLocation = 15; simpleThree.distanceToStartLocation = 15;
+        simpleTwo.distanceToEndLocation = 20; simpleThree.distanceToStartLocation = 10;
 
     }
 
@@ -91,14 +122,12 @@ public class RouteCalculatorsTest {
     @Test
     public void bruteForde_shouldReturnAValidRoute() {
         List<GooglePlace> fastest = bruteForceUnderTest.calculateFastestRoute(advancedRoute, start, end);
-
         assertNotNull(fastest);
     }
 
     @Test
     public void bruteForce_shouldReturnAValidRouteForMaximumPlaces() {
         List<GooglePlace> fastest = bruteForceUnderTest.calculateFastestRoute(maxedRoute, start, end);
-
         assertNotNull(fastest);
     }
 
@@ -122,6 +151,26 @@ public class RouteCalculatorsTest {
     }
 
     @Test
+    public void nearestNeighbourShouldFindCorrectRoute() {
+        List<GooglePlace> fastest = nearestNeighbourUnderTest.calculateFastestRoute(simpleRoute, simpleFirst, simpleLast);
+        // Assert start place is first in list
+        assertTrue(simpleFirst.getLatitude() == fastest.get(0).latitude);
+        assertTrue(simpleFirst.getLongitude() == fastest.get(0).longitude);
+
+        // Assert end place is last in list
+        assertTrue(simpleLast.getLatitude() == fastest.get(fastest.size() - 1).latitude);
+        assertTrue(simpleLast.getLongitude() == fastest.get(fastest.size() - 1).longitude);
+
+
+        // Assert the correct place order
+        assertTrue(simpleTwo.equals(fastest.get(1)));
+        assertTrue(simpleThree.equals(fastest.get(2)));
+        assertTrue(simpleFour.equals(fastest.get(3)));
+
+        for(GooglePlace place : fastest) System.out.println(place.name);
+    }
+
+    @Test
     public void dummyCalculatorsComparisonTest() {
         List<GooglePlace> fastestNearestAdvancedRoute = nearestNeighbourUnderTest.calculateFastestRoute(advancedRoute, start, end);
         List<GooglePlace> fastestBruteForceAdvancedRoute = bruteForceUnderTest.calculateFastestRoute(advancedRoute, start, end);
@@ -142,4 +191,5 @@ public class RouteCalculatorsTest {
         assertTrue(true);
 
     }
+
 }

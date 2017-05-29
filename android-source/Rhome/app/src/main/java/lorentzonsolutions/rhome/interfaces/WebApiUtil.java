@@ -8,7 +8,10 @@ import java.util.List;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 
 /**
- * Created by johanlorentzon on 2017-05-09.
+ * Interface for interaction with a locations API.
+ *
+ * @author Johan Lorentzon
+ * 
  */
 
 public interface WebApiUtil {

@@ -20,6 +20,8 @@ import lorentzonsolutions.rhome.utils.UrlDataReceiver;
  *
  */
 
+// Class not covered in test suite. Serves only as a middlehand between urlDataReviever and JSONDataParser.
+
 public class GoogleWebApiUtil implements WebApiUtil {
 
     private static final String WEB_API_KEY = Resources.getInstance().getAPI_KEY_WEB_API();
@@ -43,7 +45,7 @@ public class GoogleWebApiUtil implements WebApiUtil {
     }
 
     /**
-     * Uses googles directions API to retrieve information about directions data between two LatLng points.
+     * Uses Googles directions API to retrieve information about directions data between two LatLng points.
      * @param start
      * @param end
      * @return
@@ -107,7 +109,7 @@ public class GoogleWebApiUtil implements WebApiUtil {
     }
 
     // GOOGLE DISTANCE MATRIX API
-    public static String buildDistanceMatrixUrl(double fromLatitude, double fromLongitude, double toLatidtude, double toLongitude, GoogleDistanceModes mode) {
+    static String buildDistanceMatrixUrl(double fromLatitude, double fromLongitude, double toLatidtude, double toLongitude, GoogleDistanceModes mode) {
 
         return "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" +
                 fromLatitude + "," +

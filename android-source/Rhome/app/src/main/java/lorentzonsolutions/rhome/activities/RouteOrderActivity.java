@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,12 +13,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import lorentzonsolutions.rhome.R;
-import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.googleWebApi.GoogleLocationTypes;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.RhomeActivity;
@@ -40,6 +43,8 @@ public class RouteOrderActivity extends AppCompatActivity implements RhomeActivi
     private Button minorRouteListButton;
     private FloatingActionButton buttonBack;
 
+    private List<String> placesList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +55,7 @@ public class RouteOrderActivity extends AppCompatActivity implements RhomeActivi
 
     @Override
     protected void onResume() {
-        activateActivity();
+        // TODO. Check if list has updated. If so, init new calculation.
         super.onResume();
     }
 
@@ -58,20 +63,16 @@ public class RouteOrderActivity extends AppCompatActivity implements RhomeActivi
      * Method for handling the start of activity. This should be called both from onCreate and onResume.
      */
     private void activateActivity() {
-        initRouteCalculation();
-        incrementSelectedPlaces();
-
         assignViews();
         initEvents();
+        initRouteCalculation();
+        incrementSelectedPlaces();
     }
 
     @Override
     public void initEvents() {
-        ArrayList<String> places = new ArrayList<>();
-        for(GooglePlace googlePlace : SessionStorage.INSTANCE.getFastestRoute()) {
-            places.add(googlePlace.name);
-        }
-        routeListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, places);
+
+        routeListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, placesList);
         routeView.setAdapter(routeListAdapter);
 
         routeMapButton.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +97,9 @@ public class RouteOrderActivity extends AppCompatActivity implements RhomeActivi
                 finish();
             }
         });
+
+        routeMapButton.setVisibility(View.INVISIBLE);
+        minorRouteListButton.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -131,41 +135,7 @@ public class RouteOrderActivity extends AppCompatActivity implements RhomeActivi
      * Method starts the route calculator to calculate the best possible route.
      */
     private void initRouteCalculation() {
-        // TODO. Make progressbar for when calculating. Do in background task.
-
-        RouteCalculator nearestNeighbourRouteCalculator = new NearestNeighbourRouteCalculator();
-        RouteCalculator bruteForceRouteCalculator = new ChanceByBruteForce();
-
-        Location startLocation = SessionStorage.INSTANCE.getSelectedStartLocation();
-        Location endLocation = SessionStorage.INSTANCE.getSelectedEndLocation();
-
-        List<GooglePlace> fastestRouteNearestNeighbour =
-                nearestNeighbourRouteCalculator.calculateFastestRoute(SessionStorage.INSTANCE.getSelectedPlacesList(), startLocation, endLocation);
-
-        List<GooglePlace> fastestRouteBruteForceCalculator =
-                bruteForceRouteCalculator.calculateFastestRoute(SessionStorage.INSTANCE.getSelectedPlacesList(), startLocation, endLocation);
-
-        double bruteForceDistance = DistanceCalculatorUtil.calculateTotalRouteDistance(fastestRouteBruteForceCalculator);
-        double nearestNeighbourDistance = DistanceCalculatorUtil.calculateTotalRouteDistance(fastestRouteNearestNeighbour);
-
-        if(bruteForceDistance < nearestNeighbourDistance) {
-            Log.d(TAG, "BEST ROUTE: BruteForceCalculation calculated fastest distance with: " + bruteForceDistance + " km.");
-            Log.d(TAG, "NearestNeighbour calculated fastest distance with: " + nearestNeighbourDistance + " km.");
-            SessionStorage.INSTANCE.setFastestRoute(fastestRouteBruteForceCalculator);
-
-            for(GooglePlace place : fastestRouteBruteForceCalculator) {
-                Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
-            }
-
-        } else {
-            Log.d(TAG, "BEST ROUTE: NearestNeighbour calculated fastest distance with: " + nearestNeighbourDistance + " km.");
-            Log.d(TAG, "BruteForce calculated fastest distance with: " + bruteForceDistance + " km.");
-            SessionStorage.INSTANCE.setFastestRoute(fastestRouteNearestNeighbour);
-
-            for(GooglePlace place : fastestRouteNearestNeighbour) {
-                Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
-            }
-        }
+        new CalculateRouteOrder().execute();
     }
 
     /**
@@ -207,5 +177,89 @@ public class RouteOrderActivity extends AppCompatActivity implements RhomeActivi
             }
 
         }
+    }
+
+    private class CalculateRouteOrder extends AsyncTask<Void, Void, Void> {
+
+        TextView progressText = (TextView) findViewById(R.id.activity_route_order_calculating_route_text);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.activity_route_order_progress);
+
+        @Override
+        protected void onPreExecute() {
+            placesList.clear();
+            progressText.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
+            minorRouteListButton.setVisibility(View.INVISIBLE);
+            routeMapButton.setVisibility(View.INVISIBLE);
+            makeSnackBar("Calculating route!");
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            RouteCalculator nearestNeighbourRouteCalculator = new NearestNeighbourRouteCalculator();
+            RouteCalculator bruteForceRouteCalculator = new ChanceByBruteForce();
+
+            Location startLocation = SessionStorage.INSTANCE.getSelectedStartLocation();
+            Location endLocation = SessionStorage.INSTANCE.getSelectedEndLocation();
+
+            List<GooglePlace> fastestRouteNearestNeighbour =
+                    nearestNeighbourRouteCalculator.calculateFastestRoute(SessionStorage.INSTANCE.getSelectedPlacesList(), startLocation, endLocation);
+
+            List<GooglePlace> fastestRouteBruteForceCalculator =
+                    bruteForceRouteCalculator.calculateFastestRoute(SessionStorage.INSTANCE.getSelectedPlacesList(), startLocation, endLocation);
+
+            double bruteForceDistance = DistanceCalculatorUtil.calculateTotalRouteDistance(fastestRouteBruteForceCalculator);
+            double nearestNeighbourDistance = DistanceCalculatorUtil.calculateTotalRouteDistance(fastestRouteNearestNeighbour);
+
+            if(bruteForceDistance < nearestNeighbourDistance) {
+                Log.d(TAG, "BEST ROUTE: BruteForceCalculation calculated fastest distance with: " + bruteForceDistance + " km.");
+                Log.d(TAG, "NearestNeighbour calculated fastest distance with: " + nearestNeighbourDistance + " km.");
+                SessionStorage.INSTANCE.setFastestRoute(fastestRouteBruteForceCalculator);
+
+                for(GooglePlace place : fastestRouteBruteForceCalculator) {
+                    Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
+                }
+
+            } else {
+                Log.d(TAG, "BEST ROUTE: NearestNeighbour calculated fastest distance with: " + nearestNeighbourDistance + " km.");
+                Log.d(TAG, "BruteForce calculated fastest distance with: " + bruteForceDistance + " km.");
+                SessionStorage.INSTANCE.setFastestRoute(fastestRouteNearestNeighbour);
+
+                for(GooglePlace place : fastestRouteNearestNeighbour) {
+                    Log.d(TAG, place.name + " | Distance to start: " + place.distanceToStartLocation);
+                }
+            }
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.i(TAG, "Calculation finished.");
+            makeSnackBar("Calculation finished!");
+
+            for(GooglePlace googlePlace : SessionStorage.INSTANCE.getFastestRoute()) {
+                placesList.add(googlePlace.name);
+            }
+
+            progressText.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+            minorRouteListButton.setVisibility(View.VISIBLE);
+            routeMapButton.setVisibility(View.VISIBLE);
+
+            routeListAdapter.notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * Shows a snack bar to the user with given message.
+     *
+     * @param message
+     */
+    private void makeSnackBar(String message) {
+        Snackbar mySnackbar = Snackbar.make(getWindow().getDecorView(),
+                message, Snackbar.LENGTH_LONG);
+        mySnackbar.show();
     }
 }

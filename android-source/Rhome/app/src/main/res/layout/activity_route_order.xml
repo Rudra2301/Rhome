@@ -30,6 +30,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="70dp"
+        android:visibility="invisible"
         android:layout_alignParentBottom="true"/>
 
     <Button
@@ -40,8 +41,30 @@
         android:layout_marginTop="10dp"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
+        android:visibility="invisible"
         android:layout_above="@id/button_show_minor_route_list"
         style="@style/Widget.AppCompat.Button.Colored" />
+
+    <lorentzonsolutions.rhome.customViews.EdoszTextView
+        android:id="@+id/activity_route_order_calculating_route_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/calculating_route_text"
+        android:textSize="20dp"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        android:visibility="invisible"/>
+
+    <ProgressBar
+        android:id="@+id/activity_route_order_progress"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/activity_route_order_calculating_route_text"
+        android:visibility="invisible"/>
+
 
     <ListView
         android:id="@+id/fastest_route"

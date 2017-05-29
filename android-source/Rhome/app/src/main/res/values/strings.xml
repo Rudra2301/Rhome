@@ -101,6 +101,7 @@
     <!-- Route activity-->
     <string name="route_activity_header">Your route home!</string>
     <string name="button_show_route">Show route on map</string>
+    <string name="calculating_route_text">Calculating best route, hold tight!</string>
 
     <!-- Route map activity -->
     <string name="route_map_activity_title">Your route!</string>
@@ -127,6 +128,7 @@
     <!-- Minor routes activity -->
     <string name="list_minor_routes_header">Your minor routes</string>
     <string name="button_navigate">Show list for navigation</string>
+
 
     <string-array name="minor_route_context">
         <item>Navigate from my current position</item>
