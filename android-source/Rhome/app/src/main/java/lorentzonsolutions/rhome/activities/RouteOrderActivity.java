@@ -127,8 +127,6 @@ public class RouteOrderActivity extends AppCompatActivity implements RhomeActivi
         }
 
         new IncrementAllSelectedPlaces().execute(allSelectedTypes);
-
-
     }
 
     /**
@@ -157,7 +155,6 @@ public class RouteOrderActivity extends AppCompatActivity implements RhomeActivi
                 storage.incrementType(type);
                 publishProgress(type);
             }
-
             return null;
         }
 

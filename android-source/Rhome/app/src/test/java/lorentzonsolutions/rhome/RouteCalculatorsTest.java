@@ -83,13 +83,15 @@ public class RouteCalculatorsTest {
         GooglePlace place6 = new GooglePlace.BuildPlace("PLACE6", 57.712951, 11.975441).build();
         GooglePlace place7 = new GooglePlace.BuildPlace("PLACE7", 57.731102, 12.01767).build();
 
-        GooglePlace extra1 = new GooglePlace.BuildPlace("EXTRA1", 57.722853, 11.939049).build();
-        GooglePlace extra2 = new GooglePlace.BuildPlace("EXTRA1", 57.672583, 11.997757).build();
+        GooglePlace extra1 = new GooglePlace.BuildPlace("EXTRA1", 57.678136, 11.906433).build();
+        GooglePlace extra2 = new GooglePlace.BuildPlace("EXTRA2", 57.710567, 11.903343).build();
+        GooglePlace extra3 = new GooglePlace.BuildPlace("EXTRA3", 57.689286, 11.986771).build();
+
 
         advancedRoute.add(place2); advancedRoute.add(place4); advancedRoute.add(place3);
         advancedRoute.add(place7); advancedRoute.add(place6); advancedRoute.add(place5);
 
-        maxedRoute.addAll(advancedRoute); maxedRoute.add(extra1); maxedRoute.add(extra2);
+        maxedRoute.addAll(advancedRoute); maxedRoute.add(extra1); maxedRoute.add(extra2); maxedRoute.add(extra3);
 
         // ------------ SIMPLE ROUTE ------------------- //
         simpleFirst = Mockito.mock(Location.class);
@@ -132,16 +134,28 @@ public class RouteCalculatorsTest {
     }
 
     @Test
-    public void bruteForce_shouldBeAbleToFindMoreThanHalfOfMaximumUniquesWithMaxTriesForEachNewUniqueOf500() {
+    public void bruteForce_shouldBeAbleToFindMoreThanHalfOfMaximumUniquesWithMaxTriesForEachNewUniqueOf500WithEightPlaces() {
         GooglePlace startPlace = new GooglePlace.BuildPlace("Start location", start.getLatitude(), start.getLongitude()).build();
         GooglePlace endPlace = new GooglePlace.BuildPlace("End location", end.getLatitude(), end.getLongitude()).build();
 
         int maximumUniques = 5040; // 8!
         int maxFindNewUniqueTries = 500;
-        List<List<GooglePlace>> routes = bruteForceUnderTest.findUniques(advancedRoute, startPlace, endPlace, maximumUniques, maxFindNewUniqueTries);
+        List<List<GooglePlace>> routes = bruteForceUnderTest.findUniques(maxedRoute, startPlace, endPlace, maximumUniques, maxFindNewUniqueTries);
         System.out.println(routes.size());
         assertTrue(true);
 
+    }
+
+    @Test
+    public void bruteForce_shouldBeAbleToFindMoreThanHalfOfMaximumUniquesWithMaxTriesForEachNewUniqueOf500WithSixPlaces() {
+        GooglePlace startPlace = new GooglePlace.BuildPlace("Start location", start.getLatitude(), start.getLongitude()).build();
+        GooglePlace endPlace = new GooglePlace.BuildPlace("End location", end.getLatitude(), end.getLongitude()).build();
+
+        int maximumUniques = 5040; // 7!
+        int maxFindNewUniqueTries = 500;
+        List<List<GooglePlace>> routes = bruteForceUnderTest.findUniques(advancedRoute, startPlace, endPlace, maximumUniques, maxFindNewUniqueTries);
+        System.out.println(routes.size());
+        assertTrue(routes.size() > 720/2);
     }
 
     @Test
@@ -169,6 +183,20 @@ public class RouteCalculatorsTest {
 
         for(GooglePlace place : fastest) System.out.println(place.name);
     }
+
+    // Dummy test for comparison between algorithms. Most of the time the
+    @Test
+    public void nearestNeighbourComparedToBruteForceWhenPlacesExceedsSeven() {
+        GooglePlace startPlace = new GooglePlace.BuildPlace("Start location", start.getLatitude(), start.getLongitude()).build();
+        GooglePlace endPlace = new GooglePlace.BuildPlace("End location", end.getLatitude(), end.getLongitude()).build();
+
+        int maximumUniques = 5040; // 7!
+        int maxFindNewUniqueTries = 500;
+        List<List<GooglePlace>> routes = bruteForceUnderTest.findUniques(advancedRoute, startPlace, endPlace, maximumUniques, maxFindNewUniqueTries);
+        System.out.println(routes.size());
+        assertTrue(routes.size() > 720/2);
+    }
+
 
     @Test
     public void dummyCalculatorsComparisonTest() {

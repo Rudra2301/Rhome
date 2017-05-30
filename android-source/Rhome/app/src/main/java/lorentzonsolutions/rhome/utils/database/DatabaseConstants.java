@@ -22,7 +22,7 @@ public class DatabaseConstants {
             TABLE_NAME_LOCATION_TYPES + "(" +
             TYPE_COLUMN_NAME + " TEXT PRIMARY KEY NOT NULL," +
             COUNT_COLUMN_NAME + " INT NOT NULL " +
-            ");";
+            ")";
 
     public static final String LOCATION_TYPE_DELETE = "DROP TABLE IF EXISTS " + TABLE_NAME_LOCATION_TYPES;
 

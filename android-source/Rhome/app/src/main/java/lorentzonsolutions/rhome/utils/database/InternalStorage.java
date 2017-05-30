@@ -36,7 +36,6 @@ public class InternalStorage extends SQLiteOpenHelper implements Storage {
         // Add all location types to db
         for(GoogleLocationTypes type: GoogleLocationTypes.values())
             db.execSQL(query_insertNewType(type));
-
     }
 
     @Override
@@ -76,7 +75,6 @@ public class InternalStorage extends SQLiteOpenHelper implements Storage {
             GoogleLocationTypes type = GoogleLocationTypes.getGoogleTypeFromString(typeString);
             if(type != null) orderedTypesList.add(type);
         }
-
         return orderedTypesList;
     }
 

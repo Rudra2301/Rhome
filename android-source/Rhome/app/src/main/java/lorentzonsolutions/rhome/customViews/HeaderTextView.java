@@ -1,4 +1,7 @@
+
+/*
 package lorentzonsolutions.rhome.customViews;
+
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -7,9 +10,7 @@ import android.widget.TextView;
 
 import lorentzonsolutions.rhome.utils.FontCreator;
 
-/**
- * A custom view using a custom font.
- */
+
 
 public class HeaderTextView extends TextView {
 
@@ -31,3 +32,4 @@ public class HeaderTextView extends TextView {
     }
 
 }
+*/

@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import lorentzonsolutions.rhome.R;
-import lorentzonsolutions.rhome.exceptions.RouteException;
 import lorentzonsolutions.rhome.googleWebApi.GoogleWebApiUtil;
 import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.interfaces.WebApiUtil;

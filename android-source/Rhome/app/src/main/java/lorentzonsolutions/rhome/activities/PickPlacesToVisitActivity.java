@@ -234,6 +234,8 @@ public class PickPlacesToVisitActivity extends AppCompatActivity implements Rhom
         if(select == 0) {
             // Navigate from current
             storage.removeSelectedPlace(place);
+            selectedListAdapter.clear();
+            selectedListAdapter.addAll(storage.getSelectedPlacesList());
             selectedListAdapter.notifyDataSetChanged();
             updateDoneButtonVisibility();
         }

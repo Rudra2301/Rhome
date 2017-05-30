@@ -39,12 +39,16 @@ public class ChanceByBruteForce implements RouteCalculator {
         List<List<GooglePlace>> uniqueRoutes = findUniques(places, startPlace, endPlace, maxRoutes, maxTriesForUniqueRoute);
 
         Log.d(TAG, "Number of unique routes found: " + uniqueRoutes.size());
-        // System.out for test output
-        System.out.println(TAG + ": Number of unique routes found: " + uniqueRoutes.size());
 
         return findFastestRoute(uniqueRoutes);
     }
 
+    /**
+     * Sorts through a list of lists of routes to find the shortest.
+     *
+     * @param uniqueRoutes
+     * @return a list of {@link GooglePlace} representing the fastest route found.
+     */
     private List<GooglePlace> findFastestRoute(List<List<GooglePlace>> uniqueRoutes) {
         List<GooglePlace> fastest = new ArrayList<>();
         double shortestDistance = Double.MAX_VALUE;
@@ -63,6 +67,15 @@ public class ChanceByBruteForce implements RouteCalculator {
         return fastest;
     }
 
+    /**
+     * Takes a list of places and shuffles it to randomize the order in which the appear in the list. Adds the startplace to the beginning and end
+     * to the end of the list. Then returns a new list.
+     *
+     * @param places
+     * @param startPlace
+     * @param endPlace
+     * @return a shuffled list of places with a start and end fixed at beginning and end of the list.
+     */
     private List<GooglePlace> calculateRandomRoute(List<GooglePlace> places, GooglePlace startPlace, GooglePlace endPlace) {
         List<GooglePlace> randomRoute = new ArrayList<>(places);
         Collections.shuffle(randomRoute);
@@ -71,6 +84,17 @@ public class ChanceByBruteForce implements RouteCalculator {
         return returnList;
     }
 
+    /**
+     * Tries for the given value of maxTriesForUniqueRoute to find a new route that has not been discovered. Either it finds all unique possible routes (maxRoutes)
+     * or hits the limit for number of tries. When either of the above occurs the method returns a list containing the found unique routes.
+     *
+     * @param places
+     * @param startPlace
+     * @param endPlace
+     * @param maxRoutes
+     * @param maxTriesForUniqueRoute
+     * @return a list of lists with unique routes.
+     */
     public List<List<GooglePlace>> findUniques(List<GooglePlace> places, GooglePlace startPlace, GooglePlace endPlace, int maxRoutes, int maxTriesForUniqueRoute) {
 
         List<List<GooglePlace>> uniqueRoutes = new ArrayList<>();
@@ -89,10 +113,15 @@ public class ChanceByBruteForce implements RouteCalculator {
             }
             if(triesToFindUnique >= maxTriesForUniqueRoute) break;
         }
-
         return uniqueRoutes;
     }
 
+    /**
+     * Returns the factorial of n.
+     *
+     * @param n
+     * @return the result of n!
+     */
     public int calculateFactorial(int n) {
         int result;
         if(n==1) return 1;
