@@ -1,4 +1,4 @@
-package lorentzonsolutions.rhome.utils;
+package lorentzonsolutions.rhome.googleWebApi;
 
 import android.location.Location;
 import android.util.Log;
@@ -13,11 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceDuration;
-import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceDurationCalculator;
-import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceModes;
-import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.WebApiResponseJsonParser;
+import lorentzonsolutions.rhome.utils.SessionStorage;
 
 /**
  * This class parses JSON data in string to a list of GooglePlace object.

@@ -10,10 +10,13 @@ import java.net.URL;
 
 /**
  * This class can fetch icons from a URL to display as an drawable.
+ *
+ * @author Johan Lorentzon
+ *
  */
 
 public class URLIconDownloader {
-    private static String TAG = "IMAGE_DOWNLOADER";
+    private static String TAG = URLIconDownloader.class.toString();
 
     public static Drawable loadImageFromUrl(String url) {
         try {
@@ -21,7 +24,6 @@ public class URLIconDownloader {
             return Drawable.createFromStream(is, null);
 
         }
-        // TODO. Return error and catch in code.
         catch (MalformedURLException e) {
             Log.e(TAG, "Bad URL: \n" + e.getMessage());
             e.printStackTrace();

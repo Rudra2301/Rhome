@@ -2,15 +2,11 @@ package lorentzonsolutions.rhome.googleWebApi;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import org.json.JSONException;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import lorentzonsolutions.rhome.interfaces.WebApiResponseJsonParser;
 import lorentzonsolutions.rhome.interfaces.WebApiUtil;
-import lorentzonsolutions.rhome.utils.GoogleJsonParser;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.UrlDataReceiver;
 

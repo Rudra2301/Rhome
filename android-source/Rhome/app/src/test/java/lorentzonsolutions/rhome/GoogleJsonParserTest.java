@@ -12,7 +12,7 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceDuration;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
-import lorentzonsolutions.rhome.utils.GoogleJsonParser;
+import lorentzonsolutions.rhome.googleWebApi.GoogleJsonParser;
 
 import static junit.framework.Assert.assertNotNull;
 

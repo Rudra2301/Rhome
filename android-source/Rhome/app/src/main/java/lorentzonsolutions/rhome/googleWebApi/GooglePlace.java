@@ -3,32 +3,19 @@ package lorentzonsolutions.rhome.googleWebApi;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import lorentzonsolutions.rhome.modelclasses.RhomePlace;
+
 /**
  * Class representing a place parsed from JSON data collected from the Google Web API.
  *
  * @author Johan Lorentzon
  */
 
-public class GooglePlace implements Comparable, Parcelable{
-    public String name;
-    public double latitude;
-    public double longitude;
-    public boolean isOpen;
-    public String iconAddress;
-    public String[] types;
-    public String address;
+public class GooglePlace extends RhomePlace implements Comparable, Parcelable {
+
+
     public String googlePlaceID;
     public double placeRating;
-    //Start location
-    public int distanceToStartLocation;
-    public int minutesByCarToStartLocation;
-    public int minutesByBicycleToStartLocation;
-    public int minutesByWalkToStartLocation;
-    // End location
-    public int distanceToEndLocation;
-    public int minutesByCarToEndLocation;
-    public int minutesByBicycleToEndLocation;
-    public int minutesByWalkToEndLocation;
 
     // For calculation
     private int orderId;
