@@ -17,6 +17,7 @@ import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceDuration;
 import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceDurationCalculator;
 import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceModes;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
+import lorentzonsolutions.rhome.interfaces.WebApiResponseJsonParser;
 
 /**
  * This class parses JSON data in string to a list of GooglePlace object.
@@ -24,8 +25,8 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
  * @author Johan Lorentzon
  */
 
-public class JSONDataParser {
-    private final String TAG = JSONDataParser.class.toString();
+public class GoogleJsonParser implements WebApiResponseJsonParser{
+    private final String TAG = GoogleJsonParser.class.toString();
 
     private GoogleDistanceDurationCalculator googleDistanceDurationCalculator = new GoogleDistanceDurationCalculator();
 
@@ -36,6 +37,7 @@ public class JSONDataParser {
      * @param nearbyRequestResponseData
      * @return
      */
+    @Override
     public List<GooglePlace> parseNearbySearchData(String nearbyRequestResponseData) {
 
         Log.i(TAG, "Attempting to parse nearby locations data.");
@@ -163,6 +165,7 @@ public class JSONDataParser {
         return result;
     }
 
+    @Override
     public GooglePlace parseReverseGeocodeDataToPlaceInformation(String reverseGeocodeData) {
 
         GooglePlace place = null;
@@ -226,6 +229,7 @@ public class JSONDataParser {
 
     }
 
+    @Override
     public GoogleDistanceDuration parseDistanceCalculationData(String distanceData) {
         int distance = -1;
         int duration = -1;
@@ -271,17 +275,16 @@ public class JSONDataParser {
         return new GoogleDistanceDuration(distance, duration);
     }
 
-    // TODO. Throw wrapped exception
-    public List<List<HashMap<String,String>>> parseDirectionsData(String directionsData) throws JSONException {
-
-        JSONObject jObject = new JSONObject(directionsData);
+    @Override
+    public List<List<HashMap<String,String>>> parseDirectionsData(String directionsData)  {
 
         List<List<HashMap<String, String>>> routes = new ArrayList<List<HashMap<String,String>>>() ;
-        JSONArray jRoutes = null;
-        JSONArray jLegs = null;
-        JSONArray jSteps = null;
+        JSONArray jRoutes;
+        JSONArray jLegs;
+        JSONArray jSteps;
 
         try {
+            JSONObject jObject = new JSONObject(directionsData);
 
             jRoutes = jObject.getJSONArray("routes");
 

@@ -1,4 +1,4 @@
-package lorentzonsolutions.rhome.routeCalculators;
+package lorentzonsolutions.rhome.utils;
 
 import java.util.ArrayList;
 import java.util.Iterator;

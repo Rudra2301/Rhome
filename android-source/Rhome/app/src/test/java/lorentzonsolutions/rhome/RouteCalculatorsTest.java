@@ -17,7 +17,7 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.routeCalculators.ChanceByBruteForce;
-import lorentzonsolutions.rhome.routeCalculators.DistanceCalculatorUtil;
+import lorentzonsolutions.rhome.utils.DistanceCalculatorUtil;
 import lorentzonsolutions.rhome.routeCalculators.NearestNeighbourRouteCalculator;
 
 import static org.junit.Assert.assertEquals;

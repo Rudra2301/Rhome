@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import lorentzonsolutions.rhome.R;
@@ -26,7 +25,7 @@ import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.RhomeActivity;
 import lorentzonsolutions.rhome.interfaces.RouteCalculator;
 import lorentzonsolutions.rhome.routeCalculators.ChanceByBruteForce;
-import lorentzonsolutions.rhome.routeCalculators.DistanceCalculatorUtil;
+import lorentzonsolutions.rhome.utils.DistanceCalculatorUtil;
 import lorentzonsolutions.rhome.routeCalculators.NearestNeighbourRouteCalculator;
 import lorentzonsolutions.rhome.utils.SessionStorage;
 import lorentzonsolutions.rhome.utils.database.InternalStorage;

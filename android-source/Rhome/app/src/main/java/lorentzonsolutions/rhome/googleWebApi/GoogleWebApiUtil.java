@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import lorentzonsolutions.rhome.interfaces.WebApiResponseJsonParser;
 import lorentzonsolutions.rhome.interfaces.WebApiUtil;
-import lorentzonsolutions.rhome.utils.JSONDataParser;
+import lorentzonsolutions.rhome.utils.GoogleJsonParser;
 import lorentzonsolutions.rhome.utils.Resources;
 import lorentzonsolutions.rhome.utils.UrlDataReceiver;
 
@@ -20,13 +21,13 @@ import lorentzonsolutions.rhome.utils.UrlDataReceiver;
  *
  */
 
-// Class not covered in test suite. Serves only as a middlehand between urlDataReviever and JSONDataParser.
+// Class not covered in test suite. Serves only as a middlehand between urlDataReviever and GoogleJsonParser.
 
 public class GoogleWebApiUtil implements WebApiUtil {
 
     private static final String WEB_API_KEY = Resources.getInstance().getAPI_KEY_WEB_API();
     private UrlDataReceiver urlDataReceiver = new UrlDataReceiver();
-    private JSONDataParser jsonDataParser = new JSONDataParser();
+    private WebApiResponseJsonParser googleJsonParser = new GoogleJsonParser();
 
     /**
      * Takes the information about a locations and search places nearby with the given type. Search radius is determined by the radius parameter.
@@ -41,7 +42,7 @@ public class GoogleWebApiUtil implements WebApiUtil {
     public List<GooglePlace> getNearbyLocationsList(double locationLatitude, double locationLongitude, int radius, String type) {
         String url = buildNearbySearchUrl(locationLatitude, locationLongitude, radius, type);
         String data = urlDataReceiver.readURL(url);
-        return jsonDataParser.parseNearbySearchData(data);
+        return googleJsonParser.parseNearbySearchData(data);
     }
 
     /**
@@ -53,12 +54,8 @@ public class GoogleWebApiUtil implements WebApiUtil {
     @Override
     public List<List<HashMap<String, String>>> getPolylineData(LatLng start, LatLng end) {
         String directionsData = urlDataReceiver.readURL(buildDirectionsForRouteUrl(start, end));
-        try {
-            return jsonDataParser.parseDirectionsData(directionsData);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<>();
+
+        return googleJsonParser.parseDirectionsData(directionsData);
     }
 
     /**
@@ -69,7 +66,7 @@ public class GoogleWebApiUtil implements WebApiUtil {
     @Override
     public GooglePlace getLocationFromLatLng(LatLng location) {
         String locationData = urlDataReceiver.readURL(buildLocationByLatLngUrl(location.latitude, location.longitude));
-        return jsonDataParser.parseReverseGeocodeDataToPlaceInformation(locationData);
+        return googleJsonParser.parseReverseGeocodeDataToPlaceInformation(locationData);
     }
 
 

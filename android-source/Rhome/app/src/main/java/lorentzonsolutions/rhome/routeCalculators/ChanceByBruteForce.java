@@ -9,6 +9,7 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
 import lorentzonsolutions.rhome.interfaces.RouteCalculator;
+import lorentzonsolutions.rhome.utils.DistanceCalculatorUtil;
 
 /**
  * Algorithm to calculate fastest route for visiting a list of places. Calculates up to a maximum of 1000 different routes by brute force.

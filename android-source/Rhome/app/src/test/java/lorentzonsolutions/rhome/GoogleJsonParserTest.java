@@ -1,7 +1,5 @@
 package lorentzonsolutions.rhome;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +12,7 @@ import java.util.List;
 
 import lorentzonsolutions.rhome.googleWebApi.GoogleDistanceDuration;
 import lorentzonsolutions.rhome.googleWebApi.GooglePlace;
-import lorentzonsolutions.rhome.utils.JSONDataParser;
+import lorentzonsolutions.rhome.utils.GoogleJsonParser;
 
 import static junit.framework.Assert.assertNotNull;
 
@@ -27,13 +25,13 @@ import static junit.framework.Assert.assertNotNull;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class JsonParserTest {
+public class GoogleJsonParserTest {
 
-    JSONDataParser unitUnderTest;
+    GoogleJsonParser unitUnderTest;
 
     @Before
     public void before() {
-        unitUnderTest = new JSONDataParser();
+        unitUnderTest = new GoogleJsonParser();
     }
 
     @Test
